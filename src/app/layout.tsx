@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import './globals.css';
 
 const montserrat = Montserrat({
-  variable: '--fon-montserrat',
+  variable: '--font-montserrat',
   subsets: ['latin'],
 });
 

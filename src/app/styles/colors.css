@@ -1,18 +1,8 @@
 :root {
-  --color-dark: #0c0a09;
-  --color-background: #292524;
-  --color-primary: #ffedd5;
-
-  --color-yellow: #fffb79;
-  --color-brown: #242424;
-
-  --color-red: #b51818;
-
   --background: #ffffff;
   --foreground: #1a1a1a;
-  --main: #366d78;
+  --primary: #366d78;
 
-  --footer-light: rgb(59 130 246 / 0.5);
-  --footer-dark:  
-;
+  --footer-light: #c8e1e5;
+  --footer-dark: #bdd0d6;
 }

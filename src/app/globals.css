@@ -1,21 +1,33 @@
 @import 'tailwindcss';
-
-:root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --main: #366d78;
-}
+@import './styles/colors.css';
+@import './styles/footer.css';
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-main: var(--main);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-footer-light: var(--footer-light);
+  --color-footer-dark: var(--footer-dark);
+
+  --font-sans: var(--font-montserrat);
+}
+
+/* layers */
+/* base */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    @apply text-base;
+  }
+
+  body {
+    @apply text-base md:text-lg xl:text-xl;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Montserrat, sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }

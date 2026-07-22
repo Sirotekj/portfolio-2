@@ -26,8 +26,8 @@ export default function Navigation() {
             href={href}
             className={`px-3 py-2 text-xl font-medium transition-colors ${
               isActive
-                ? 'bg-background text-main'
-                : 'text-foreground hover:text-main'
+                ? 'bg-background text-primary'
+                : 'text-foreground hover:text-primary'
             }`}
           >
             {label}

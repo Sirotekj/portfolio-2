@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import './styles/colors.css';
-@import './styles/footer.css';
 
 @theme inline {
   --color-background: var(--background);
@@ -8,12 +7,14 @@
   --color-primary: var(--primary);
   --color-footer-light: var(--footer-light);
   --color-footer-dark: var(--footer-dark);
+  --color-footer-btn: var(--footer-btn);
+  --color-footer-btn-hover: var(--footer-btn-hover);
+  --color-footer-lajna: var(--footer-lajna);
+  --color-footer-placeholder: var(--footer-placeholder);
 
   --font-sans: var(--font-montserrat);
+  --max-width-footer: 1650px;
 }
-
-/* layers */
-/* base */
 
 @layer base {
   html {
@@ -23,11 +24,8 @@
 
   body {
     @apply text-base md:text-lg xl:text-xl;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), sans-serif;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), sans-serif;
 }

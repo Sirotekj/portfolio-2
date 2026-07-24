@@ -1,10 +1,14 @@
 @import 'tailwindcss';
 @import './styles/colors.css';
+@import './styles/spacing.css';
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-light: var(--light);
+  --color-border: var(--border);
+
   --color-footer-light: var(--footer-light);
   --color-footer-dark: var(--footer-dark);
   --color-footer-btn: var(--footer-btn);
@@ -14,6 +18,11 @@
 
   --font-sans: var(--font-montserrat);
   --max-width-footer: 1650px;
+
+  --spacing-small: var(--space-small);
+  --spacing-medium: var(--space-medium);
+  --spacing-large: var(--space-large);
+  --spacing-xlarge: var(--space-xlarge);
 }
 
 @layer base {
@@ -25,7 +34,22 @@
   body {
     @apply text-base md:text-lg xl:text-xl;
     background: var(--background);
-    color: var(--foreground);
+    color: var(--light);
     font-family: var(--font-sans), sans-serif;
+  }
+  h2 {
+    @apply text-2xl font-bold text-foreground mt-large mb-small;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto w-full sm:w-160 md:w-3xl lg:w-5xl xl:w-7xl 2xl:w-384;
+  }
+  .skill-circle {
+    @apply inline-block mr-1 h-4 w-4 rounded-full border text-light bg-none;
+  }
+  .skill-circle-full {
+    @apply border-0 bg-primary;
   }
 }

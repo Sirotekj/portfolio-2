@@ -1,0 +1,6 @@
+:root {
+  --space-small: 0.5rem; /* m-2 / p-2 */
+  --space-medium: 1rem; /* m-4 / p-4 */
+  --space-large: 1.5rem; /* m-6 / p-6 */
+  --space-xlarge: 3rem; /* m-12 / p-12 */
+}

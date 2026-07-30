@@ -6,7 +6,9 @@ import './globals.css';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '700'],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -24,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs" className={`${montserrat.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+      <body className={`${montserrat.className} flex min-h-full flex-col`}>
         <Header />
         <main className="mt-9 mx-auto w-full flex-1 p-6">{children}</main>
         <Footer />

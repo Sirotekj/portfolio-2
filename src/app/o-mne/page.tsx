@@ -25,7 +25,7 @@ export default function AboutPage() {
       <section>
         <div className="container my-xlarge">
           <div className="after:clear-both after:content-[''] after:block">
-            <div className="w-full mb-large mr-large overflow-hidden sm:w-2/5 sm:float-left md:w-1/3  rounded-xl shadow-xl">
+            <div className="w-full mb-medium mr-large overflow-hidden sm:w-2/5 sm:float-left md:w-1/3  rounded-xl shadow-xl">
               <picture>
                 <img src={textsAbout.photo} alt="About photo" />
               </picture>

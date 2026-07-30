@@ -16,7 +16,7 @@
   --color-footer-lajna: var(--footer-lajna);
   --color-footer-placeholder: var(--footer-placeholder);
 
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --max-width-footer: 1650px;
 
   --spacing-small: var(--space-small);
@@ -29,22 +29,32 @@
   html {
     scroll-behavior: smooth;
     @apply text-base;
+    --font-montserrat: Montserrat, ui-sans-serif, system-ui, sans-serif;
   }
 
   body {
     @apply text-base md:text-lg xl:text-xl;
     background: var(--background);
     color: var(--light);
-    font-family: var(--font-sans), sans-serif;
+  }
+  h1 {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-large mb-small;
   }
   h2 {
     @apply text-2xl font-bold text-foreground mt-large mb-small;
+  }
+
+  h3 {
+    @apply text-xl font-semibold text-foreground mt-large mb-small;
   }
 }
 
 @layer components {
   .container {
     @apply mx-auto w-full sm:w-160 md:w-3xl lg:w-5xl xl:w-7xl 2xl:w-384;
+  }
+  .small-container {
+    @apply mx-auto w-full sm:w-8/10  lg:w-6/10 max-w-160;
   }
   .skill-circle {
     @apply inline-block mr-1 h-4 w-4 rounded-full border text-light bg-none;

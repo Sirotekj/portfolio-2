@@ -1,5 +1,5 @@
 import type { Categories } from '@/types/types';
- 
+
 const PortfolioUvod = () => {
   return (
     <>
@@ -29,16 +29,46 @@ const projects = [
   },
   {
     title: 'Logo a název firmy vyrábějící medaile a trofeje',
-    image: '',
+    image: 'logo-a-nazev-firmy-vyrabejici-medaile-a-trofeje',
     gallery: [''],
     description: '',
     category: '',
   },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
+  {
+    title: 'Logo pro Vinařské potřeby BS',
+    image: 'logo-pro-vinarské-potreby-bs',
+    gallery: [''],
+    description: '',
+    category: '',
+  },
+  {
+    title: 'Logo architektonické firmy a architekta',
+    image: 'logo-architektonicke-firmy-a-architekta',
+    gallery: [''],
+    description: '',
+    category: '',
+  },
+  {
+    title: 'Modelování z hlíny',
+    image: 'modelovani-z-hliny',
+    gallery: [''],
+    description: '',
+    category: 'personal',
+  },
+  {
+    title: 'Grafika pro web a sociální sítě ADHDospělí',
+    image: 'grafika-pro-web-a-socialni-site-adhddospeli',
+    gallery: [''],
+    description: '',
+    category: 'digital',
+  },
+  {
+    title: 'Leták - leporelo pro Magical Prague',
+    image: 'letak---leporelo-pro-magical-prague',
+    gallery: [''],
+    description: '',
+    category: 'print',
+  },
   { title: '', image: '', gallery: [''], description: '', category: '' },
   { title: '', image: '', gallery: [''], description: '', category: '' },
   { title: '', image: '', gallery: [''], description: '', category: '' },

@@ -1,18 +1,21 @@
 import type { Metadata } from 'next';
 
+import Portfolio from '@/components/portfolio';
+import { getPortfolio } from '@/data/dummy-portfolio';
+
 export const metadata: Metadata = {
   title: 'Portfolio',
 };
 
 export default function PortfolioPage() {
+  const portfolio = getPortfolio();
   return (
     <section>
       <div className="mx-auto container">
-        <h1 className="text-3xl font-semibold tracking-tight">Portfolio</h1>
-        <p className="mt-4 max-w-2xl text-zinc-600">
-          Zde budou prezentovány moje projekty a práce.
-        </p>
+        <p className="mt-4">{portfolio.uvod}</p>
       </div>
+
+      <Portfolio />
     </section>
   );
 }

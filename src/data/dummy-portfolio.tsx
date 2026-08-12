@@ -13,7 +13,10 @@ const PortfolioUvod = () => {
   );
 };
 
-const portfolio = { uvod: <PortfolioUvod /> };
+const portfolio = {
+  uvod: <PortfolioUvod />,
+  categories: ['print', 'digital', 'personal', 'logo', 'vše'],
+};
 
 export const getPortfolio = () => {
   return portfolio;
@@ -25,28 +28,28 @@ const projects = [
     image: 'logo-agreFlex',
     gallery: [''],
     description: '',
-    category: '',
+    category: 'logo',
   },
   {
     title: 'Logo a název firmy vyrábějící medaile a trofeje',
     image: 'logo-a-nazev-firmy-vyrabejici-medaile-a-trofeje',
     gallery: [''],
     description: '',
-    category: '',
+    category: 'logo',
   },
   {
     title: 'Logo pro Vinařské potřeby BS',
     image: 'logo-pro-vinarské-potreby-bs',
     gallery: [''],
     description: '',
-    category: '',
+    category: 'logo',
   },
   {
     title: 'Logo architektonické firmy a architekta',
     image: 'logo-architektonicke-firmy-a-architekta',
     gallery: [''],
     description: '',
-    category: '',
+    category: 'logo',
   },
   {
     title: 'Modelování z hlíny',
@@ -70,17 +73,13 @@ const projects = [
     category: 'print',
   },
   { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
-  { title: '', image: '', gallery: [''], description: '', category: '' },
 ];
 export const getAllProjects = () => {
   return projects;
 };
-export const getCategoryProjects = (category: Categories) => {
+export const getCategoryProjects = (category: Categories | 'vse') => {
+  if (category === 'vse') {
+    return projects;
+  }
   return projects.filter((project) => project.category === category);
 };

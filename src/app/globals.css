@@ -62,4 +62,18 @@
   .skill-circle-full {
     @apply border-0 bg-primary;
   }
+  .category-button {
+    &.active {
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: var(--primary);
+      }
+    }
+    @apply relative uppercase;
+  }
 }

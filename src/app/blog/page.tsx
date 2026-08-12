@@ -17,16 +17,16 @@ export default function BlogPage() {
           <li key={blog.slug}>
             <Link
               href={`/blog/${blog.slug}`}
-              className="group grid min-h-48 overflow-hidden rounded-xl border border-border shadow-xl transition-colors hover:border-primary md:grid-cols-[auto_1fr]"
+              className="group grid min-h-48 grid-cols-1 overflow-hidden rounded-xl border border-border shadow-xl transition-colors hover:border-primary md:grid-cols-[280px_1fr]"
             >
               {blog.image ? (
-                <div className="relative aspect-video w-full md:h-full md:w-auto md:aspect-video">
+                <div className="relative aspect-video w-full max-w-full overflow-hidden md:aspect-auto md:h-full md:min-h-0">
                   <Image
                     src={`/${blog.image}`}
                     alt={blog.title}
                     fill
                     className="object-cover"
-                    sizes="(min-width: 768px) 320px, 100vw"
+                    sizes="(min-width: 768px) 280px, 100vw"
                   />
                 </div>
               ) : null}

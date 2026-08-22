@@ -38,10 +38,10 @@
     color: var(--light);
   }
   h1 {
-    @apply text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mt-large mb-small;
+    @apply text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mt-large mb-small;
   }
   h2 {
-    @apply text-2xl font-bold text-foreground mt-large mb-small;
+    @apply text-2xl font-semibold text-foreground mt-large mb-small;
   }
 
   h3 {

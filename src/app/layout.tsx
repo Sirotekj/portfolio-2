@@ -25,7 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs" className={`${montserrat.variable} h-full antialiased`}>
+    <html
+      lang="cs"
+      className={`${montserrat.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+    >
       <body className={`${montserrat.className} flex min-h-full flex-col`}>
         <Header />
         <main className="mt-9 mx-auto w-full flex-1 p-6">{children}</main>

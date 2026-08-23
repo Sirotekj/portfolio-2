@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProjectCategory {
+  print
+  digital
+  personal
+  logo
+}
+
+/// Globální nastavení webu (paticka, formulář).
+model SiteSettings {
+  id              Int    @id @default(1)
+  contactHeader   String @default("Kontakt")
+  contactEmail    String @default("")
+  contactLocation String @default("")
+  contactPhone    String @default("")
+  formHeader      String @default("Kontaktní formulář")
+  formNameLabel   String @default("Jméno")
+  formEmailLabel  String @default("Váš mail")
+  formMessageLabel String @default("Zpráva")
+  formSubmitLabel String @default("Odeslat")
+
+  @@map("site_settings")
+}
+
+/// Stránka O mně – úvodní text a foto.
+model AboutPage {
+  id      Int    @id @default(1)
+  photo   String @default("")
+  intro   String @db.Text
+  hobbies String @default("")
+
+  @@map("about_page")
+}
+
+model Skill {
+  id        Int    @id @default(autoincrement())
+  name      String
+  level     Int
+  sortOrder Int    @default(0)
+
+  @@map("skills")
+}
+
+model Language {
+  id        Int    @id @default(autoincrement())
+  name      String
+  level     Int
+  sortOrder Int    @default(0)
+
+  @@map("languages")
+}
+
+model Education {
+  id        Int    @id @default(autoincrement())
+  years     String
+  school    String @db.Text
+  sortOrder Int    @default(0)
+
+  @@map("education")
+}
+
+model JobExperience {
+  id          Int    @id @default(autoincrement())
+  years       String
+  description String @db.Text
+  sortOrder   Int    @default(0)
+
+  @@map("job_experiences")
+}
+
+/// Úvodní text na homepage portfolia.
+model PortfolioPage {
+  id    Int    @id @default(1)
+  intro String @db.Text
+
+  @@map("portfolio_page")
+}
+
+model Project {
+  id          Int              @id @default(autoincrement())
+  title       String
+  image       String
+  description String           @default("") @db.Text
+  category    ProjectCategory?
+  gallery     String[]
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@map("projects")
+}
+
+model BlogPost {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique
+  title     String
+  image     String    @default("")
+  intro     String    @db.Text
+  content   String    @db.Text
+  publishedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("blog_posts")
+}

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default function PortfolioPage() {
   const portfolio = getPortfolio();
+
   return (
     <section>
       <div className="mx-auto container">

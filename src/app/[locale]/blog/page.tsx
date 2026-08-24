@@ -1,13 +1,22 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { getBlogs } from '@/data/dummy-blog';
+import { isValidLocale, type Locale } from '@/i18n/config';
+import { localizedPath } from '@/i18n/routing';
+
+type BlogPageProps = {
+  params: Promise<{ locale: string }>;
+};
 
 export const metadata: Metadata = {
   title: 'Blog',
 };
 
-export default function BlogPage() {
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { locale: localeParam } = await params;
+  const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
   const blogs = getBlogs();
 
   return (
@@ -16,7 +25,7 @@ export default function BlogPage() {
         {blogs.map((blog) => (
           <li key={blog.slug}>
             <Link
-              href={`/blog/${blog.slug}`}
+              href={localizedPath(locale, `/blog/${blog.slug}`)}
               className="group grid min-h-48 grid-cols-1 overflow-hidden rounded-xl border border-border shadow-xl transition-colors hover:border-primary md:grid-cols-[280px_1fr]"
             >
               {blog.image ? (

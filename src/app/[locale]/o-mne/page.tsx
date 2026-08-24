@@ -7,7 +7,7 @@ import {
   getLanguages,
   getHobbies,
   getJobs,
-} from '../../data/dummy-about';
+} from '@/data/dummy-about';
 
 export const metadata: Metadata = {
   title: 'O mně',
@@ -20,6 +20,7 @@ export default function AboutPage() {
   const textsLanguages = getLanguages();
   const textsHobbies = getHobbies();
   const textsJobs = getJobs();
+
   return (
     <>
       <section>

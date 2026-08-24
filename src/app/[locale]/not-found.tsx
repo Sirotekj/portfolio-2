@@ -1,11 +1,16 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import { defaultLocale } from '@/i18n/config';
+import type { Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n/messages';
-import { localizedPath } from '@/i18n/routing';
+import { getLocaleFromPathname, localizedPath } from '@/i18n/routing';
 
-export default function NotFound() {
-  const messages = getMessages(defaultLocale);
+export default function LocaleNotFound() {
+  const pathname = usePathname();
+  const locale: Locale = getLocaleFromPathname(pathname) ?? 'cs';
+  const messages = getMessages(locale);
 
   return (
     <section className="container my-xlarge text-center">
@@ -17,7 +22,7 @@ export default function NotFound() {
         {messages.notFound.description}
       </p>
       <Link
-        href={localizedPath(defaultLocale, '/')}
+        href={localizedPath(locale, '/')}
         className="mt-large inline-block rounded-md bg-primary px-large py-small text-background transition-opacity hover:opacity-90"
       >
         {messages.notFound.back}

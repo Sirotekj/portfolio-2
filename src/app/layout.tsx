@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Montserrat } from 'next/font/google';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
+
+import { defaultLocale, isValidLocale, type Locale } from '@/i18n/config';
+
 import './globals.css';
 
 const montserrat = Montserrat({
@@ -19,21 +21,24 @@ export const metadata: Metadata = {
   description: 'Osobní portfolio a blog',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const headerLocale = headersList.get('x-next-locale');
+  const locale: Locale =
+    headerLocale && isValidLocale(headerLocale) ? headerLocale : defaultLocale;
+
   return (
     <html
-      lang="cs"
+      lang={locale}
       className={`${montserrat.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
       <body className={`${montserrat.className} flex min-h-full flex-col`}>
-        <Header />
-        <main className="mt-9 mx-auto w-full flex-1 p-6">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

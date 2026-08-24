@@ -3,22 +3,38 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const navItems = [
-  { href: '/', label: 'Portfolio' },
-  { href: '/o-mne', label: 'O mně' },
-  { href: '/blog', label: 'Blog' },
-];
+import type { Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n/messages';
+import {
+  getAlternateLocale,
+  localizedPath,
+  stripLocaleFromPathname,
+} from '@/i18n/routing';
 
-export default function Navigation() {
+type NavigationProps = {
+  locale: Locale;
+};
+
+export default function Navigation({ locale }: NavigationProps) {
   const pathname = usePathname();
+  const messages = getMessages(locale);
+  const pathWithoutLocale = stripLocaleFromPathname(pathname);
+  const alternateLocale = getAlternateLocale(locale);
+
+  const navItems = [
+    { href: localizedPath(locale, '/'), label: messages.nav.portfolio },
+    { href: localizedPath(locale, '/o-mne'), label: messages.nav.about },
+    { href: localizedPath(locale, '/blog'), label: messages.nav.blog },
+  ];
 
   return (
     <nav className="flex items-center gap-1">
       {navItems.map(({ href, label }) => {
         const isActive =
-          href === '/'
-            ? pathname === '/'
-            : pathname === href || pathname.startsWith(`${href}/`);
+          href === localizedPath(locale, '/')
+            ? pathWithoutLocale === '/'
+            : pathWithoutLocale === stripLocaleFromPathname(href) ||
+              pathWithoutLocale.startsWith(`${stripLocaleFromPathname(href)}/`);
 
         return (
           <Link
@@ -32,6 +48,14 @@ export default function Navigation() {
           </Link>
         );
       })}
+
+      <Link
+        href={localizedPath(alternateLocale, pathWithoutLocale)}
+        className="ml-2 px-3 py-2 text-xl font-medium text-foreground transition-colors hover:text-primary"
+        aria-label={`Switch to ${alternateLocale.toUpperCase()}`}
+      >
+        {messages.localeSwitch}
+      </Link>
     </nav>
   );
 }

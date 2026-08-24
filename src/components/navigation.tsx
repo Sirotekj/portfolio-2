@@ -51,7 +51,7 @@ export default function Navigation({ locale }: NavigationProps) {
 
       <Link
         href={localizedPath(alternateLocale, pathWithoutLocale)}
-        className="ml-2 px-3 py-2 text-xl font-medium text-foreground transition-colors hover:text-primary"
+        className="ml-2 pl-3 py-2 text-xl font-medium text-foreground transition-colors hover:text-primary"
         aria-label={`Switch to ${alternateLocale.toUpperCase()}`}
       >
         {messages.localeSwitch}

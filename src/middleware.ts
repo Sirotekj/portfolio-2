@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSessionTokenEdge,
+} from '@/lib/auth/session-edge';
 import { defaultLocale, isValidLocale, locales } from '@/i18n/config';
 
 const PUBLIC_FILE = /\.[^/]+$/;
@@ -7,14 +11,30 @@ const PUBLIC_FILE = /\.[^/]+$/;
 function shouldSkipLocaleRedirect(pathname: string): boolean {
   return (
     pathname.startsWith('/admin') ||
+    pathname.startsWith('/edit') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     PUBLIC_FILE.test(pathname)
   );
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith('/edit')) {
+    const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    const isAuthenticated = token
+      ? await verifyAdminSessionTokenEdge(token)
+      : false;
+
+    if (!isAuthenticated) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = '/admin';
+      return NextResponse.redirect(loginUrl);
+    }
+
+    return NextResponse.next();
+  }
 
   if (shouldSkipLocaleRedirect(pathname)) {
     return NextResponse.next();

@@ -22,7 +22,7 @@ function ContactItem({
     <li>
       <div className="relative w-2/5">
         <p className={nowrap ? 'whitespace-nowrap' : undefined}>{children}</p>
-        <span className="absolute bottom-px left-0 hidden h-0.5 w-4/5 translate-y-1/2 bg-footer-lajna md:block lg:w-full" />
+        <span className="absolute bottom-px left-0 hidden h-0.5 w-4/5 translate-y-1/2 bg-footer-line md:block lg:w-full" />
       </div>
     </li>
   );

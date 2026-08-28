@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -27,6 +28,8 @@ export default function Navigation({ locale }: NavigationProps) {
     { href: localizedPath(locale, '/blog'), label: messages.nav.blog },
   ];
 
+  const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
+
   return (
     <nav className="flex items-center gap-1">
       {navItems.map(({ href, label }) => {
@@ -40,7 +43,7 @@ export default function Navigation({ locale }: NavigationProps) {
           <Link
             key={href}
             href={href}
-            className={`px-3 py-2 text-xl font-medium transition-colors ${
+            className={`hidden md:block px-3 py-2 text-xl font-medium transition-colors ${
               isActive ? 'text-primary' : 'text-foreground hover:text-primary'
             }`}
           >
@@ -56,6 +59,46 @@ export default function Navigation({ locale }: NavigationProps) {
       >
         {messages.localeSwitch}
       </Link>
+      <button
+        id="burger"
+        type="button"
+        aria-expanded={mobileMenuOpened}
+        aria-label={mobileMenuOpened ? 'Zavřít menu' : 'Otevřít menu'}
+        onClick={() => setMobileMenuOpened((opened) => !opened)}
+        className={`open-main-nav md:hidden ${mobileMenuOpened ? 'is-open' : ''}`}
+      >
+        <span className="burger"></span>
+      </button>
+      <div
+        className={`mobile-menu md:hidden ${mobileMenuOpened ? 'is-open' : ''}`}
+      >
+        <ul className="relative h-[93%] flex flex-col justify-center items-center -skew-x-14">
+          {navItems.map(({ href, label }) => {
+            const isActive =
+              href === localizedPath(locale, '/')
+                ? pathWithoutLocale === '/'
+                : pathWithoutLocale === stripLocaleFromPathname(href) ||
+                  pathWithoutLocale.startsWith(
+                    `${stripLocaleFromPathname(href)}/`,
+                  );
+
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileMenuOpened(false)}
+                className={`block py-3 text-xl font-medium transition-colors skew-x-14 ${
+                  isActive
+                    ? 'text-background'
+                    : 'text-background/80 hover:text-background'
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 }

@@ -17,6 +17,7 @@ const messages = {
     blog: {
       back: '← Zpět na blog',
       notFound: 'Článek nenalezen',
+      empty: 'Zatím zde nejsou žádné publikované články.',
     },
     localeSwitch: 'EN',
   },
@@ -36,6 +37,7 @@ const messages = {
     blog: {
       back: '← Back to blog',
       notFound: 'Article not found',
+      empty: 'No published articles yet.',
     },
     localeSwitch: 'CS',
   },

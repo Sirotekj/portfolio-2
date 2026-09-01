@@ -36,7 +36,7 @@ export default function EditShell({
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:text-primary"
+                className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors cursor-pointer hover:border-primary hover:text-primary"
               >
                 Odhlásit se
               </button>

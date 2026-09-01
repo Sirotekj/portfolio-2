@@ -148,4 +148,36 @@
       }
     }
   }
+
+  .blog-content {
+    @apply leading-relaxed;
+
+    :where(p, ul, ol, blockquote) {
+      @apply mb-medium;
+    }
+
+    :where(h2, h3) {
+      @apply mt-large mb-small font-semibold text-foreground;
+    }
+
+    :where(ul, ol) {
+      @apply ml-large list-outside;
+    }
+
+    :where(ul) {
+      @apply list-disc;
+    }
+
+    :where(ol) {
+      @apply list-decimal;
+    }
+
+    :where(a) {
+      @apply text-primary underline;
+    }
+
+    :where(img) {
+      @apply my-medium h-auto max-w-full rounded-lg;
+    }
+  }
 }

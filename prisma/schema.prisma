@@ -99,15 +99,19 @@ model Project {
 }
 
 model BlogPost {
-  id        Int       @id @default(autoincrement())
-  slug      String    @unique
-  title     String
-  image     String    @default("")
-  intro     String    @db.Text
-  content   String    @db.Text
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique
+  slugEn      String?   @unique @map("slug_en")
+  title       String
+  titleEn     String?   @map("title_en")
+  image       String    @default("")
+  intro       String    @db.Text
+  introEn     String?   @map("intro_en") @db.Text
+  content     String    @db.Text
+  contentEn   String?   @map("content_en") @db.Text
   publishedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@map("blog_posts")
 }

@@ -19,11 +19,13 @@
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "bcryptjs": "^3.0.3",
+    "jodit-react": "^5.4.72",
     "jose": "^6.2.10",
     "next": "16.2.10",
     "pg": "^8.23.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "xxs": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

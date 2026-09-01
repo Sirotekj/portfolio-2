@@ -97,10 +97,14 @@ CREATE TABLE "projects" (
 CREATE TABLE "blog_posts" (
     "id" SERIAL NOT NULL,
     "slug" TEXT NOT NULL,
+    "slug_en" TEXT,
     "title" TEXT NOT NULL,
+    "title_en" TEXT,
     "image" TEXT NOT NULL DEFAULT '',
     "intro" TEXT NOT NULL,
+    "intro_en" TEXT,
     "content" TEXT NOT NULL,
+    "content_en" TEXT,
     "publishedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -110,3 +114,6 @@ CREATE TABLE "blog_posts" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "blog_posts_slug_key" ON "blog_posts"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "blog_posts_slug_en_key" ON "blog_posts"("slug_en");

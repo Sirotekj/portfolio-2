@@ -1,10 +1,7 @@
-import { mkdir, writeFile } from 'fs/promises';
-import path from 'path';
-
 import type { BlogFormData, BlogView } from '@/types/types';
 
+import { saveResponsiveImages } from '@/lib/images/process-upload';
 import { prisma } from '@/lib/prisma';
-import { slugify } from '@/lib/utils/slug';
 
 function mapBlog(blog: {
   id: number;
@@ -35,17 +32,10 @@ function mapBlog(blog: {
 }
 
 export async function saveBlogImage(file: File): Promise<string> {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const extension = path.extname(file.name) || '.jpg';
-  const baseName = slugify(path.basename(file.name, extension)) || 'blog-image';
-  const filename = `${Date.now()}-${baseName}${extension}`;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'blog');
-
-  await mkdir(uploadDir, { recursive: true });
-  await writeFile(path.join(uploadDir, filename), buffer);
-
-  return `uploads/blog/${filename}`;
+  return saveResponsiveImages({
+    file,
+    folder: 'uploads/blog',
+  });
 }
 
 export async function SaveBlog(

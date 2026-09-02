@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import BlogForm from '@/components/forms/blog-form';
+import ButtonAdmin from '@/components/admin/button-admin';
 import type { BlogView } from '@/types/types';
 
 type BlogEditorProps = {
@@ -30,13 +31,9 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
 
   return (
     <div className="space-y-6">
-      <button
-        type="button"
-        onClick={openCreateForm}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-background transition-opacity cursor-pointer hover:opacity-90"
-      >
+      <ButtonAdmin type="button" onClick={openCreateForm} color="dark">
         Přidat článek
-      </button>
+      </ButtonAdmin>
 
       {blogs.length === 0 ? (
         <p className="text-light">Zatím žádné články v databázi.</p>
@@ -54,20 +51,20 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
                   {blog.slugEn ? ` · EN: /${blog.slugEn}` : ''}
                 </p>
               </div>
-              <button
+              <ButtonAdmin
                 type="button"
                 onClick={() => openEditForm(blog)}
                 className="text-sm font-medium text-primary cursor-pointer hover:underline"
               >
                 Upravit
-              </button>
+              </ButtonAdmin>
             </li>
           ))}
         </ul>
       )}
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-[100001] flex items-start justify-center overflow-y-auto bg-black/40 p-4">
+        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto bg-black/40 p-4">
           <div className="my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
             <BlogForm onClose={closeForm} initialData={selectedBlog} />
           </div>

@@ -2,7 +2,13 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 
-const MAX_SIZE = 1024 * 1024; // 1MB
+import ButtonAdmin from '@/components/admin/button-admin';
+import {
+  DEFAULT_IMAGE_WIDTH,
+  getResponsiveImagePath,
+} from '@/lib/images/responsive';
+
+const MAX_SIZE = 2 * 1024 * 1024; // 1MB
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 
 export default function ImagePicker({
@@ -32,15 +38,15 @@ export default function ImagePicker({
       return;
     }
 
-    function validateFile(file: File) {
+    function validateFile(file: File): string | undefined {
       if (!ALLOWED_TYPES.includes(file.type)) {
-        setPickedImage(null);
         return 'Povolené formáty jsou PNG, JPG nebo WEBP.';
       }
       if (file.size > MAX_SIZE) {
-        setPickedImage(null);
         return 'Soubor je příliš velký. Maximální velikost je 1 MB.';
       }
+
+      return undefined;
     }
     const file = files[0];
     const validationError = validateFile(file);
@@ -59,6 +65,12 @@ export default function ImagePicker({
     };
     fileReader.readAsDataURL(file);
   };
+  const previewSrc = pickedImage?.startsWith('data:')
+    ? pickedImage
+    : pickedImage
+      ? getResponsiveImagePath(pickedImage, DEFAULT_IMAGE_WIDTH)
+      : null;
+
   return (
     <div>
       <label htmlFor={name} className="text-sm">
@@ -66,20 +78,19 @@ export default function ImagePicker({
       </label>
       <div className="controls">
         <div className="mb-4">
-          {!pickedImage && (
+          {!previewSrc && (
             <p className="w-full sm:max-w-[50%] aspect-video p-2 border">
               Obrázek nevybrán.
             </p>
           )}
-          {pickedImage && (
-            <div className="relative border w-full aspect-video">
+          {previewSrc && (
+            <div className="relative border w-full sm:max-w-[50%] aspect-video">
               <Image
-                src={pickedImage}
-                width={0}
-                height={0}
-                sizes="30vw"
+                src={previewSrc}
+                width={960}
+                height={540}
                 alt="Vybraný obrázek."
-                className="w-full h-auto"
+                className="h-auto w-full"
               />
             </div>
           )}
@@ -96,13 +107,9 @@ export default function ImagePicker({
         {defaultImage && (
           <input type="hidden" name="existingImage" value={defaultImage} />
         )}
-        <button
-          type="button"
-          onClick={handlePickClick}
-          className="border rounded-sm p-1 cursor-pointer hover:shadow-md hover:bg-background/10"
-        >
+        <ButtonAdmin type="button" onClick={handlePickClick}>
           Vyber obrázek
-        </button>
+        </ButtonAdmin>
         {error && <p className="text-red">{error}</p>}
       </div>
     </div>

@@ -7,6 +7,7 @@ import type { BlogView } from '@/types/types';
 
 import { createAction } from '@/lib/actions/blog-actions';
 
+import ButtonAdmin from '@/components/admin/button-admin';
 import FormSubmit from './form-submit';
 import ImagePicker from './image-picker';
 import RichTextEditor from './rich-text-editor';
@@ -38,10 +39,6 @@ export default function BlogForm({ onClose, initialData }: Props) {
       <form action={formAction} className="flex flex-col gap-4">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
-        ) : null}
-
-        {initialData?.image ? (
-          <input type="hidden" name="existingImage" value={initialData.image} />
         ) : null}
 
         <div>
@@ -113,7 +110,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
             defaultImage={initialData?.image}
           />
           {initialData?.image ? (
-            <p className="mb-2 text-sm text-light">
+            <p className="my-2 text-sm text-light">
               Aktuální: {initialData.image}
             </p>
           ) : null}
@@ -196,13 +193,9 @@ export default function BlogForm({ onClose, initialData }: Props) {
 
         <div className="mt-2 flex justify-between gap-4">
           <FormSubmit />
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md border border-border px-4 py-2 text-sm transition-colors cursor-pointer hover:border-primary hover:text-primary"
-          >
+          <ButtonAdmin type="button" onClick={onClose} color="light">
             Zrušit
-          </button>
+          </ButtonAdmin>
         </div>
       </form>
     </>

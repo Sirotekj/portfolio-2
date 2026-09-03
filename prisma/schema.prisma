@@ -87,7 +87,10 @@ model PortfolioPage {
 model Project {
   id          Int              @id @default(autoincrement())
   title       String
+  titleEn     String?          @map("title_en")
   image       String
+  imageWidth  Int?
+  imageHeight Int?
   description String           @default("") @db.Text
   category    ProjectCategory?
   gallery     String[]

@@ -1,23 +1,30 @@
 import type { Metadata } from 'next';
 
+import PortfolioEditor from '@/components/admin/portfolio-editor';
 import EditShell from '@/components/admin/edit-shell';
+import type { ProjectView } from '@/types/types';
+
+import { GetAllProjects } from '@/lib/actions/portfolio-prisma';
 
 export const metadata: Metadata = {
   title: 'Editace | Portfolio',
 };
 
-export default function EditPortfolioPage() {
+export default async function EditPortfolioPage() {
+  let projects: ProjectView[] = [];
+
+  try {
+    projects = await GetAllProjects();
+  } catch {
+    projects = [];
+  }
+
   return (
     <EditShell
       title="Portfolio"
-      description="Úvodní text a projekty zobrazené na homepage."
+      description="Správa projektů zobrazených na homepage."
     >
-      <div className="rounded-xl border border-dashed border-border p-6 text-light">
-        <p>
-          Editor portfolia zatím připravujeme. Po napojení na databázi zde
-          půjde upravit úvodní text a jednotlivé projekty.
-        </p>
-      </div>
+      <PortfolioEditor projects={projects} />
     </EditShell>
   );
 }

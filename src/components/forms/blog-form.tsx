@@ -32,8 +32,14 @@ export default function BlogForm({ onClose, initialData }: Props) {
 
   return (
     <>
-      <header className="mb-4 text-xl font-semibold text-foreground">
+      <header className="flex justify-between mb-4 text-xl font-semibold text-foreground">
         {isEditing ? 'Upravit článek' : 'Přidat článek'}
+        <button
+          className="text-4xl h-6 w-6 flex justify-center items-center cursor-pointer hover:text-primary"
+          onClick={onClose}
+        >
+          ×
+        </button>
       </header>
 
       <form action={formAction} className="flex flex-col gap-4">

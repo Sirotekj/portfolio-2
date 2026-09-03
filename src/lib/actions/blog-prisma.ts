@@ -32,10 +32,12 @@ function mapBlog(blog: {
 }
 
 export async function saveBlogImage(file: File): Promise<string> {
-  return saveResponsiveImages({
+  const upload = await saveResponsiveImages({
     file,
     folder: 'uploads/blog',
   });
+
+  return upload.basePath;
 }
 
 export async function SaveBlog(

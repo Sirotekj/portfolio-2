@@ -1,4 +1,4 @@
-import type { BlogPost } from '@/generated/prisma/client';
+import type { BlogPost, ProjectCategory } from '@/generated/prisma/client';
 
 export type FormState = {
   messages: string[];
@@ -24,3 +24,21 @@ export type BlogView = BlogFormData & {
   image: string;
   publishedAt: Date | null;
 };
+
+export type ProjectView = {
+  id: number;
+  title: string;
+  titleEn: string | null;
+  image: string;
+  imageWidth: number | null;
+  imageHeight: number | null;
+  description: string;
+  category: ProjectCategory | Categories | null;
+  gallery: string[];
+  sortOrder: number;
+};
+
+export type ProjectFormData = Pick<
+  ProjectView,
+  'title' | 'titleEn' | 'description' | 'category'
+>;

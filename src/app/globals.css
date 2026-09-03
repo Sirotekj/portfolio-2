@@ -75,7 +75,7 @@
         background-color: var(--primary);
       }
     }
-    @apply relative uppercase;
+    @apply relative uppercase cursor-pointer hover:text-primary;
   }
 
   .open-main-nav {

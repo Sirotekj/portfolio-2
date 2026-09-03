@@ -11,11 +11,17 @@ type SaveResponsiveImagesOptions = {
   folder: string;
 };
 
-/** Uloží originál jako WebP ve třech šířkách. Vrací základní cestu bez přípony velikosti. */
+export type ResponsiveImageUpload = {
+  basePath: string;
+  width: number;
+  height: number;
+};
+
+/** Uloží originál jako WebP ve třech šířkách. Vrací cestu a rozměry po EXIF rotaci. */
 export async function saveResponsiveImages({
   file,
   folder,
-}: SaveResponsiveImagesOptions): Promise<string> {
+}: SaveResponsiveImagesOptions): Promise<ResponsiveImageUpload> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const originalExtension = path.extname(file.name);
   const baseName =
@@ -26,6 +32,9 @@ export async function saveResponsiveImages({
   await mkdir(uploadDir, { recursive: true });
 
   const outputBasePath = path.join(uploadDir, imageId);
+  const { width: imageWidth = 0, height: imageHeight = 0 } = await sharp(buffer)
+    .rotate()
+    .metadata();
 
   await Promise.all(
     IMAGE_WIDTHS.map(async (width) => {
@@ -40,5 +49,9 @@ export async function saveResponsiveImages({
     }),
   );
 
-  return `${folder}/${imageId}`.replace(/\\/g, '/');
+  return {
+    basePath: `${folder}/${imageId}`.replace(/\\/g, '/'),
+    width: imageWidth,
+    height: imageHeight,
+  };
 }

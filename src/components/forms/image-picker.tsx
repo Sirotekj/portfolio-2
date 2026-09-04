@@ -7,9 +7,7 @@ import {
   DEFAULT_IMAGE_WIDTH,
   getResponsiveImagePath,
 } from '@/lib/images/responsive';
-
-const MAX_SIZE = 2 * 1024 * 1024; // 1MB
-const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+import { ALLOWED_TYPES, validateImageFile } from '@/lib/images/validate-image-file';
 
 export default function ImagePicker({
   label,
@@ -39,14 +37,7 @@ export default function ImagePicker({
     }
 
     function validateFile(file: File): string | undefined {
-      if (!ALLOWED_TYPES.includes(file.type)) {
-        return 'Povolené formáty jsou PNG, JPG nebo WEBP.';
-      }
-      if (file.size > MAX_SIZE) {
-        return 'Soubor je příliš velký. Maximální velikost je 1 MB.';
-      }
-
-      return undefined;
+      return validateImageFile(file);
     }
     const file = files[0];
     const validationError = validateFile(file);

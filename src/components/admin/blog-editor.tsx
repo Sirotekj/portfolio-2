@@ -64,8 +64,12 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
       )}
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto bg-black/40 p-4">
-          <div className="my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
+        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto  p-4">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={closeForm}
+          ></div>
+          <div className="relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
             <BlogForm onClose={closeForm} initialData={selectedBlog} />
           </div>
         </div>

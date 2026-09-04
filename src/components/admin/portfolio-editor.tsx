@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import PortfolioForm from '@/components/forms/portfolio-form';
@@ -11,19 +11,19 @@ type PortfolioEditorProps = {
   projects: ProjectView[];
 };
 
-function reorderProjects(
-  items: ProjectView[],
+function reorderIds(
+  ids: number[],
   draggedId: number,
   targetId: number,
-): ProjectView[] {
-  const fromIndex = items.findIndex((item) => item.id === draggedId);
-  const toIndex = items.findIndex((item) => item.id === targetId);
+): number[] {
+  const fromIndex = ids.indexOf(draggedId);
+  const toIndex = ids.indexOf(targetId);
 
   if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) {
-    return items;
+    return ids;
   }
 
-  const next = [...items];
+  const next = [...ids];
   const [moved] = next.splice(fromIndex, 1);
   next.splice(toIndex, 0, moved);
 
@@ -31,7 +31,7 @@ function reorderProjects(
 }
 
 export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
-  const [items, setItems] = useState(projects);
+  const [optimisticIds, setOptimisticIds] = useState<number[] | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<
     ProjectView | undefined
@@ -41,9 +41,14 @@ export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
   const [reorderError, setReorderError] = useState<string | null>(null);
   const [isReordering, startReorderTransition] = useTransition();
 
-  useEffect(() => {
-    setItems(projects);
-  }, [projects]);
+  const items = useMemo(() => {
+    const order = optimisticIds ?? projects.map((project) => project.id);
+    const byId = new Map(projects.map((project) => [project.id, project]));
+
+    return order
+      .map((id) => byId.get(id))
+      .filter((project): project is ProjectView => project != null);
+  }, [optimisticIds, projects]);
 
   function openCreateForm() {
     setSelectedProject(undefined);
@@ -67,23 +72,24 @@ export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
       return;
     }
 
-    const previousItems = items;
-    const nextItems = reorderProjects(items, draggedId, targetId);
+    const currentIds = items.map((item) => item.id);
+    const nextIds = reorderIds(currentIds, draggedId, targetId);
 
-    setItems(nextItems);
+    setOptimisticIds(nextIds);
     setDraggedId(null);
     setDropTargetId(null);
     setReorderError(null);
 
     startReorderTransition(async () => {
-      const result = await reorderProjectsAction(
-        nextItems.map((item) => item.id),
-      );
+      const result = await reorderProjectsAction(nextIds);
 
       if (result.error) {
-        setItems(previousItems);
+        setOptimisticIds(null);
         setReorderError(result.error);
+        return;
       }
+
+      setOptimisticIds(null);
     });
   }
 
@@ -177,8 +183,9 @@ export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
       )}
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto bg-black/40 p-4">
-          <div className="my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
+        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4">
+          <div className="fixed inset-0 bg-black/40" onClick={closeForm}></div>
+          <div className="relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
             <PortfolioForm onClose={closeForm} initialData={selectedProject} />
           </div>
         </div>

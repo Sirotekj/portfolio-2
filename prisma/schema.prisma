@@ -14,18 +14,25 @@ enum ProjectCategory {
   logo
 }
 
-/// Globální nastavení webu (paticka, formulář).
+/// Globální nastavení webu (SEO, branding, patička, formulář).
 model SiteSettings {
-  id              Int    @id @default(1)
-  contactHeader   String @default("Kontakt")
-  contactEmail    String @default("")
-  contactLocation String @default("")
-  contactPhone    String @default("")
-  formHeader      String @default("Kontaktní formulář")
-  formNameLabel   String @default("Jméno")
-  formEmailLabel  String @default("Váš mail")
+  id               Int    @id @default(1)
+  siteTitle        String @default("")
+  siteDescription  String @default("") @db.Text
+  favicon          String @default("")
+  logo             String @default("")
+  ogImage          String @default("")
+  keywords         String @default("")
+  author           String @default("")
+  contactHeader    String @default("Kontakt")
+  contactEmail     String @default("")
+  contactLocation  String @default("")
+  contactPhone     String @default("")
+  formHeader       String @default("Kontaktní formulář")
+  formNameLabel    String @default("Jméno")
+  formEmailLabel   String @default("Váš mail")
   formMessageLabel String @default("Zpráva")
-  formSubmitLabel String @default("Odeslat")
+  formSubmitLabel  String @default("Odeslat")
 
   @@map("site_settings")
 }

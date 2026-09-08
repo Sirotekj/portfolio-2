@@ -14,6 +14,7 @@ function mapProject(project: {
   imageWidth: number | null;
   imageHeight: number | null;
   description: string;
+  descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
   sortOrder: number;
@@ -26,6 +27,7 @@ function mapProject(project: {
     imageWidth: project.imageWidth,
     imageHeight: project.imageHeight,
     description: project.description,
+    descriptionEn: project.descriptionEn,
     category: project.category,
     gallery: project.gallery.filter(Boolean),
     sortOrder: project.sortOrder,
@@ -48,6 +50,7 @@ export type ProjectWriteData = {
   imageWidth: number | null;
   imageHeight: number | null;
   description: string;
+  descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
   sortOrder: number;
@@ -62,6 +65,7 @@ export async function SaveProject(data: ProjectWriteData): Promise<void> {
       imageWidth: data.imageWidth,
       imageHeight: data.imageHeight,
       description: data.description,
+      descriptionEn: data.descriptionEn,
       category: data.category,
       gallery: data.gallery,
       sortOrder: data.sortOrder,

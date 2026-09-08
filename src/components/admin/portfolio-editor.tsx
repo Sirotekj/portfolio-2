@@ -4,10 +4,12 @@ import { useMemo, useState, useTransition } from 'react';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import PortfolioForm from '@/components/forms/portfolio-form';
+import PortfolioPageForm from '@/components/forms/portfolio-page-form';
 import { reorderProjectsAction } from '@/lib/actions/portfolio-actions';
-import type { ProjectView } from '@/types/types';
+import type { PortfolioPageView, ProjectView } from '@/types/types';
 
 type PortfolioEditorProps = {
+  portfolioPage: PortfolioPageView;
   projects: ProjectView[];
 };
 
@@ -30,7 +32,10 @@ function reorderIds(
   return next;
 }
 
-export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
+export default function PortfolioEditor({
+  portfolioPage,
+  projects,
+}: PortfolioEditorProps) {
   const [optimisticIds, setOptimisticIds] = useState<number[] | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<
@@ -94,7 +99,17 @@ export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      <PortfolioPageForm portfolioPage={portfolioPage} />
+
+      <section className="space-y-6">
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">Projekty</h2>
+          <p className="mt-1 text-sm text-light">
+            Správa projektů zobrazených na homepage.
+          </p>
+        </div>
+
       <ButtonAdmin type="button" onClick={openCreateForm} color="dark">
         Přidat projekt
       </ButtonAdmin>
@@ -190,6 +205,7 @@ export default function PortfolioEditor({ projects }: PortfolioEditorProps) {
           </div>
         </div>
       ) : null}
+      </section>
     </div>
   );
 }

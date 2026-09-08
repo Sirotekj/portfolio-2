@@ -17,76 +17,99 @@ enum ProjectCategory {
 /// Globální nastavení webu (SEO, branding, patička, formulář).
 model SiteSettings {
   id               Int    @id @default(1)
-  siteTitle        String @default("")
-  siteDescription  String @default("") @db.Text
-  favicon          String @default("")
-  logo             String @default("")
-  ogImage          String @default("")
-  keywords         String @default("")
-  author           String @default("")
-  contactHeader    String @default("Kontakt")
-  contactEmail     String @default("")
-  contactLocation  String @default("")
-  contactPhone     String @default("")
-  formHeader       String @default("Kontaktní formulář")
-  formNameLabel    String @default("Jméno")
-  formEmailLabel   String @default("Váš mail")
-  formMessageLabel String @default("Zpráva")
-  formSubmitLabel  String @default("Odeslat")
+  siteTitle        String  @default("")
+  siteTitleEn      String? @map("site_title_en")
+  siteDescription  String  @default("") @db.Text
+  siteDescriptionEn String? @map("site_description_en") @db.Text
+  favicon          String  @default("")
+  logo             String  @default("")
+  ogImage          String  @default("")
+  keywords         String  @default("")
+  keywordsEn       String? @map("keywords_en")
+  author           String  @default("")
+  contactHeader    String  @default("Kontakt")
+  contactHeaderEn  String? @map("contact_header_en")
+  contactEmail     String  @default("")
+  contactLocation  String  @default("")
+  contactPhone     String  @default("")
+  formHeader       String  @default("Kontaktní formulář")
+  formHeaderEn     String? @map("form_header_en")
+  formNameLabel    String  @default("Jméno")
+  formNameLabelEn  String? @map("form_name_label_en")
+  formEmailLabel   String  @default("Váš mail")
+  formEmailLabelEn String? @map("form_email_label_en")
+  formMessageLabel String  @default("Zpráva")
+  formMessageLabelEn String? @map("form_message_label_en")
+  formSubmitLabel  String  @default("Odeslat")
+  formSubmitLabelEn String? @map("form_submit_label_en")
 
   @@map("site_settings")
 }
 
 /// Stránka O mně – úvodní text a foto.
 model AboutPage {
-  id      Int    @id @default(1)
-  photo   String @default("")
-  intro   String @db.Text
-  hobbies String @default("")
+  id        Int      @id @default(1)
+  photo     String   @default("")
+  intro     String   @db.Text
+  introEn   String?  @map("intro_en") @db.Text
 
   @@map("about_page")
 }
 
-model Skill {
-  id        Int    @id @default(autoincrement())
+model Hobby {
+  id        Int     @id @default(autoincrement())
   name      String
+  nameEn    String? @map("name_en")
+  sortOrder Int     @default(0)
+
+  @@map("hobbies")
+}
+
+model Skill {
+  id        Int     @id @default(autoincrement())
+  name      String
+  nameEn    String? @map("name_en")
   level     Int
-  sortOrder Int    @default(0)
+  sortOrder Int     @default(0)
 
   @@map("skills")
 }
 
 model Language {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
+  nameEn    String? @map("name_en")
   level     Int
-  sortOrder Int    @default(0)
+  sortOrder Int     @default(0)
 
   @@map("languages")
 }
 
 model Education {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   years     String
-  school    String @db.Text
-  sortOrder Int    @default(0)
+  school    String  @db.Text
+  schoolEn  String? @map("school_en") @db.Text
+  sortOrder Int     @default(0)
 
   @@map("education")
 }
 
 model JobExperience {
-  id          Int    @id @default(autoincrement())
-  years       String
-  description String @db.Text
-  sortOrder   Int    @default(0)
+  id            Int     @id @default(autoincrement())
+  years         String
+  description   String  @db.Text
+  descriptionEn String? @map("description_en") @db.Text
+  sortOrder     Int     @default(0)
 
   @@map("job_experiences")
 }
 
 /// Úvodní text na homepage portfolia.
 model PortfolioPage {
-  id    Int    @id @default(1)
-  intro String @db.Text
+  id      Int     @id @default(1)
+  intro   String  @db.Text
+  introEn String? @map("intro_en") @db.Text
 
   @@map("portfolio_page")
 }
@@ -99,6 +122,7 @@ model Project {
   imageWidth  Int?
   imageHeight Int?
   description String           @default("") @db.Text
+  descriptionEn String?        @map("description_en") @db.Text
   category    ProjectCategory?
   gallery     String[]
   sortOrder   Int              @default(0)

@@ -104,13 +104,30 @@ export default function PortfolioForm({
 
         <div>
           <label htmlFor="description" className="mb-1 block text-sm font-medium">
-            Popis
+            Popis (CS)
           </label>
           <textarea
             id="description"
             name="description"
             rows={4}
             defaultValue={initialData?.description ?? ''}
+            className={fieldClass}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="descriptionEn"
+            className="mb-1 block text-sm font-medium"
+          >
+            Popis (EN)
+          </label>
+          <textarea
+            id="descriptionEn"
+            name="descriptionEn"
+            rows={4}
+            defaultValue={initialData?.descriptionEn ?? ''}
+            placeholder="Volitelné — prázdné použije českou verzi"
             className={fieldClass}
           />
         </div>

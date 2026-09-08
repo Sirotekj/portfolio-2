@@ -1,47 +1,7 @@
-import type { SiteSettings } from '@/generated/prisma/client';
+import type { SiteSettingsView } from '@/types/types';
 
+import { defaultSiteSettings } from '@/lib/site-settings/defaults';
 import { prisma } from '@/lib/prisma';
-
-export type SiteSettingsView = Pick<
-  SiteSettings,
-  | 'id'
-  | 'siteTitle'
-  | 'siteDescription'
-  | 'favicon'
-  | 'logo'
-  | 'ogImage'
-  | 'keywords'
-  | 'author'
-  | 'contactHeader'
-  | 'contactEmail'
-  | 'contactLocation'
-  | 'contactPhone'
-  | 'formHeader'
-  | 'formNameLabel'
-  | 'formEmailLabel'
-  | 'formMessageLabel'
-  | 'formSubmitLabel'
->;
-
-const defaultSiteSettings: SiteSettingsView = {
-  id: 1,
-  siteTitle: '',
-  siteDescription: '',
-  favicon: '',
-  logo: '',
-  ogImage: '',
-  keywords: '',
-  author: '',
-  contactHeader: 'Kontakt',
-  contactEmail: '',
-  contactLocation: '',
-  contactPhone: '',
-  formHeader: 'Kontaktní formulář',
-  formNameLabel: 'Jméno',
-  formEmailLabel: 'Váš mail',
-  formMessageLabel: 'Zpráva',
-  formSubmitLabel: 'Odeslat',
-};
 
 function isMissingSiteSettingsTableError(error: unknown): boolean {
   return (

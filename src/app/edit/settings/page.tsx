@@ -1,23 +1,30 @@
 import type { Metadata } from 'next';
 
 import EditShell from '@/components/admin/edit-shell';
+import SettingsForm from '@/components/forms/settings-form';
+import { getOrCreateSiteSettings } from '@/lib/actions/settings-actions';
+import { defaultSiteSettings } from '@/lib/site-settings/defaults';
+import type { SiteSettingsView } from '@/types/types';
 
 export const metadata: Metadata = {
   title: 'Editace | Nastavení',
 };
 
-export default function EditSettingsPage() {
+export default async function EditSettingsPage() {
+  let settings: SiteSettingsView = defaultSiteSettings;
+
+  try {
+    settings = await getOrCreateSiteSettings();
+  } catch {
+    settings = defaultSiteSettings;
+  }
+
   return (
     <EditShell
       title="Nastavení webu"
-      description="Kontaktní údaje a texty formuláře v patičce."
+      description="SEO, branding, kontakt a texty formuláře v patičce."
     >
-      <div className="rounded-xl border border-dashed border-border p-6 text-light">
-        <p>
-          Editor nastavení zatím připravujeme. Po napojení na databázi zde
-          půjde upravit kontakt a popisky formuláře.
-        </p>
-      </div>
+      <SettingsForm settings={settings} />
     </EditShell>
   );
 }

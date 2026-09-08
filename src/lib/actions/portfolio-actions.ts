@@ -39,6 +39,7 @@ function parseProjectForm(formData: FormData): {
   const title = String(formData.get('title') ?? '').trim();
   const titleEn = optionalText(formData.get('titleEn'));
   const description = String(formData.get('description') ?? '').trim();
+  const descriptionEn = optionalText(formData.get('descriptionEn'));
   const category = parseCategory(formData.get('category'));
 
   if (!title) {
@@ -50,6 +51,7 @@ function parseProjectForm(formData: FormData): {
       title,
       titleEn,
       description,
+      descriptionEn,
       category,
     },
     errors,

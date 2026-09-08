@@ -13,10 +13,12 @@ export default function ImagePicker({
   label,
   name,
   defaultImage,
+  existingImageFieldName = 'existingImage',
 }: {
   label: string;
   name: string;
   defaultImage?: string | null;
+  existingImageFieldName?: string;
 }) {
   const [pickedImage, setPickedImage] = useState<string | null>(
     defaultImage ?? null,
@@ -95,9 +97,13 @@ export default function ImagePicker({
           onChange={handleImageChange}
           className="hidden"
         />
-        {defaultImage && (
-          <input type="hidden" name="existingImage" value={defaultImage} />
-        )}
+        {defaultImage ? (
+          <input
+            type="hidden"
+            name={existingImageFieldName}
+            value={defaultImage}
+          />
+        ) : null}
         <ButtonAdmin type="button" onClick={handlePickClick}>
           Vyber obrázek
         </ButtonAdmin>

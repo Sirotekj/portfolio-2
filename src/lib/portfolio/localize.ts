@@ -1,5 +1,5 @@
 import type { Locale } from '@/i18n/config';
-import type { ProjectView } from '@/types/types';
+import type { PortfolioPageView, ProjectView } from '@/types/types';
 
 export function getProjectLocalizedTitle(
   project: ProjectView,
@@ -10,4 +10,15 @@ export function getProjectLocalizedTitle(
   }
 
   return project.title;
+}
+
+export function getLocalizedPortfolioIntro(
+  page: PortfolioPageView,
+  locale: Locale,
+): string {
+  if (locale === 'en' && page.introEn?.trim()) {
+    return page.introEn.trim();
+  }
+
+  return page.intro;
 }

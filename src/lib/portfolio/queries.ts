@@ -1,8 +1,9 @@
 import type { ProjectCategory } from '@/generated/prisma/client';
 
 import { getAllProjects as getDummyProjects } from '@/data/dummy-portfolio';
+import { getOrCreatePortfolioPage } from '@/lib/actions/portfolio-page-prisma';
 import { prisma } from '@/lib/prisma';
-import type { Categories, ProjectView } from '@/types/types';
+import type { Categories, PortfolioPageView, ProjectView } from '@/types/types';
 
 function isMissingProjectsTableError(error: unknown): boolean {
   return (
@@ -21,6 +22,7 @@ function mapProject(project: {
   imageWidth: number | null;
   imageHeight: number | null;
   description: string;
+  descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
   sortOrder: number;
@@ -33,6 +35,7 @@ function mapProject(project: {
     imageWidth: project.imageWidth,
     imageHeight: project.imageHeight,
     description: project.description,
+    descriptionEn: project.descriptionEn,
     category: project.category,
     gallery: project.gallery.filter(Boolean),
     sortOrder: project.sortOrder,
@@ -50,6 +53,7 @@ function getDummyProjectViews(): ProjectView[] {
       imageWidth: null,
       imageHeight: null,
       description: project.description,
+      descriptionEn: null,
       category: (project.category || null) as Categories | null,
       gallery: project.gallery,
       sortOrder: index,
@@ -77,11 +81,11 @@ export async function getPortfolioProjects(): Promise<ProjectView[]> {
   }
 }
 
-export async function getPortfolioIntro(): Promise<string | null> {
+export async function getPortfolioPage(): Promise<PortfolioPageView | null> {
   try {
-    const page = await prisma.portfolioPage.findUnique({ where: { id: 1 } });
+    const page = await getOrCreatePortfolioPage();
 
-    return page?.intro ?? null;
+    return page.intro.trim() ? page : null;
   } catch (error) {
     if (isMissingProjectsTableError(error)) {
       return null;
@@ -89,4 +93,10 @@ export async function getPortfolioIntro(): Promise<string | null> {
 
     throw error;
   }
+}
+
+export async function getPortfolioIntro(): Promise<string | null> {
+  const page = await getPortfolioPage();
+
+  return page?.intro ?? null;
 }

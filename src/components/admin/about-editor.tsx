@@ -57,6 +57,21 @@ export default function AboutEditor({ data }: AboutEditorProps) {
       />
 
       <AboutListEditor
+        title="Vzdělání"
+        items={data.education}
+        emptyLabel="Zatím žádné vzdělání."
+        addLabel="Přidat vzdělání"
+        onReorder={reorderEducationAction}
+        Form={EducationForm}
+        renderItem={(education) => (
+          <>
+            <p className="font-medium text-foreground">{education.years}</p>
+            <p className="text-sm text-light">{education.school}</p>
+          </>
+        )}
+      />
+
+      <AboutListEditor
         title="Jazyky"
         items={data.languages}
         emptyLabel="Zatím žádné jazyky."
@@ -80,21 +95,6 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         Form={HobbyForm}
         renderItem={(hobby) => (
           <p className="font-medium text-foreground">{hobby.name}</p>
-        )}
-      />
-
-      <AboutListEditor
-        title="Vzdělání"
-        items={data.education}
-        emptyLabel="Zatím žádné vzdělání."
-        addLabel="Přidat vzdělání"
-        onReorder={reorderEducationAction}
-        Form={EducationForm}
-        renderItem={(education) => (
-          <>
-            <p className="font-medium text-foreground">{education.years}</p>
-            <p className="text-sm text-light">{education.school}</p>
-          </>
         )}
       />
 

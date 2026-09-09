@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
 import type { Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n/messages';
 import {
   getProjectImageSrc,
   hasProjectImageDimensions,
@@ -68,6 +69,7 @@ function ProjectImage({
 
 export default function Portfolio({ projects, locale }: PortfolioProps) {
   const [category, setCategory] = useState<Categories | 'vse'>('vse');
+  const messages = getMessages(locale);
 
   const filteredProjects = useMemo(() => {
     const withImage = projects.filter((project) => project.image);
@@ -98,17 +100,21 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
         </div>
       </div>
 
-      <div className="mx-auto mt-large container">
-        <ul className="columns-1 gap-x-medium sm:columns-2 lg:columns-3">
-          {filteredProjects.map((project) => (
-            <li
-              key={project.id}
-              className="mb-medium w-full break-inside-avoid overflow-hidden rounded-xl shadow-xl"
-            >
-              <ProjectImage project={project} locale={locale} />
-            </li>
-          ))}
-        </ul>
+      <div className="mx-auto my-large container">
+        {filteredProjects.length > 0 ? (
+          <ul className="columns-1 gap-x-medium sm:columns-2 lg:columns-3">
+            {filteredProjects.map((project) => (
+              <li
+                key={project.id}
+                className="mb-medium w-full break-inside-avoid overflow-hidden rounded-xl shadow-xl"
+              >
+                <ProjectImage project={project} locale={locale} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center text-light">{messages.portfolio.empty}</p>
+        )}
       </div>
     </>
   );

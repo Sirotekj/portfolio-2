@@ -58,7 +58,7 @@
     @apply mx-auto w-full sm:w-8/10  lg:w-6/10 max-w-160;
   }
   .skill-circle {
-    @apply inline-block mr-1 h-4 w-4 rounded-full border text-light bg-none;
+    @apply inline-block mr-1 h-4 w-4 rounded-full border text-light bg-none translate-y-0.5;
   }
   .skill-circle-full {
     @apply border-0 bg-primary;

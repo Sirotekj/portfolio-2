@@ -24,7 +24,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
   return (
     <section className="container my-xlarge">
       {blogs.length === 0 ? (
-        <p className="text-light">{messages.blog.empty}</p>
+        <p className="text-center text-light">{messages.blog.empty}</p>
       ) : (
         <ul className="flex flex-col gap-large">
           {blogs.map((blog) => {

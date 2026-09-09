@@ -17,7 +17,19 @@ const messages = {
     blog: {
       back: '← Zpět na blog',
       notFound: 'Článek nenalezen',
-      empty: 'Zatím zde nejsou žádné publikované články.',
+      empty: 'Nejsou zde žádné publikované články.',
+    },
+    portfolio: {
+      empty: 'Nejsou zde žádné projekty.',
+    },
+    about: {
+      empty: {
+        skills: 'Nejsou zde žádné dovednosti.',
+        education: 'Není zde žádné vzdělání.',
+        languages: 'Nejsou zde žádné jazyky.',
+        hobbies: 'Nejsou zde žádné koníčky.',
+        jobs: 'Nejsou zde žádné pracovní zkušenosti.',
+      },
     },
     localeSwitch: 'EN',
   },
@@ -37,7 +49,19 @@ const messages = {
     blog: {
       back: '← Back to blog',
       notFound: 'Article not found',
-      empty: 'No published articles yet.',
+      empty: 'There are no published articles here.',
+    },
+    portfolio: {
+      empty: 'There are no projects here.',
+    },
+    about: {
+      empty: {
+        skills: 'There are no skills here.',
+        education: 'There is no education here.',
+        languages: 'There are no languages here.',
+        hobbies: 'There are no hobbies here.',
+        jobs: 'There is no work experience here.',
+      },
     },
     localeSwitch: 'CS',
   },

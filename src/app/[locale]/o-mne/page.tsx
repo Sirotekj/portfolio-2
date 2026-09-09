@@ -12,6 +12,7 @@ import { getAboutPhotoSrc } from '@/lib/about/images';
 import { localizeAboutPageData } from '@/lib/about/localize';
 import { getAboutPageDataFromDb, splitAboutIntro } from '@/lib/about/queries';
 import { isValidLocale, type Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n/messages';
 
 type AboutPageProps = {
   params: Promise<{ locale: string }>;
@@ -37,6 +38,7 @@ function LevelDots({ level }: { level: number }) {
 export default async function AboutPage({ params }: AboutPageProps) {
   const { locale: localeParam } = await params;
   const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
+  const messages = getMessages(locale);
   const dbData = await getAboutPageDataFromDb();
 
   if (dbData) {
@@ -68,49 +70,71 @@ export default async function AboutPage({ params }: AboutPageProps) {
           <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border px-large pb-large shadow-xl lg:grid-cols-2">
             <div className="col-span-1">
               <h2>Dovednosti</h2>
-              <ul>
-                {localized.skills.map((skill) => (
-                  <li key={skill.id}>
-                    {skill.displayName}
-                    <LevelDots level={skill.level} />
-                  </li>
-                ))}
-              </ul>
+              {localized.skills.length > 0 ? (
+                <ul>
+                  {localized.skills.map((skill) => (
+                    <li key={skill.id}>
+                      {skill.displayName}
+                      <LevelDots level={skill.level} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-light">{messages.about.empty.skills}</p>
+              )}
 
               <h2>Vzdělání</h2>
-              <ul>
-                {[...localized.education].reverse().map((education) => (
-                  <li key={education.id}>
-                    <b>{education.years}</b> - {education.displaySchool}
-                  </li>
-                ))}
-              </ul>
+              {localized.education.length > 0 ? (
+                <ul>
+                  {[...localized.education].reverse().map((education) => (
+                    <li key={education.id}>
+                      <b>{education.years}</b> - {education.displaySchool}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-light">{messages.about.empty.education}</p>
+              )}
 
               <h2>Jazyky</h2>
-              <ul>
-                {localized.languages.map((language) => (
-                  <li key={language.id}>
-                    {language.displayName}
-                    <LevelDots level={language.level} />
-                  </li>
-                ))}
-              </ul>
+              {localized.languages.length > 0 ? (
+                <ul>
+                  {localized.languages.map((language) => (
+                    <li key={language.id}>
+                      {language.displayName}
+                      <LevelDots level={language.level} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-light">{messages.about.empty.languages}</p>
+              )}
 
               <h2>Koníčky</h2>
-              <p>
-                {localized.hobbies.map((hobby) => hobby.displayName).join(', ')}
-              </p>
+              {localized.hobbies.length > 0 ? (
+                <p>
+                  {localized.hobbies
+                    .map((hobby) => hobby.displayName)
+                    .join(', ')}
+                </p>
+              ) : (
+                <p className="text-light">{messages.about.empty.hobbies}</p>
+              )}
             </div>
 
             <div className="col-span-1">
               <h2>Pracovní zkušenosti</h2>
-              <ul>
-                {[...localized.jobs].reverse().map((job) => (
-                  <li key={job.id} className="whitespace-pre-line">
-                    <b>{job.years}</b> - {job.displayDescription}
-                  </li>
-                ))}
-              </ul>
+              {localized.jobs.length > 0 ? (
+                <ul>
+                  {[...localized.jobs].reverse().map((job) => (
+                    <li key={job.id} className="whitespace-pre-line">
+                      <b>{job.years}</b> - {job.displayDescription}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-light">{messages.about.empty.jobs}</p>
+              )}
             </div>
           </div>
         </div>
@@ -142,47 +166,67 @@ export default async function AboutPage({ params }: AboutPageProps) {
         <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border px-large pb-large shadow-xl lg:grid-cols-2">
           <div className="col-span-1">
             <h2>Dovednosti</h2>
-            <ul>
-              {textsSkills.map((skill) => (
-                <li key={skill.skill}>
-                  {skill.skill}
-                  <LevelDots level={skill.level} />
-                </li>
-              ))}
-            </ul>
+            {textsSkills.length > 0 ? (
+              <ul>
+                {textsSkills.map((skill) => (
+                  <li key={skill.skill}>
+                    {skill.skill}
+                    <LevelDots level={skill.level} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-light">{messages.about.empty.skills}</p>
+            )}
 
             <h2>Vzdělání</h2>
-            <ul>
-              {[...textsEducation].reverse().map((education) => (
-                <li key={education.school}>
-                  <b>{education.years}</b> - {education.school}
-                </li>
-              ))}
-            </ul>
+            {textsEducation.length > 0 ? (
+              <ul>
+                {[...textsEducation].reverse().map((education) => (
+                  <li key={education.school}>
+                    <b>{education.years}</b> - {education.school}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-light">{messages.about.empty.education}</p>
+            )}
 
             <h2>Jazyky</h2>
-            <ul>
-              {textsLanguages.map((language) => (
-                <li key={language.language}>
-                  {language.language}
-                  <LevelDots level={language.level} />
-                </li>
-              ))}
-            </ul>
+            {textsLanguages.length > 0 ? (
+              <ul>
+                {textsLanguages.map((language) => (
+                  <li key={language.language}>
+                    {language.language}
+                    <LevelDots level={language.level} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-light">{messages.about.empty.languages}</p>
+            )}
 
             <h2>Koníčky</h2>
-            <p>{textsHobbies}</p>
+            {textsHobbies.trim() ? (
+              <p>{textsHobbies}</p>
+            ) : (
+              <p className="text-light">{messages.about.empty.hobbies}</p>
+            )}
           </div>
 
           <div className="col-span-1">
             <h2>Pracovní zkušenosti</h2>
-            <ul>
-              {[...textsJobs].reverse().map((job) => (
-                <li key={job.name} className="whitespace-pre-line">
-                  <b>{job.years}</b> - {job.name}
-                </li>
-              ))}
-            </ul>
+            {textsJobs.length > 0 ? (
+              <ul>
+                {[...textsJobs].reverse().map((job) => (
+                  <li key={job.name} className="whitespace-pre-line">
+                    <b>{job.years}</b> - {job.name}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-light">{messages.about.empty.jobs}</p>
+            )}
           </div>
         </div>
       </div>

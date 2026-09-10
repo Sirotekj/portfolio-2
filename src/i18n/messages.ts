@@ -23,6 +23,13 @@ const messages = {
       empty: 'Nejsou zde žádné projekty.',
     },
     about: {
+      sections: {
+        skills: 'Dovednosti',
+        education: 'Vzdělání',
+        languages: 'Jazyky',
+        hobbies: 'Koníčky',
+        jobs: 'Pracovní zkušenosti',
+      },
       empty: {
         skills: 'Nejsou zde žádné dovednosti.',
         education: 'Není zde žádné vzdělání.',
@@ -55,6 +62,13 @@ const messages = {
       empty: 'There are no projects here.',
     },
     about: {
+      sections: {
+        skills: 'Skills',
+        education: 'Education',
+        languages: 'Languages',
+        hobbies: 'Hobbies',
+        jobs: 'Work experience',
+      },
       empty: {
         skills: 'There are no skills here.',
         education: 'There is no education here.',

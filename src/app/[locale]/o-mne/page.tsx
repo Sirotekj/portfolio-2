@@ -69,7 +69,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
         <div className="container my-xlarge">
           <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border px-large pb-large shadow-xl lg:grid-cols-2">
             <div className="col-span-1">
-              <h2>Dovednosti</h2>
+              <h2>{messages.about.sections.skills}</h2>
               {localized.skills.length > 0 ? (
                 <ul>
                   {localized.skills.map((skill) => (
@@ -83,7 +83,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 <p className="text-light">{messages.about.empty.skills}</p>
               )}
 
-              <h2>Vzdělání</h2>
+              <h2>{messages.about.sections.education}</h2>
               {localized.education.length > 0 ? (
                 <ul>
                   {[...localized.education].reverse().map((education) => (
@@ -96,7 +96,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 <p className="text-light">{messages.about.empty.education}</p>
               )}
 
-              <h2>Jazyky</h2>
+              <h2>{messages.about.sections.languages}</h2>
               {localized.languages.length > 0 ? (
                 <ul>
                   {localized.languages.map((language) => (
@@ -110,7 +110,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 <p className="text-light">{messages.about.empty.languages}</p>
               )}
 
-              <h2>Koníčky</h2>
+              <h2>{messages.about.sections.hobbies}</h2>
               {localized.hobbies.length > 0 ? (
                 <p>
                   {localized.hobbies
@@ -123,7 +123,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </div>
 
             <div className="col-span-1">
-              <h2>Pracovní zkušenosti</h2>
+              <h2>{messages.about.sections.jobs}</h2>
               {localized.jobs.length > 0 ? (
                 <ul>
                   {[...localized.jobs].reverse().map((job) => (
@@ -165,7 +165,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
       <div className="container my-xlarge">
         <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border px-large pb-large shadow-xl lg:grid-cols-2">
           <div className="col-span-1">
-            <h2>Dovednosti</h2>
+            <h2>{messages.about.sections.skills}</h2>
             {textsSkills.length > 0 ? (
               <ul>
                 {textsSkills.map((skill) => (
@@ -179,7 +179,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <p className="text-light">{messages.about.empty.skills}</p>
             )}
 
-            <h2>Vzdělání</h2>
+            <h2>{messages.about.sections.education}</h2>
             {textsEducation.length > 0 ? (
               <ul>
                 {[...textsEducation].reverse().map((education) => (
@@ -192,7 +192,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <p className="text-light">{messages.about.empty.education}</p>
             )}
 
-            <h2>Jazyky</h2>
+            <h2>{messages.about.sections.languages}</h2>
             {textsLanguages.length > 0 ? (
               <ul>
                 {textsLanguages.map((language) => (
@@ -206,7 +206,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <p className="text-light">{messages.about.empty.languages}</p>
             )}
 
-            <h2>Koníčky</h2>
+            <h2>{messages.about.sections.hobbies}</h2>
             {textsHobbies.trim() ? (
               <p>{textsHobbies}</p>
             ) : (
@@ -215,7 +215,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
           </div>
 
           <div className="col-span-1">
-            <h2>Pracovní zkušenosti</h2>
+            <h2>{messages.about.sections.jobs}</h2>
             {textsJobs.length > 0 ? (
               <ul>
                 {[...textsJobs].reverse().map((job) => (

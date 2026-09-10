@@ -5,14 +5,27 @@ import { localizeAboutPageData } from '@/lib/about/localize';
 import { getAboutPageData, splitAboutIntro } from '@/lib/about/queries';
 import { isValidLocale, type Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n/messages';
+import { buildPageMetadata } from '@/lib/site-settings/metadata';
 
 type AboutPageProps = {
   params: Promise<{ locale: string }>;
 };
 
-export const metadata: Metadata = {
-  title: 'O mně',
-};
+export async function generateMetadata({
+  params,
+}: AboutPageProps): Promise<Metadata> {
+  const { locale: localeParam } = await params;
+  const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
+  const messages = getMessages(locale);
+  const data = await getAboutPageData();
+  const intro = localizeAboutPageData(data, locale).intro.trim();
+
+  return buildPageMetadata(locale, {
+    title: messages.nav.about,
+    description: intro || undefined,
+    ogImage: data.aboutPage.photo.trim() || undefined,
+  });
+}
 
 function LevelDots({ level }: { level: number }) {
   return (

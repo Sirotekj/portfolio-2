@@ -14,11 +14,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Portfolio',
-    template: 'SarArt | %s',
-  },
-  description: 'Osobní portfolio a blog',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'http://localhost:3000',
+  ),
 };
 
 export default async function RootLayout({

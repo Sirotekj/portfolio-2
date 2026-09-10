@@ -8,6 +8,10 @@ const messages = {
       blog: 'Blog',
     },
     home: 'Domů',
+    site: {
+      title: 'SarArt',
+      description: 'Osobní portfolio a blog',
+    },
     notFound: {
       title: 'Stránka nenalezena',
       description:
@@ -63,6 +67,10 @@ const messages = {
       blog: 'Blog',
     },
     home: 'Home',
+    site: {
+      title: 'SarArt',
+      description: 'Personal portfolio and blog',
+    },
     notFound: {
       title: 'Page not found',
       description:

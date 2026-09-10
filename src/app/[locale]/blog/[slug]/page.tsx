@@ -11,6 +11,7 @@ import {
   getPublishedBlogBySlug,
   getPublishedBlogStaticParams,
 } from '@/lib/blog/queries';
+import { buildPageMetadata } from '@/lib/site-settings/metadata';
 
 type BlogPostPageProps = {
   params: Promise<{ locale: string; slug: string }>;
@@ -29,15 +30,18 @@ export async function generateMetadata({
   const blog = await getPublishedBlogBySlug(slug, locale);
 
   if (!blog) {
-    return { title: messages.blog.notFound };
+    return buildPageMetadata(locale, {
+      title: messages.blog.notFound,
+    });
   }
 
   const localized = getBlogLocalizedFields(blog, locale);
 
-  return {
+  return buildPageMetadata(locale, {
     title: localized.title,
     description: localized.intro,
-  };
+    ogImage: blog.image.trim() || undefined,
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {

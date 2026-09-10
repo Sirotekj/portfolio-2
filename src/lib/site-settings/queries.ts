@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 import type { SiteSettingsView } from '@/types/types';
 
 import { defaultSiteSettings } from '@/lib/site-settings/defaults';
@@ -12,7 +14,7 @@ function isMissingSiteSettingsTableError(error: unknown): boolean {
   );
 }
 
-export async function getSiteSettings(): Promise<SiteSettingsView> {
+export const getSiteSettings = cache(async (): Promise<SiteSettingsView> => {
   try {
     const settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
 
@@ -24,6 +26,6 @@ export async function getSiteSettings(): Promise<SiteSettingsView> {
 
     throw error;
   }
-}
+});
 
 export { defaultSiteSettings };

@@ -6,14 +6,23 @@ import { isValidLocale, type Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n/messages';
 import { localizedPath } from '@/i18n/routing';
 import { getBlogLocalizedFields, getPublishedBlogs } from '@/lib/blog/queries';
+import { buildPageMetadata } from '@/lib/site-settings/metadata';
 
 type BlogPageProps = {
   params: Promise<{ locale: string }>;
 };
 
-export const metadata: Metadata = {
-  title: 'Blog',
-};
+export async function generateMetadata({
+  params,
+}: BlogPageProps): Promise<Metadata> {
+  const { locale: localeParam } = await params;
+  const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
+  const messages = getMessages(locale);
+
+  return buildPageMetadata(locale, {
+    title: messages.nav.blog,
+  });
+}
 
 export default async function BlogPage({ params }: BlogPageProps) {
   const { locale: localeParam } = await params;

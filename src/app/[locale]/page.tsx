@@ -8,14 +8,28 @@ import {
   getPortfolioPage,
   getPortfolioProjects,
 } from '@/lib/portfolio/queries';
+import { buildPageMetadata } from '@/lib/site-settings/metadata';
 
 type PortfolioPageProps = {
   params: Promise<{ locale: string }>;
 };
 
-export const metadata: Metadata = {
-  title: 'Portfolio',
-};
+export async function generateMetadata({
+  params,
+}: PortfolioPageProps): Promise<Metadata> {
+  const { locale: localeParam } = await params;
+  const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
+  const messages = getMessages(locale);
+  const portfolioPage = await getPortfolioPage();
+  const intro = portfolioPage
+    ? getLocalizedPortfolioIntro(portfolioPage, locale).trim()
+    : '';
+
+  return buildPageMetadata(locale, {
+    title: messages.nav.portfolio,
+    description: intro || undefined,
+  });
+}
 
 export default async function PortfolioPage({ params }: PortfolioPageProps) {
   const { locale: localeParam } = await params;

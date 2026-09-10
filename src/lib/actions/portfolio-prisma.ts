@@ -2,8 +2,8 @@ import type { ProjectCategory } from '@/generated/prisma/client';
 
 import type { ProjectView } from '@/types/types';
 
-import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
-import { saveResponsiveImages } from '@/lib/images/process-upload';
+import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
+import { saveResponsiveImages } from '@/lib/images/save-upload';
 import { deleteStoredImage } from '@/lib/images/delete-upload';
 import { prisma } from '@/lib/prisma';
 

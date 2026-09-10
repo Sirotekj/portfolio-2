@@ -1,6 +1,6 @@
 import type { BlogFormData, BlogView } from '@/types/types';
 
-import { saveResponsiveImages } from '@/lib/images/process-upload';
+import { saveResponsiveImages } from '@/lib/images/save-upload';
 import {
   deleteStoredImage,
   extractUploadPathsFromHtml,

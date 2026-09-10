@@ -1,4 +1,4 @@
-import { getAboutPublicData } from '@/lib/actions/about-prisma';
+import { getAboutPublicData } from '@/lib/about/db';
 import { isPrismaSchemaMismatchError } from '@/lib/prisma/errors';
 import type { AboutEditorData, AboutPageView } from '@/types/types';
 

@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["sharp"],
   experimental: {
     serverActions: {
       // Výchozí 1 MB nestačí pro upload hlavního obrázku + galerie (originály před sharp).

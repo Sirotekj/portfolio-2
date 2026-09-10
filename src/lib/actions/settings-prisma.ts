@@ -1,7 +1,7 @@
 import type { SiteSettingsView } from '@/types/types';
 
-import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
-import { saveResponsiveImages } from '@/lib/images/process-upload';
+import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
+import { saveResponsiveImages } from '@/lib/images/save-upload';
 import { prisma } from '@/lib/prisma';
 import { defaultSiteSettings } from '@/lib/site-settings/defaults';
 

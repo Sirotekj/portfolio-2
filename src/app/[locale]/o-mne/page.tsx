@@ -34,32 +34,30 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const data = await getAboutPageData();
   const localized = localizeAboutPageData(data, locale);
   const introParagraphs = splitAboutIntro(localized.intro);
-  const photoSrc = data.aboutPage.photo
-    ? getAboutPhotoSrc(data.aboutPage.photo)
-    : '';
+  const photoSrc = getAboutPhotoSrc(data.aboutPage.photo);
 
   return (
     <section>
       <div className="container my-xlarge">
         <div className="after:clear-both after:content-[''] after:block">
-          {photoSrc ? (
-            <div className="mb-medium mr-large w-full overflow-hidden rounded-xl shadow-xl sm:w-2/5 sm:float-left md:w-1/3">
-              <picture>
-                <img
-                  src={photoSrc}
-                  alt="About photo"
-                  className="h-auto w-full"
-                />
-              </picture>
-            </div>
-          ) : null}
+          <div className="mb-medium mr-large w-full overflow-hidden rounded-xl shadow-xl sm:w-2/5 sm:float-left md:w-1/3">
+            <picture>
+              <img
+                src={photoSrc}
+                alt={messages.about.photoAlt}
+                className="h-auto w-full"
+              />
+            </picture>
+          </div>
           {introParagraphs.length > 0 ? (
             <div className="space-y-4">
               {introParagraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
-          ) : null}
+          ) : (
+            <p className="text-light">{messages.about.empty.intro}</p>
+          )}
         </div>
       </div>
 

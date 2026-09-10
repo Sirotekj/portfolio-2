@@ -4,9 +4,11 @@ import {
   isResponsiveImageBase,
 } from '@/lib/images/responsive';
 
+export const ABOUT_PHOTO_PLACEHOLDER = '/about-placeholder.svg';
+
 export function getAboutPhotoSrc(photo: string): string {
   if (!photo) {
-    return '';
+    return ABOUT_PHOTO_PLACEHOLDER;
   }
 
   if (isResponsiveImageBase(photo)) {

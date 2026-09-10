@@ -23,6 +23,7 @@ const messages = {
       empty: 'Nejsou zde žádné projekty.',
     },
     about: {
+      photoAlt: 'Profilová fotografie',
       sections: {
         skills: 'Dovednosti',
         education: 'Vzdělání',
@@ -31,6 +32,7 @@ const messages = {
         jobs: 'Pracovní zkušenosti',
       },
       empty: {
+        intro: 'Není zde žádný úvodní text.',
         skills: 'Nejsou zde žádné dovednosti.',
         education: 'Není zde žádné vzdělání.',
         languages: 'Nejsou zde žádné jazyky.',
@@ -70,6 +72,7 @@ const messages = {
       empty: 'There are no projects here.',
     },
     about: {
+      photoAlt: 'Profile photo',
       sections: {
         skills: 'Skills',
         education: 'Education',
@@ -78,6 +81,7 @@ const messages = {
         jobs: 'Work experience',
       },
       empty: {
+        intro: 'There is no introduction here.',
         skills: 'There are no skills here.',
         education: 'There is no education here.',
         languages: 'There are no languages here.',

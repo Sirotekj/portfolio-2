@@ -1,4 +1,5 @@
-import { getAboutEditorData } from '@/lib/actions/about-prisma';
+import { getAboutPublicData } from '@/lib/actions/about-prisma';
+import { isPrismaSchemaMismatchError } from '@/lib/prisma/errors';
 import type { AboutEditorData, AboutPageView } from '@/types/types';
 
 const emptyAboutData: AboutEditorData = {
@@ -15,20 +16,11 @@ const emptyAboutData: AboutEditorData = {
   hobbies: [],
 };
 
-function isMissingAboutTableError(error: unknown): boolean {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    (error as { code: string }).code === 'P2021'
-  );
-}
-
 export async function getAboutPageData(): Promise<AboutEditorData> {
   try {
-    return await getAboutEditorData();
+    return await getAboutPublicData();
   } catch (error) {
-    if (isMissingAboutTableError(error)) {
+    if (isPrismaSchemaMismatchError(error)) {
       return emptyAboutData;
     }
 

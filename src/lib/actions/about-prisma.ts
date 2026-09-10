@@ -100,31 +100,60 @@ export async function updateAboutPage(data: {
   });
 }
 
-export async function getAboutEditorData(): Promise<AboutEditorData> {
-  const [aboutPage, skills, languages, education, jobs, hobbies] =
-    await Promise.all([
-      getOrCreateAboutPage(),
-      prisma.skill.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] }),
-      prisma.language.findMany({
-        orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-      }),
-      prisma.education.findMany({
-        orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-      }),
-      prisma.jobExperience.findMany({
-        orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-      }),
-      prisma.hobby.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] }),
-    ]);
+const aboutListOrder = [{ sortOrder: 'asc' as const }, { id: 'asc' as const }];
 
+function buildAboutEditorData(
+  aboutPage: AboutPageView | null,
+  skills: Parameters<typeof mapSkill>[0][],
+  languages: Parameters<typeof mapLanguage>[0][],
+  education: Parameters<typeof mapEducation>[0][],
+  jobs: Parameters<typeof mapJob>[0][],
+  hobbies: Parameters<typeof mapHobby>[0][],
+): AboutEditorData {
   return {
-    aboutPage: mapAboutPage(aboutPage),
+    aboutPage: aboutPage ?? { id: 1, photo: '', intro: '', introEn: null },
     skills: skills.map(mapSkill),
     languages: languages.map(mapLanguage),
     education: education.map(mapEducation),
     jobs: jobs.map(mapJob),
     hobbies: hobbies.map(mapHobby),
   };
+}
+
+/** Read-only load for the public About page (no upsert side effects). */
+export async function getAboutPublicData(): Promise<AboutEditorData> {
+  const [aboutPage, skills, languages, education, jobs, hobbies] =
+    await Promise.all([
+      prisma.aboutPage.findUnique({ where: { id: 1 } }),
+      prisma.skill.findMany({ orderBy: aboutListOrder }),
+      prisma.language.findMany({ orderBy: aboutListOrder }),
+      prisma.education.findMany({ orderBy: aboutListOrder }),
+      prisma.jobExperience.findMany({ orderBy: aboutListOrder }),
+      prisma.hobby.findMany({ orderBy: aboutListOrder }),
+    ]);
+
+  return buildAboutEditorData(
+    aboutPage ? mapAboutPage(aboutPage) : null,
+    skills,
+    languages,
+    education,
+    jobs,
+    hobbies,
+  );
+}
+
+export async function getAboutEditorData(): Promise<AboutEditorData> {
+  const [aboutPage, skills, languages, education, jobs, hobbies] =
+    await Promise.all([
+      getOrCreateAboutPage(),
+      prisma.skill.findMany({ orderBy: aboutListOrder }),
+      prisma.language.findMany({ orderBy: aboutListOrder }),
+      prisma.education.findMany({ orderBy: aboutListOrder }),
+      prisma.jobExperience.findMany({ orderBy: aboutListOrder }),
+      prisma.hobby.findMany({ orderBy: aboutListOrder }),
+    ]);
+
+  return buildAboutEditorData(aboutPage, skills, languages, education, jobs, hobbies);
 }
 
 async function getNextSortOrder(

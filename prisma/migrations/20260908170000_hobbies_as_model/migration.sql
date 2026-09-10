@@ -3,13 +3,13 @@ CREATE TABLE "hobbies" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "name_en" TEXT,
-    "sort_order" INTEGER NOT NULL DEFAULT 0,
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "hobbies_pkey" PRIMARY KEY ("id")
 );
 
 -- Migrate existing comma-separated hobbies from about_page
-INSERT INTO "hobbies" ("name", "name_en", "sort_order")
+INSERT INTO "hobbies" ("name", "name_en", "sortOrder")
 SELECT
     TRIM(hobby.name),
     NULL,

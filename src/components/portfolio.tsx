@@ -25,6 +25,22 @@ type PortfolioProps = {
   locale: Locale;
 };
 
+const LOADING_IMAGE = '/loading.png';
+
+function ProjectImageLoader() {
+  return (
+    <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80">
+      {/* eslint-disable-next-line @next/next/no-img-element -- animovaný placeholder z public/ */}
+      <img
+        src={LOADING_IMAGE}
+        alt=""
+        aria-hidden
+        className="h-10 w-10 animate-spin"
+      />
+    </div>
+  );
+}
+
 function ProjectImage({
   project,
   locale,
@@ -32,8 +48,15 @@ function ProjectImage({
   project: ProjectView;
   locale: Locale;
 }) {
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
   const src = getProjectImageSrc(project);
   const title = getProjectLocalizedTitle(project, locale);
+  const showLoader = !loaded && !failed;
+
+  const imageClassName = `transition-opacity duration-300 ${
+    loaded ? 'opacity-100' : 'opacity-0'
+  }`;
 
   if (hasProjectImageDimensions(project)) {
     return (
@@ -43,27 +66,37 @@ function ProjectImage({
           aspectRatio: `${project.imageWidth} / ${project.imageHeight}`,
         }}
       >
+        {showLoader ? <ProjectImageLoader /> : null}
         <Image
           src={src}
           alt={title}
           fill
+          loading="lazy"
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
+          className={`object-cover ${imageClassName}`}
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
         />
       </div>
     );
   }
 
   return (
-    <Image
-      src={src}
-      alt={title}
-      width={0}
-      height={0}
-      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-      className="h-auto w-full"
-      style={{ width: '100%', height: 'auto' }}
-    />
+    <div className="relative w-full min-h-48">
+      {showLoader ? <ProjectImageLoader /> : null}
+      <Image
+        src={src}
+        alt={title}
+        width={0}
+        height={0}
+        loading="lazy"
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        className={`h-auto w-full ${imageClassName}`}
+        style={{ width: '100%', height: 'auto' }}
+        onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
+      />
+    </div>
   );
 }
 

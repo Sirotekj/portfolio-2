@@ -13,8 +13,10 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "admin:hash-password": "node scripts/hash-admin-password.mjs",
-    "admin:verify-env": "node scripts/verify-admin-env.cjs"
+    "admin:generate-secret": "node scripts/generate-session-secret.mjs",
+    "admin:create-user": "node scripts/create-admin-user.mjs",
+    "admin:verify-auth": "node scripts/verify-admin-auth.cjs",
+    "admin:hash-password": "node scripts/hash-admin-password.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",

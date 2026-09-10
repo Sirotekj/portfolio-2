@@ -15,7 +15,3 @@ export function getAdminSessionSecretValue(): string | null {
     null
   );
 }
-
-export function getAdminEmailValue(): string | null {
-  return process.env.ADMIN_EMAIL?.trim() ?? null;
-}

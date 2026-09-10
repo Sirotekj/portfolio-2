@@ -2,11 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-import {
-  getAdminAuthSetupError,
-  getAdminEmail,
-  hasAdminAuthConfig,
-} from '@/lib/auth/config';
+import { getAdminAuthSetupError, isAdminLoginReady } from '@/lib/auth/config';
 import { verifyAdminCredentials } from '@/lib/auth/credentials';
 import { createAdminSession, destroyAdminSession } from '@/lib/auth/session';
 
@@ -18,13 +14,13 @@ export async function loginAction(
   _prevState: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  const setupError = getAdminAuthSetupError();
+  const setupError = await getAdminAuthSetupError();
 
-  if (!hasAdminAuthConfig() || setupError) {
+  if (!(await isAdminLoginReady()) || setupError) {
     return {
       error:
         setupError ??
-        'Admin přihlášení není nakonfigurované. Doplňte ADMIN_* proměnné v .env.',
+        'Admin přihlášení není nakonfigurované. Doplň ADMIN_SESSION_SECRET a vytvoř uživatele v DB.',
     };
   }
 
@@ -39,13 +35,13 @@ export async function loginAction(
     return { error: 'Vyplňte email a heslo.' };
   }
 
-  const isValid = await verifyAdminCredentials(email, password);
+  const result = await verifyAdminCredentials(email, password);
 
-  if (!isValid) {
+  if (!result.ok) {
     return { error: 'Neplatný email nebo heslo.' };
   }
 
-  await createAdminSession(getAdminEmail());
+  await createAdminSession(result.email);
   redirect('/edit');
 }
 

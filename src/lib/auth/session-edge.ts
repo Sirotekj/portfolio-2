@@ -1,7 +1,7 @@
 import { jwtVerify } from 'jose';
 
 import { ADMIN_SESSION_COOKIE } from './constants';
-import { getAdminEmailValue, getAdminSessionSecretValue } from './env-shared';
+import { getAdminSessionSecretValue } from './env-shared';
 
 export { ADMIN_SESSION_COOKIE };
 
@@ -9,9 +9,8 @@ export async function verifyAdminSessionTokenEdge(
   token: string,
 ): Promise<boolean> {
   const secret = getAdminSessionSecretValue();
-  const email = getAdminEmailValue();
 
-  if (!secret || !email) {
+  if (!secret) {
     return false;
   }
 
@@ -22,7 +21,7 @@ export async function verifyAdminSessionTokenEdge(
     );
 
     const subject = payload.sub ?? payload.email;
-    return subject === email;
+    return typeof subject === 'string' && subject.includes('@');
   } catch {
     return false;
   }

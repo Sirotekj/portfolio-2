@@ -3,19 +3,17 @@ import 'server-only';
 import bcrypt from 'bcryptjs';
 import { timingSafeEqual } from 'crypto';
 
-import {
-  getAdminEmail,
-  getAdminPasswordHash,
-  hasAdminAuthConfig,
-} from './config';
+import { findUserByEmail, normalizeUserEmail } from '@/lib/auth/users';
 
-function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase();
-}
+import { hasSessionSecretConfig } from './config';
+
+/** Bcrypt hash of a throwaway password — used when the user does not exist. */
+const INVALID_USER_PASSWORD_HASH =
+  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfLkNeZQ/UW.uSi';
 
 function emailsMatch(input: string, expected: string): boolean {
-  const a = Buffer.from(normalizeEmail(input));
-  const b = Buffer.from(normalizeEmail(expected));
+  const a = Buffer.from(normalizeUserEmail(input));
+  const b = Buffer.from(normalizeUserEmail(expected));
 
   if (a.length !== b.length) {
     return false;
@@ -24,22 +22,25 @@ function emailsMatch(input: string, expected: string): boolean {
   return timingSafeEqual(a, b);
 }
 
+export type AdminLoginResult =
+  | { ok: true; email: string }
+  | { ok: false };
+
 export async function verifyAdminCredentials(
   email: string,
   password: string,
-): Promise<boolean> {
-  if (!hasAdminAuthConfig()) {
-    return false;
+): Promise<AdminLoginResult> {
+  if (!hasSessionSecretConfig()) {
+    return { ok: false };
   }
 
-  const expectedEmail = getAdminEmail();
-  const passwordHash = getAdminPasswordHash();
+  const user = await findUserByEmail(email);
+  const passwordHash = user?.passwordHash ?? INVALID_USER_PASSWORD_HASH;
+  const passwordMatches = await bcrypt.compare(password, passwordHash);
 
-  if (!emailsMatch(email, expectedEmail)) {
-    // Same work as failed password check to avoid timing leaks.
-    await bcrypt.compare(password, passwordHash);
-    return false;
+  if (!user || !passwordMatches || !emailsMatch(email, user.email)) {
+    return { ok: false };
   }
 
-  return bcrypt.compare(password, passwordHash);
+  return { ok: true, email: user.email };
 }

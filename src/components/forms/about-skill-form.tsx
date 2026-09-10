@@ -4,10 +4,7 @@ import { useActionState } from 'react';
 
 import type { SkillView } from '@/types/types';
 
-import {
-  deleteSkillAction,
-  saveSkillAction,
-} from '@/lib/actions/about-actions';
+import { saveSkillAction } from '@/lib/actions/about-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import {
@@ -90,15 +87,6 @@ export default function SkillForm({ onClose, initialData }: SkillFormProps) {
           </ButtonAdmin>
         </div>
       </form>
-
-      {initialData?.id ? (
-        <form action={deleteSkillAction} className="mt-4 border-t border-border pt-4">
-          <input type="hidden" name="id" value={initialData.id} />
-          <ButtonAdmin type="submit" color="light">
-            Smazat dovednost
-          </ButtonAdmin>
-        </form>
-      ) : null}
     </>
   );
 }

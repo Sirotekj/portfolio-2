@@ -6,7 +6,7 @@ import type { BlogFormData, FormState } from '@/types/types';
 
 import { isHtmlEmpty, slugify } from '@/lib/utils/slug';
 
-import { DeleteBlog, SaveBlog, UpdateBlog, saveBlogImage } from './blog-prisma';
+import { DeleteBlog, GetBlogById, SaveBlog, UpdateBlog, saveBlogImage } from './blog-prisma';
 
 function optionalText(value: FormDataEntryValue | null): string | null {
   if (typeof value !== 'string') {
@@ -146,15 +146,30 @@ export async function createAction(
   }
 }
 
-export async function deleteAction(formData: FormData): Promise<void> {
+export async function deleteBlogAction(formData: FormData): Promise<void> {
   const id = formData.get('id');
 
   if (typeof id !== 'string' || !id.trim()) {
     return;
   }
 
+  const blog = await GetBlogById(Number(id));
+
   await DeleteBlog(id);
   revalidatePath('/edit/blog');
   revalidatePath('/cs/blog');
   revalidatePath('/en/blog');
+
+  if (blog) {
+    revalidateBlogPaths({
+      title: blog.title,
+      titleEn: blog.titleEn,
+      slug: blog.slug,
+      slugEn: blog.slugEn,
+      intro: blog.intro,
+      introEn: blog.introEn,
+      content: blog.content,
+      contentEn: blog.contentEn,
+    });
+  }
 }

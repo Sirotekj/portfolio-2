@@ -4,10 +4,7 @@ import { useActionState } from 'react';
 
 import type { JobExperienceView } from '@/types/types';
 
-import {
-  deleteJobAction,
-  saveJobAction,
-} from '@/lib/actions/about-actions';
+import { saveJobAction } from '@/lib/actions/about-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import { fieldClass, FormFeedback } from '@/components/forms/admin-fields';
@@ -100,15 +97,6 @@ export default function JobForm({ onClose, initialData }: JobFormProps) {
           </ButtonAdmin>
         </div>
       </form>
-
-      {initialData?.id ? (
-        <form action={deleteJobAction} className="mt-4 border-t border-border pt-4">
-          <input type="hidden" name="id" value={initialData.id} />
-          <ButtonAdmin type="submit" color="light">
-            Smazat zkušenost
-          </ButtonAdmin>
-        </form>
-      ) : null}
     </>
   );
 }

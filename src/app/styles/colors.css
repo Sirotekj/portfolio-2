@@ -6,6 +6,10 @@
   --light: #707070;
   --border: #e5e7eb;
 
+  /*--danger: #b54747;*/
+  --danger: #b57777;
+  --danger-hover: #953838;
+
   --footer-light: #c8e1e5;
   --footer-dark: #bdd0d6;
   --footer-btn: #cfeef1;

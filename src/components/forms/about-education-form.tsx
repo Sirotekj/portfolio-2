@@ -4,10 +4,7 @@ import { useActionState } from 'react';
 
 import type { EducationView } from '@/types/types';
 
-import {
-  deleteEducationAction,
-  saveEducationAction,
-} from '@/lib/actions/about-actions';
+import { saveEducationAction } from '@/lib/actions/about-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import { fieldClass, FormFeedback } from '@/components/forms/admin-fields';
@@ -97,18 +94,6 @@ export default function EducationForm({
           </ButtonAdmin>
         </div>
       </form>
-
-      {initialData?.id ? (
-        <form
-          action={deleteEducationAction}
-          className="mt-4 border-t border-border pt-4"
-        >
-          <input type="hidden" name="id" value={initialData.id} />
-          <ButtonAdmin type="submit" color="light">
-            Smazat vzdělání
-          </ButtonAdmin>
-        </form>
-      ) : null}
     </>
   );
 }

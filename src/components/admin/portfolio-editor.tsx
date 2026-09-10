@@ -3,9 +3,13 @@
 import { useMemo, useState, useTransition } from 'react';
 
 import ButtonAdmin from '@/components/admin/button-admin';
+import ConfirmDeleteModal from '@/components/admin/confirm-delete-modal';
 import PortfolioForm from '@/components/forms/portfolio-form';
 import PortfolioPageForm from '@/components/forms/portfolio-page-form';
-import { reorderProjectsAction } from '@/lib/actions/portfolio-actions';
+import {
+  deleteProjectAction,
+  reorderProjectsAction,
+} from '@/lib/actions/portfolio-actions';
 import type { PortfolioPageView, ProjectView } from '@/types/types';
 
 type PortfolioEditorProps = {
@@ -45,6 +49,10 @@ export default function PortfolioEditor({
   const [dropTargetId, setDropTargetId] = useState<number | null>(null);
   const [reorderError, setReorderError] = useState<string | null>(null);
   const [isReordering, startReorderTransition] = useTransition();
+  const [projectToDelete, setProjectToDelete] = useState<ProjectView | null>(
+    null,
+  );
+  const [isDeleting, startDeleteTransition] = useTransition();
 
   const items = useMemo(() => {
     const order = optimisticIds ?? projects.map((project) => project.id);
@@ -68,6 +76,31 @@ export default function PortfolioEditor({
   function closeForm() {
     setIsFormOpen(false);
     setSelectedProject(undefined);
+  }
+
+  function openDeleteConfirm(project: ProjectView) {
+    setProjectToDelete(project);
+  }
+
+  function closeDeleteConfirm() {
+    if (!isDeleting) {
+      setProjectToDelete(null);
+    }
+  }
+
+  function confirmDelete() {
+    if (!projectToDelete) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set('id', String(projectToDelete.id));
+
+    startDeleteTransition(async () => {
+      await deleteProjectAction(formData);
+      setProjectToDelete(null);
+      setOptimisticIds(null);
+    });
   }
 
   function handleDrop(targetId: number) {
@@ -182,13 +215,25 @@ export default function PortfolioEditor({
                   </p>
                 </div>
 
-                <div onMouseDown={(event) => event.stopPropagation()}>
+                <div
+                  className="flex shrink-0 flex-col items-end gap-1"
+                  onMouseDown={(event) => event.stopPropagation()}
+                >
                   <ButtonAdmin
                     type="button"
                     onClick={() => openEditForm(project)}
-                    className="cursor-pointer shrink-0 text-sm font-medium text-primary hover:underline"
+                    color="light"
+                    className="px-3 py-1"
                   >
                     Upravit
+                  </ButtonAdmin>
+                  <ButtonAdmin
+                    type="button"
+                    onClick={() => openDeleteConfirm(project)}
+                    color="danger"
+                    className="px-3 py-1"
+                  >
+                    Smazat
                   </ButtonAdmin>
                 </div>
               </li>
@@ -199,12 +244,30 @@ export default function PortfolioEditor({
 
       {isFormOpen ? (
         <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4">
-          <div className="fixed inset-0 bg-black/40" onClick={closeForm}></div>
+          <div className="fixed inset-0 bg-black/40" onClick={closeForm} />
           <div className="relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
             <PortfolioForm onClose={closeForm} initialData={selectedProject} />
           </div>
         </div>
       ) : null}
+
+      <ConfirmDeleteModal
+        isOpen={projectToDelete !== null}
+        isPending={isDeleting}
+        onCancel={closeDeleteConfirm}
+        onConfirm={confirmDelete}
+      >
+        <p>
+          Opravdu chcete smazat projekt{' '}
+          <strong className="text-foreground">
+            „{projectToDelete?.title ?? ''}“
+          </strong>
+          ?
+        </p>
+        <p className="mt-2">
+          Smaže se hlavní obrázek i všechny soubory z galerie projektu.
+        </p>
+      </ConfirmDeleteModal>
       </section>
     </div>
   );

@@ -4,6 +4,7 @@ import type { ProjectView } from '@/types/types';
 
 import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
 import { saveResponsiveImages } from '@/lib/images/process-upload';
+import { deleteStoredImage } from '@/lib/images/delete-upload';
 import { prisma } from '@/lib/prisma';
 
 function mapProject(project: {
@@ -84,6 +85,28 @@ export async function UpdateProject(
 }
 
 export async function DeleteProject(id: string): Promise<void> {
+  const project = await prisma.project.findUnique({
+    where: { id: Number(id) },
+  });
+
+  if (!project) {
+    return;
+  }
+
+  const imagePaths = new Set<string>();
+
+  if (project.image.trim()) {
+    imagePaths.add(project.image.trim());
+  }
+
+  for (const galleryImage of project.gallery) {
+    if (galleryImage.trim()) {
+      imagePaths.add(galleryImage.trim());
+    }
+  }
+
+  await Promise.all([...imagePaths].map((imagePath) => deleteStoredImage(imagePath)));
+
   await prisma.project.delete({
     where: { id: Number(id) },
   });

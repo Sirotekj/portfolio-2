@@ -9,6 +9,8 @@
   --color-dark: var(--dark);
   --color-light: var(--light);
   --color-border: var(--border);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
 
   --color-footer-light: var(--footer-light);
   --color-footer-dark: var(--footer-dark);

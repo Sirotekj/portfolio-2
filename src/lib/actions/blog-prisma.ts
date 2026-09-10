@@ -1,6 +1,10 @@
 import type { BlogFormData, BlogView } from '@/types/types';
 
 import { saveResponsiveImages } from '@/lib/images/process-upload';
+import {
+  deleteStoredImage,
+  extractUploadPathsFromHtml,
+} from '@/lib/images/delete-upload';
 import { prisma } from '@/lib/prisma';
 
 function mapBlog(blog: {
@@ -88,6 +92,32 @@ export async function UpdateBlog(
 }
 
 export async function DeleteBlog(id: string): Promise<void> {
+  const blog = await prisma.blogPost.findUnique({
+    where: { id: Number(id) },
+  });
+
+  if (!blog) {
+    return;
+  }
+
+  const imagePaths = new Set<string>();
+
+  if (blog.image.trim()) {
+    imagePaths.add(blog.image.trim());
+  }
+
+  for (const html of [blog.content, blog.contentEn]) {
+    if (!html) {
+      continue;
+    }
+
+    for (const uploadPath of extractUploadPathsFromHtml(html)) {
+      imagePaths.add(uploadPath);
+    }
+  }
+
+  await Promise.all([...imagePaths].map((imagePath) => deleteStoredImage(imagePath)));
+
   await prisma.blogPost.delete({
     where: { id: Number(id) },
   });

@@ -4,10 +4,7 @@ import { useActionState } from 'react';
 
 import type { LanguageView } from '@/types/types';
 
-import {
-  deleteLanguageAction,
-  saveLanguageAction,
-} from '@/lib/actions/about-actions';
+import { saveLanguageAction } from '@/lib/actions/about-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import {
@@ -93,18 +90,6 @@ export default function LanguageForm({
           </ButtonAdmin>
         </div>
       </form>
-
-      {initialData?.id ? (
-        <form
-          action={deleteLanguageAction}
-          className="mt-4 border-t border-border pt-4"
-        >
-          <input type="hidden" name="id" value={initialData.id} />
-          <ButtonAdmin type="submit" color="light">
-            Smazat jazyk
-          </ButtonAdmin>
-        </form>
-      ) : null}
     </>
   );
 }

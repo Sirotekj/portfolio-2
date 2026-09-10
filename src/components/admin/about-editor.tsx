@@ -3,6 +3,11 @@
 import type { AboutEditorData } from '@/types/types';
 
 import {
+  deleteEducationAction,
+  deleteHobbyAction,
+  deleteJobAction,
+  deleteLanguageAction,
+  deleteSkillAction,
   reorderEducationAction,
   reorderHobbiesAction,
   reorderJobsAction,
@@ -46,7 +51,10 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         items={data.skills}
         emptyLabel="Zatím žádné dovednosti."
         addLabel="Přidat dovednost"
+        entityLabel="dovednost"
         onReorder={reorderSkillsAction}
+        onDelete={deleteSkillAction}
+        getItemDeleteLabel={(skill) => skill.name}
         Form={SkillForm}
         renderItem={(skill) => (
           <>
@@ -61,7 +69,12 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         items={data.education}
         emptyLabel="Zatím žádné vzdělání."
         addLabel="Přidat vzdělání"
+        entityLabel="vzdělání"
         onReorder={reorderEducationAction}
+        onDelete={deleteEducationAction}
+        getItemDeleteLabel={(education) =>
+          `${education.years} – ${education.school}`
+        }
         Form={EducationForm}
         renderItem={(education) => (
           <>
@@ -76,7 +89,10 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         items={data.languages}
         emptyLabel="Zatím žádné jazyky."
         addLabel="Přidat jazyk"
+        entityLabel="jazyk"
         onReorder={reorderLanguagesAction}
+        onDelete={deleteLanguageAction}
+        getItemDeleteLabel={(language) => language.name}
         Form={LanguageForm}
         renderItem={(language) => (
           <>
@@ -91,7 +107,10 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         items={data.hobbies}
         emptyLabel="Zatím žádné koníčky."
         addLabel="Přidat koníček"
+        entityLabel="koníček"
         onReorder={reorderHobbiesAction}
+        onDelete={deleteHobbyAction}
+        getItemDeleteLabel={(hobby) => hobby.name}
         Form={HobbyForm}
         renderItem={(hobby) => (
           <p className="font-medium text-foreground">{hobby.name}</p>
@@ -103,7 +122,12 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         items={data.jobs}
         emptyLabel="Zatím žádné pracovní zkušenosti."
         addLabel="Přidat zkušenost"
+        entityLabel="pracovní zkušenost"
         onReorder={reorderJobsAction}
+        onDelete={deleteJobAction}
+        getItemDeleteLabel={(job) =>
+          `${job.years} – ${job.description.split('\n')[0]}`
+        }
         Form={JobForm}
         renderItem={(job) => (
           <>

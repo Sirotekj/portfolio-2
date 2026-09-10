@@ -4,10 +4,7 @@ import { useActionState } from 'react';
 
 import type { HobbyView } from '@/types/types';
 
-import {
-  deleteHobbyAction,
-  saveHobbyAction,
-} from '@/lib/actions/about-actions';
+import { saveHobbyAction } from '@/lib/actions/about-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import { fieldClass, FormFeedback } from '@/components/forms/admin-fields';
@@ -79,18 +76,6 @@ export default function HobbyForm({ onClose, initialData }: HobbyFormProps) {
           </ButtonAdmin>
         </div>
       </form>
-
-      {initialData?.id ? (
-        <form
-          action={deleteHobbyAction}
-          className="mt-4 border-t border-border pt-4"
-        >
-          <input type="hidden" name="id" value={initialData.id} />
-          <ButtonAdmin type="submit" color="light">
-            Smazat koníček
-          </ButtonAdmin>
-        </form>
-      ) : null}
     </>
   );
 }

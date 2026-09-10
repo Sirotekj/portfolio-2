@@ -58,14 +58,12 @@ export async function getPortfolioProjects(): Promise<ProjectView[]> {
   }
 }
 
-export async function getPortfolioPage(): Promise<PortfolioPageView | null> {
+export async function getPortfolioPage(): Promise<PortfolioPageView> {
   try {
-    const page = await getOrCreatePortfolioPage();
-
-    return page.intro.trim() ? page : null;
+    return await getOrCreatePortfolioPage();
   } catch (error) {
     if (isMissingProjectsTableError(error)) {
-      return null;
+      return { id: 1, intro: '', introEn: null };
     }
 
     throw error;
@@ -75,5 +73,5 @@ export async function getPortfolioPage(): Promise<PortfolioPageView | null> {
 export async function getPortfolioIntro(): Promise<string | null> {
   const page = await getPortfolioPage();
 
-  return page?.intro ?? null;
+  return page.intro.trim() ? page.intro : null;
 }

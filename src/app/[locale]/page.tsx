@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import Portfolio from '@/components/portfolio';
 import { isValidLocale, type Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n/messages';
 import { getLocalizedPortfolioIntro } from '@/lib/portfolio/localize';
 import {
   getPortfolioPage,
@@ -19,21 +20,22 @@ export const metadata: Metadata = {
 export default async function PortfolioPage({ params }: PortfolioPageProps) {
   const { locale: localeParam } = await params;
   const locale: Locale = isValidLocale(localeParam) ? localeParam : 'cs';
+  const messages = getMessages(locale);
   const [projects, portfolioPage] = await Promise.all([
     getPortfolioProjects(),
     getPortfolioPage(),
   ]);
-  const intro = portfolioPage
-    ? getLocalizedPortfolioIntro(portfolioPage, locale)
-    : null;
+  const intro = getLocalizedPortfolioIntro(portfolioPage, locale).trim();
 
   return (
     <section>
-      {intro ? (
-        <div className="mx-auto container">
+      <div className="mx-auto container">
+        {intro ? (
           <p className="mt-4">{intro}</p>
-        </div>
-      ) : null}
+        ) : (
+          <p className="mt-4 text-light">{messages.portfolio.empty.intro}</p>
+        )}
+      </div>
 
       <Portfolio projects={projects} locale={locale} />
     </section>

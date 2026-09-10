@@ -12,13 +12,20 @@ import {
 import { getProjectLocalizedTitle } from '@/lib/portfolio/localize';
 import type { Categories, ProjectView } from '@/types/types';
 
-const CATEGORY_LABELS: Record<Categories | 'vse', string> = {
+const CATEGORY_LABELS: Record<Categories, string> = {
   print: 'print',
   digital: 'digital',
   personal: 'personal',
   logo: 'logo',
-  vse: 'vše',
 };
+
+const CATEGORY_KEYS: Array<Categories | 'vse'> = [
+  'print',
+  'digital',
+  'personal',
+  'logo',
+  'vse',
+];
 
 type PortfolioProps = {
   projects: ProjectView[];
@@ -118,18 +125,18 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
     <>
       <div className="mx-auto my-16 container">
         <div className="flex justify-center gap-4">
-          {(Object.keys(CATEGORY_LABELS) as Array<Categories | 'vse'>).map(
-            (key) => (
+          {CATEGORY_KEYS.map((key) => (
               <button
                 key={key}
                 type="button"
                 className={`category-button ${category === key && 'active'}`}
                 onClick={() => setCategory(key)}
               >
-                {CATEGORY_LABELS[key]}
+                {key === 'vse'
+                  ? messages.portfolio.categories.all
+                  : CATEGORY_LABELS[key]}
               </button>
-            ),
-          )}
+            ))}
         </div>
       </div>
 
@@ -146,7 +153,9 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
             ))}
           </ul>
         ) : (
-          <p className="text-center text-light">{messages.portfolio.empty}</p>
+          <p className="text-center text-light">
+            {messages.portfolio.empty.projects}
+          </p>
         )}
       </div>
     </>

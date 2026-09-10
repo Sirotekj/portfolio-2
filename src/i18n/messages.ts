@@ -20,7 +20,13 @@ const messages = {
       empty: 'Nejsou zde žádné publikované články.',
     },
     portfolio: {
-      empty: 'Nejsou zde žádné projekty.',
+      categories: {
+        all: 'vše',
+      },
+      empty: {
+        intro: 'Není zde žádný úvodní text.',
+        projects: 'Nejsou zde žádné projekty.',
+      },
     },
     about: {
       photoAlt: 'Profilová fotografie',
@@ -69,7 +75,13 @@ const messages = {
       empty: 'There are no published articles here.',
     },
     portfolio: {
-      empty: 'There are no projects here.',
+      categories: {
+        all: 'all',
+      },
+      empty: {
+        intro: 'There is no introduction here.',
+        projects: 'There are no projects here.',
+      },
     },
     about: {
       photoAlt: 'Profile photo',

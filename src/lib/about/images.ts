@@ -6,7 +6,7 @@ import {
 
 export function getAboutPhotoSrc(photo: string): string {
   if (!photo) {
-    return '/about.jpg';
+    return '';
   }
 
   if (isResponsiveImageBase(photo)) {

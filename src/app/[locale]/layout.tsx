@@ -27,7 +27,7 @@ export default async function LocaleLayout({
     <>
       <Header locale={locale} />
       <main className="mt-9 mx-auto w-full flex-1 p-6">{children}</main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }

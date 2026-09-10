@@ -1,6 +1,20 @@
 import { getAboutEditorData } from '@/lib/actions/about-prisma';
 import type { AboutEditorData, AboutPageView } from '@/types/types';
 
+const emptyAboutData: AboutEditorData = {
+  aboutPage: {
+    id: 1,
+    photo: '',
+    intro: '',
+    introEn: null,
+  },
+  skills: [],
+  languages: [],
+  education: [],
+  jobs: [],
+  hobbies: [],
+};
+
 function isMissingAboutTableError(error: unknown): boolean {
   return (
     typeof error === 'object' &&
@@ -10,25 +24,12 @@ function isMissingAboutTableError(error: unknown): boolean {
   );
 }
 
-function hasAboutContent(data: AboutEditorData): boolean {
-  return (
-    Boolean(data.aboutPage.intro.trim()) ||
-    data.skills.length > 0 ||
-    data.languages.length > 0 ||
-    data.education.length > 0 ||
-    data.jobs.length > 0 ||
-    data.hobbies.length > 0
-  );
-}
-
-export async function getAboutPageDataFromDb(): Promise<AboutEditorData | null> {
+export async function getAboutPageData(): Promise<AboutEditorData> {
   try {
-    const data = await getAboutEditorData();
-
-    return hasAboutContent(data) ? data : null;
+    return await getAboutEditorData();
   } catch (error) {
     if (isMissingAboutTableError(error)) {
-      return null;
+      return emptyAboutData;
     }
 
     throw error;

@@ -1,9 +1,8 @@
 import type { ProjectCategory } from '@/generated/prisma/client';
 
-import { getAllProjects as getDummyProjects } from '@/data/dummy-portfolio';
 import { getOrCreatePortfolioPage } from '@/lib/actions/portfolio-page-prisma';
 import { prisma } from '@/lib/prisma';
-import type { Categories, PortfolioPageView, ProjectView } from '@/types/types';
+import type { PortfolioPageView, ProjectView } from '@/types/types';
 
 function isMissingProjectsTableError(error: unknown): boolean {
   return (
@@ -42,24 +41,6 @@ function mapProject(project: {
   };
 }
 
-function getDummyProjectViews(): ProjectView[] {
-  return getDummyProjects()
-    .filter((project) => project.image)
-    .map((project, index) => ({
-      id: -(index + 1),
-      title: project.title,
-      titleEn: null,
-      image: project.image,
-      imageWidth: null,
-      imageHeight: null,
-      description: project.description,
-      descriptionEn: null,
-      category: (project.category || null) as Categories | null,
-      gallery: project.gallery,
-      sortOrder: index,
-    }));
-}
-
 export async function getPortfolioProjects(): Promise<ProjectView[]> {
   try {
     const projects = await prisma.project.findMany({
@@ -67,14 +48,10 @@ export async function getPortfolioProjects(): Promise<ProjectView[]> {
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
     });
 
-    if (projects.length > 0) {
-      return projects.map(mapProject);
-    }
-
-    return getDummyProjectViews();
+    return projects.map(mapProject);
   } catch (error) {
     if (isMissingProjectsTableError(error)) {
-      return getDummyProjectViews();
+      return [];
     }
 
     throw error;

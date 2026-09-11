@@ -51,7 +51,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-md bg-primary px-4 py-2 font-medium text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-md bg-primary px-4 py-2 font-medium text-background transition-opacity cursor-pointer hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending ? 'Přihlašuji…' : 'Přihlásit se'}
       </button>

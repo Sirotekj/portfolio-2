@@ -4,6 +4,8 @@ import { config } from 'dotenv';
 import { resolve } from 'path';
 import { Pool } from 'pg';
 
+import { getDatabaseHost } from './lib/db-host.mjs';
+
 const envFile =
   process.env.NODE_ENV === 'production'
     ? '.env.production.local'
@@ -52,6 +54,10 @@ try {
   const user = result.rows[0];
   console.log(`Admin user ready: ${user.email} (${user.id})`);
   console.log(`Env file: ${envFile}`);
+  console.log(`Database host: ${getDatabaseHost(process.env.DATABASE_URL)}`);
+  console.log(
+    'Tip: local dev uses .env.development.local, Vercel preview uses its own DATABASE_URL.',
+  );
 } catch (error) {
   console.error('Failed to create admin user:', error);
   process.exitCode = 1;

@@ -1,7 +1,6 @@
 import 'server-only';
 
 import bcrypt from 'bcryptjs';
-import { timingSafeEqual } from 'crypto';
 
 import { findUserByEmail, normalizeUserEmail } from '@/lib/auth/users';
 
@@ -10,17 +9,6 @@ import { hasSessionSecretConfig } from './config';
 /** Bcrypt hash of a throwaway password — used when the user does not exist. */
 const INVALID_USER_PASSWORD_HASH =
   '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfLkNeZQ/UW.uSi';
-
-function emailsMatch(input: string, expected: string): boolean {
-  const a = Buffer.from(normalizeUserEmail(input));
-  const b = Buffer.from(normalizeUserEmail(expected));
-
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return timingSafeEqual(a, b);
-}
 
 export type AdminLoginResult =
   | { ok: true; email: string }
@@ -34,11 +22,17 @@ export async function verifyAdminCredentials(
     return { ok: false };
   }
 
-  const user = await findUserByEmail(email);
-  const passwordHash = user?.passwordHash ?? INVALID_USER_PASSWORD_HASH;
-  const passwordMatches = await bcrypt.compare(password, passwordHash);
+  const normalizedEmail = normalizeUserEmail(email);
+  const user = await findUserByEmail(normalizedEmail);
 
-  if (!user || !passwordMatches || !emailsMatch(email, user.email)) {
+  if (!user) {
+    await bcrypt.compare(password, INVALID_USER_PASSWORD_HASH);
+    return { ok: false };
+  }
+
+  const passwordMatches = await bcrypt.compare(password, user.passwordHash);
+
+  if (!passwordMatches) {
     return { ok: false };
   }
 

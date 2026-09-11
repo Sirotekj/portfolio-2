@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'crypto';
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client.js';
 
 const envFile =
   process.env.NODE_ENV === 'production'
@@ -34,23 +33,28 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+function createUserId() {
+  return randomBytes(16).toString('base64url');
+}
+
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
 
 try {
   const passwordHash = bcrypt.hashSync(passwordArg, rounds);
-  const user = await prisma.user.upsert({
-    where: { email },
-    create: { email, passwordHash },
-    update: { passwordHash },
-  });
+  const result = await pool.query(
+    `INSERT INTO users (id, email, password_hash)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash
+     RETURNING id, email`,
+    [createUserId(), email, passwordHash],
+  );
 
+  const user = result.rows[0];
   console.log(`Admin user ready: ${user.email} (${user.id})`);
   console.log(`Env file: ${envFile}`);
 } catch (error) {
   console.error('Failed to create admin user:', error);
   process.exitCode = 1;
 } finally {
-  await prisma.$disconnect();
   await pool.end();
 }

@@ -1,8 +1,6 @@
 const { loadEnvConfig } = require('@next/env');
 const { resolve } = require('path');
 const { Pool } = require('pg');
-const { PrismaPg } = require('@prisma/adapter-pg');
-const { PrismaClient } = require('../src/generated/prisma/client.js');
 
 loadEnvConfig(resolve(process.cwd()));
 
@@ -27,26 +25,33 @@ async function main() {
   }
 
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
 
   try {
-    const users = await prisma.user.findMany({
-      select: { email: true, createdAt: true },
-      orderBy: { createdAt: 'asc' },
-    });
+    const result = await pool.query(
+      `SELECT email, created_at FROM users ORDER BY created_at ASC`,
+    );
 
-    console.log('\nAdmin users in DB:', users.length);
+    console.log('\nAdmin users in DB:', result.rows.length);
 
-    for (const user of users) {
+    for (const user of result.rows) {
       console.log(`- ${user.email}`);
     }
 
-    if (users.length === 0) {
-      console.log('\nVytvoř uživatele: npm run admin:create-user -- email@example.com heslo');
+    if (result.rows.length === 0) {
+      console.log(
+        '\nVytvoř uživatele: npm run admin:create-user -- email@example.com heslo',
+      );
       process.exitCode = 1;
     }
+  } catch (error) {
+    if (error.code === '42P01') {
+      console.log('\nTabulka users neexistuje. Spusť nejdřív: npm run db:migrate:deploy');
+      process.exitCode = 1;
+      return;
+    }
+
+    throw error;
   } finally {
-    await prisma.$disconnect();
     await pool.end();
   }
 }

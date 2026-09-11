@@ -45,10 +45,12 @@ export default async function AdminPage() {
           </p>
           <p className="mt-2">
             Uživatele vytvoř v DB:{' '}
-            <code>npm run admin:create-user -- email@example.com heslo</code>
+            <code>
+              npm run admin:create-user:dev -- email@example.com heslo
+            </code>
           </p>
           <p className="mt-2">
-            Ověření: <code>npm run admin:verify-auth</code>
+            Ověření: <code>npm run admin:verify-auth:dev</code>
           </p>
         </div>
       ) : (

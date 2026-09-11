@@ -1,27 +1,27 @@
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
-import { config } from 'dotenv';
-import { resolve } from 'path';
 import { Pool } from 'pg';
 
 import { getDatabaseHost } from './lib/db-host.mjs';
+import { loadProjectEnv } from './lib/load-env.mjs';
 
-const envFile =
-  process.env.NODE_ENV === 'production'
-    ? '.env.production.local'
-    : '.env.development.local';
-
-config({ path: resolve(process.cwd(), envFile) });
-config({ path: resolve(process.cwd(), '.env') });
-
-const emailArg = process.argv[2];
-const passwordArg = process.argv[3];
+const targetArg = process.argv[2];
+const emailArg = process.argv[3];
+const passwordArg = process.argv[4];
 const rounds = 12;
 
-if (!emailArg || !passwordArg) {
-  console.error('Usage: npm run admin:create-user -- <email> <heslo>');
+if (targetArg !== 'dev' && targetArg !== 'prod') {
+  console.error('Usage: npm run admin:create-user:dev -- <email> <heslo>');
+  console.error('       npm run admin:create-user:prod -- <email> <heslo>');
   process.exit(1);
 }
+
+if (!emailArg || !passwordArg) {
+  console.error('Usage: npm run admin:create-user:dev -- <email> <heslo>');
+  process.exit(1);
+}
+
+const { envFile, target } = loadProjectEnv(targetArg);
 
 const email = emailArg.trim().toLowerCase();
 
@@ -34,6 +34,8 @@ if (!process.env.DATABASE_URL) {
   console.error(`Chybí DATABASE_URL v ${envFile}.`);
   process.exit(1);
 }
+
+const databaseHost = getDatabaseHost(process.env.DATABASE_URL);
 
 function createUserId() {
   return randomBytes(16).toString('base64url');
@@ -51,13 +53,34 @@ try {
     [createUserId(), email, passwordHash],
   );
 
-  const user = result.rows[0];
-  console.log(`Admin user ready: ${user.email} (${user.id})`);
-  console.log(`Env file: ${envFile}`);
-  console.log(`Database host: ${getDatabaseHost(process.env.DATABASE_URL)}`);
-  console.log(
-    'Tip: local dev uses .env.development.local, Vercel preview uses its own DATABASE_URL.',
+  const verify = await pool.query(
+    `SELECT id, email FROM users WHERE email = $1`,
+    [email],
   );
+
+  const allUsers = await pool.query(
+    `SELECT email FROM users ORDER BY email ASC`,
+  );
+
+  const user = result.rows[0];
+
+  console.log(`Target: ${target} (${envFile})`);
+  console.log(`Database host: ${databaseHost}`);
+  console.log(`Admin user ready: ${user.email} (${user.id})`);
+  console.log(`Verified in DB: ${verify.rows.length === 1 ? 'yes' : 'NO'}`);
+  console.log(`All users on this host (${allUsers.rows.length}):`);
+
+  for (const row of allUsers.rows) {
+    console.log(`- ${row.email}`);
+  }
+
+  console.log(
+    `\nOtevři stejnou DB ve Studiu: npm run db:studio:${target}`,
+  );
+
+  if (verify.rows.length !== 1) {
+    process.exitCode = 1;
+  }
 } catch (error) {
   console.error('Failed to create admin user:', error);
   process.exitCode = 1;

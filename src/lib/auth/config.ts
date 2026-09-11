@@ -38,7 +38,7 @@ export async function getAdminAuthSetupError(): Promise<string | null> {
   const userCount = await countAdminUsers();
 
   if (userCount === 0) {
-    return 'V databázi není žádný admin uživatel. Vytvoř ho: npm run admin:create-user -- email@example.com heslo';
+    return 'V databázi není žádný admin uživatel. Vytvoř ho: npm run admin:create-user:dev -- email@example.com heslo';
   }
 
   return null;

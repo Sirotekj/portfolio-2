@@ -9,7 +9,7 @@ const messages = {
     },
     home: 'Domů',
     site: {
-      title: 'SarArt',
+      title: 'Title',
       description: 'Osobní portfolio a blog',
     },
     notFound: {
@@ -57,6 +57,18 @@ const messages = {
       formEmailLabel: 'Váš mail',
       formMessageLabel: 'Zpráva',
       formSubmitLabel: 'Odeslat',
+      form: {
+        sending: 'Odesílám…',
+        success: 'Děkujeme, zpráva byla odeslána.',
+        errors: {
+          required: 'Vyplňte jméno, email a zprávu.',
+          nameTooShort: 'Jméno musí mít alespoň 2 znaky.',
+          invalidEmail: 'Zadejte platný email.',
+          messageTooShort: 'Zpráva musí mít alespoň 10 znaků.',
+          sendFailed: 'Zprávu se nepodařilo odeslat. Zkuste to prosím později.',
+          notConfigured: 'Kontaktní formulář není nakonfigurovaný.',
+        },
+      },
     },
     localeSwitch: 'EN',
   },
@@ -68,7 +80,7 @@ const messages = {
     },
     home: 'Home',
     site: {
-      title: 'SarArt',
+      title: 'Title',
       description: 'Personal portfolio and blog',
     },
     notFound: {
@@ -116,6 +128,18 @@ const messages = {
       formEmailLabel: 'Your email',
       formMessageLabel: 'Message',
       formSubmitLabel: 'Send',
+      form: {
+        sending: 'Sending…',
+        success: 'Thank you, your message has been sent.',
+        errors: {
+          required: 'Please fill in your name, email, and message.',
+          nameTooShort: 'Name must be at least 2 characters.',
+          invalidEmail: 'Please enter a valid email address.',
+          messageTooShort: 'Message must be at least 10 characters.',
+          sendFailed: 'We could not send your message. Please try again later.',
+          notConfigured: 'The contact form is not configured.',
+        },
+      },
     },
     localeSwitch: 'CS',
   },

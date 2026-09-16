@@ -16,10 +16,8 @@
     "db:studio:dev": "node scripts/prisma-studio.mjs dev",
     "db:studio:prod": "node scripts/prisma-studio.mjs prod",
     "admin:generate-secret": "node scripts/generate-session-secret.mjs",
-    "admin:create-user": "node scripts/create-admin-user.mjs dev",
     "admin:create-user:dev": "node scripts/create-admin-user.mjs dev",
     "admin:create-user:prod": "node scripts/create-admin-user.mjs prod",
-    "admin:verify-auth": "node scripts/verify-admin-auth.mjs dev",
     "admin:verify-auth:dev": "node scripts/verify-admin-auth.mjs dev",
     "admin:verify-auth:prod": "node scripts/verify-admin-auth.mjs prod",
     "admin:hash-password": "node scripts/hash-admin-password.mjs"
@@ -34,6 +32,7 @@
     "pg": "^8.23.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "resend": "^6.28.1",
     "sharp": "^0.35.4",
     "xxs": "^0.0.1"
   },

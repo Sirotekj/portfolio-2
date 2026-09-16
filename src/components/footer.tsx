@@ -1,18 +1,12 @@
 import type { ReactNode } from 'react';
 
+import FooterContactForm from '@/components/footer-contact-form';
 import type { Locale } from '@/i18n/config';
+import { getMessages } from '@/i18n/messages';
 import { getLocalizedFooterSettings } from '@/lib/site-settings/localize';
 import { getSiteSettings } from '@/lib/site-settings/queries';
 
 const footerHeadingClass = 'mb-3 text-[28px] text-black tracking-wide 2xl:pb-1';
-
-const formFieldClass =
-  'mb-2 w-full rounded-[5px] border-none bg-white py-[0.35rem] pl-[0.6rem] pr-0 font-light outline-none max-[650px]:text-[0.95rem] placeholder:text-footer-placeholder';
-
-const formTextareaClass = `${formFieldClass} placeholder:pt-[0.2rem]`;
-
-const submitButtonClass =
-  'w-full cursor-pointer rounded-[5px] border-none bg-footer-btn py-[0.35rem] text-base font-medium text-black transition-all duration-500 hover:bg-footer-btn-hover';
 
 type FooterProps = {
   locale: Locale;
@@ -37,6 +31,7 @@ function ContactItem({
 
 export default async function Footer({ locale }: FooterProps) {
   const settings = await getSiteSettings();
+  const messages = getMessages(locale);
   const texts = getLocalizedFooterSettings(settings, locale);
 
   return (
@@ -62,43 +57,16 @@ export default async function Footer({ locale }: FooterProps) {
             <h1 className={`${footerHeadingClass} tracking-wider`}>
               {texts.formHeader}
             </h1>
-            <form action="" id="contact_form">
-              <div className="grid grid-cols-1 gap-x-2 gap-y-[0.35rem] sm:grid-cols-2">
-                <div className="flex flex-col items-center justify-center">
-                  <input
-                    type="text"
-                    placeholder={texts.formNameLabel}
-                    className={formFieldClass}
-                    id="contact_name"
-                  />
-                  <input
-                    type="email"
-                    placeholder={texts.formEmailLabel}
-                    className={formFieldClass}
-                    id="contact_email"
-                  />
-                  <textarea
-                    placeholder={texts.formMessageLabel}
-                    className={`${formTextareaClass} flex h-auto sm:hidden`}
-                    id="contact_message2"
-                  />
-                  <button
-                    className={submitButtonClass}
-                    id="contact_submit"
-                    type="submit"
-                  >
-                    {texts.formSubmitLabel}
-                  </button>
-                </div>
-                <div>
-                  <textarea
-                    placeholder={texts.formMessageLabel}
-                    className={`${formTextareaClass} hidden h-full sm:flex`}
-                    id="contact_message"
-                  />
-                </div>
-              </div>
-            </form>
+            <FooterContactForm
+              locale={locale}
+              labels={{
+                formNameLabel: texts.formNameLabel,
+                formEmailLabel: texts.formEmailLabel,
+                formMessageLabel: texts.formMessageLabel,
+                formSubmitLabel: texts.formSubmitLabel,
+              }}
+              formMessages={messages.footer.form}
+            />
           </div>
         </div>
       </div>

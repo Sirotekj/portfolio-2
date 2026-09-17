@@ -51,14 +51,13 @@ export default function Navigation({ locale }: NavigationProps) {
   }));
 
   return (
-    <nav className="flex items-center gap-1">
+    <nav className="site-nav">
       {navItems.map(({ href, label, isActive }) => (
         <Link
           key={href}
           href={href}
-          className={`hidden md:block px-3 py-2 text-xl font-medium transition-colors ${
-            isActive ? 'text-primary' : 'text-foreground hover:text-primary'
-          }`}
+          className="site-nav__link"
+          data-active={isActive}
         >
           {label}
         </Link>
@@ -66,7 +65,7 @@ export default function Navigation({ locale }: NavigationProps) {
 
       <Link
         href={localizedPath(alternateLocale, pathWithoutLocale)}
-        className="ml-2 pl-3 py-2 text-xl font-medium text-foreground transition-colors hover:text-primary"
+        className="site-nav__locale"
         aria-label={`Switch to ${alternateLocale.toUpperCase()}`}
       >
         {messages.localeSwitch}

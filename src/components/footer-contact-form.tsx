@@ -9,14 +9,6 @@ import {
   type ContactFormState,
 } from '@/lib/actions/contact-actions';
 
-const formFieldClass =
-  'mb-2 w-full rounded-[5px] border-none bg-white py-[0.35rem] pl-[0.6rem] pr-0 font-light outline-none max-[650px]:text-[0.95rem] placeholder:text-footer-placeholder';
-
-const formTextareaClass = `${formFieldClass} placeholder:pt-[0.2rem]`;
-
-const submitButtonClass =
-  'w-full cursor-pointer rounded-[5px] border-none bg-footer-btn py-[0.35rem] text-base font-medium text-black transition-all duration-500 hover:bg-footer-btn-hover disabled:cursor-not-allowed disabled:opacity-60';
-
 type FooterContactFormProps = {
   locale: Locale;
   labels: {
@@ -57,13 +49,13 @@ export default function FooterContactForm({
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-x-2 gap-y-[0.35rem] sm:grid-cols-2">
-        <div className="flex flex-col items-center justify-center">
+      <div className="footer-form__grid">
+        <div className="footer-form__column">
           <input
             type="text"
             name="name"
             placeholder={labels.formNameLabel}
-            className={formFieldClass}
+            className="footer-field"
             id="contact_name"
             autoComplete="name"
           />
@@ -71,19 +63,19 @@ export default function FooterContactForm({
             type="email"
             name="email"
             placeholder={labels.formEmailLabel}
-            className={formFieldClass}
+            className="footer-field"
             id="contact_email"
             autoComplete="email"
           />
           <textarea
             name="messageMobile"
             placeholder={labels.formMessageLabel}
-            className={`${formTextareaClass} flex h-auto sm:hidden`}
+            className="footer-field footer-field--textarea flex h-auto sm:hidden"
             id="contact_message2"
             rows={4}
           />
           <button
-            className={submitButtonClass}
+            className="footer-submit"
             id="contact_submit"
             type="submit"
             disabled={isPending}
@@ -95,19 +87,22 @@ export default function FooterContactForm({
           <textarea
             name="message"
             placeholder={labels.formMessageLabel}
-            className={`${formTextareaClass} hidden h-full sm:flex`}
+            className="footer-field footer-field--textarea hidden h-full sm:flex"
             id="contact_message"
           />
         </div>
       </div>
 
       {state.error ? (
-        <p className="text-sm text-red-700" role="alert">
+        <p className="footer-form__feedback footer-form__feedback--error" role="alert">
           {state.error}
         </p>
       ) : null}
       {state.success ? (
-        <p className="text-sm text-green-800" role="status">
+        <p
+          className="footer-form__feedback footer-form__feedback--success"
+          role="status"
+        >
           {state.success}
         </p>
       ) : null}

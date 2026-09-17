@@ -1,0 +1,33 @@
+@layer components {
+  .site-header {
+    @apply fixed top-0 right-0 left-0 z-50 border-b border-border bg-background/75 backdrop-blur-sm;
+  }
+
+  .site-header__inner {
+    @apply container flex h-16 mx-auto items-center justify-between gap-8;
+  }
+
+  .site-logo-link {
+    @apply flex h-9 shrink-0 items-center justify-center rounded-md text-xl font-semibold text-foreground;
+  }
+
+  .site-logo {
+    @apply h-9 w-auto max-w-40 object-contain;
+  }
+
+  .site-nav {
+    @apply flex items-center gap-1;
+  }
+
+  .site-nav__link {
+    @apply hidden px-3 py-2 text-xl font-medium text-foreground transition-colors hover:text-primary md:block;
+  }
+
+  .site-nav__link[data-active='true'] {
+    @apply text-primary;
+  }
+
+  .site-nav__locale {
+    @apply ml-2 py-2 pl-3 text-xl font-medium text-foreground transition-colors hover:text-primary;
+  }
+}

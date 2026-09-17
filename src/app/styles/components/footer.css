@@ -1,0 +1,45 @@
+@layer components {
+  .site-footer__main {
+    @apply w-full bg-footer-light;
+  }
+
+  .site-footer__grid {
+    @apply mx-auto grid w-full max-w-footer grid-cols-1 justify-between px-6 py-12 lg:grid-cols-2 lg:items-start lg:px-16;
+  }
+
+  .site-footer__section {
+    @apply col-span-1 w-full pt-4 pb-2 md:pt-12 md:pb-4;
+  }
+
+  .site-footer__section--contact {
+    @apply max-w-64 py-8 pt-4 pb-2 tracking-wide lg:py-0 lg:pt-12 lg:pb-4;
+  }
+
+  .site-footer__heading {
+    @apply mt-0 mb-3 text-[28px] font-semibold tracking-wide text-black 2xl:pb-1;
+  }
+
+  .site-footer__heading--form {
+    @apply tracking-wider;
+  }
+
+  .site-footer__contact-list {
+    @apply flex w-full list-none flex-col justify-start p-0 text-black leading-7 lg:leading-8 xl:leading-[2.4rem];
+  }
+
+  .site-footer__contact-item {
+    @apply relative w-2/5;
+  }
+
+  .site-footer__contact-line {
+    @apply absolute bottom-px left-0 hidden h-0.5 w-4/5 translate-y-1/2 bg-footer-line md:block lg:w-full;
+  }
+
+  .site-footer__bar {
+    @apply bg-footer-dark py-3 text-center text-sm text-white;
+  }
+
+  .site-footer__bar-list {
+    @apply mx-auto flex w-full max-w-footer list-none flex-wrap items-center justify-center gap-4 p-0 px-6 lg:px-8;
+  }
+}

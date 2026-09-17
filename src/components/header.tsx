@@ -15,16 +15,16 @@ export default async function Header({ locale }: HeaderProps) {
   const { brand, logoSrc } = await getSiteBranding(locale);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 border-b border-border bg-background/75 bg-opacity-50 px-6 backdrop-blur-sm">
-      <div className="container flex h-16 items-center justify-between gap-8">
+    <header className="site-header">
+      <div className="site-header__inner">
         <Link
           href={localizedPath(locale, '/')}
-          className="flex h-9 shrink-0 items-center justify-center rounded-md text-xl font-semibold text-foreground"
+          className="site-logo-link"
           aria-label={messages.home}
         >
           {logoSrc ? (
             // eslint-disable-next-line @next/next/no-img-element -- responzivní logo z uploads/
-            <img src={logoSrc} alt={brand} className="h-9 w-auto max-w-40 object-contain" />
+            <img src={logoSrc} alt={brand} className="site-logo" />
           ) : (
             brand
           )}

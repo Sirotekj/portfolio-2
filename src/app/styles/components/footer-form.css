@@ -1,0 +1,33 @@
+@layer components {
+  .footer-field {
+    @apply mb-2 w-full rounded-[5px] border-none bg-white py-[0.35rem] pl-[0.6rem] pr-0 font-light outline-none max-[650px]:text-[0.95rem] placeholder:text-footer-placeholder;
+  }
+
+  .footer-field--textarea {
+    @apply placeholder:pt-[0.2rem];
+  }
+
+  .footer-submit {
+    @apply w-full cursor-pointer rounded-[5px] border-none bg-footer-btn py-[0.35rem] text-base font-medium text-black transition-all duration-500 hover:bg-footer-btn-hover disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .footer-form__grid {
+    @apply grid grid-cols-1 gap-x-2 gap-y-[0.35rem] sm:grid-cols-2;
+  }
+
+  .footer-form__column {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .footer-form__feedback {
+    @apply text-sm;
+  }
+
+  .footer-form__feedback--error {
+    @apply text-red-700;
+  }
+
+  .footer-form__feedback--success {
+    @apply text-green-800;
+  }
+}

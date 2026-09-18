@@ -16,10 +16,16 @@ type GalleryItem =
 
 type GalleryPickerProps = {
   defaultGallery?: string[];
+  disabled?: boolean;
+  disabledReason?: string;
+  onCountChange?: (count: number) => void;
 };
 
 export default function GalleryPicker({
   defaultGallery = [],
+  disabled = false,
+  disabledReason,
+  onCountChange,
 }: GalleryPickerProps) {
   const [items, setItems] = useState<GalleryItem[]>(() =>
     defaultGallery
@@ -32,9 +38,18 @@ export default function GalleryPicker({
   );
   const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
 
+  function updateItems(nextItems: GalleryItem[]) {
+    setItems(nextItems);
+    onCountChange?.(nextItems.length);
+  }
+
   const addItem = () => {
-    setItems((current) => [
-      ...current,
+    if (disabled) {
+      return;
+    }
+
+    updateItems([
+      ...items,
       {
         id: `new-${Date.now()}`,
         kind: 'new',
@@ -45,7 +60,7 @@ export default function GalleryPicker({
   };
 
   const removeItem = (id: string) => {
-    setItems((current) => current.filter((item) => item.id !== id));
+    updateItems(items.filter((item) => item.id !== id));
   };
 
   const openFilePicker = (id: string) => {
@@ -59,33 +74,37 @@ export default function GalleryPicker({
     const file = event.target.files?.[0];
 
     if (!file) {
-      setItems((current) =>
-        current.map((item) =>
+      setItems((current) => {
+        const nextItems = current.map((item) =>
           item.id === id && item.kind === 'new'
             ? { ...item, preview: null, error: null }
             : item,
-        ),
-      );
+        );
+        onCountChange?.(nextItems.length);
+        return nextItems;
+      });
       return;
     }
 
     const validationError = validateImageFile(file);
 
     if (validationError) {
-      setItems((current) =>
-        current.map((item) =>
+      setItems((current) => {
+        const nextItems = current.map((item) =>
           item.id === id && item.kind === 'new'
             ? { ...item, preview: null, error: validationError }
             : item,
-        ),
-      );
+        );
+        onCountChange?.(nextItems.length);
+        return nextItems;
+      });
       return;
     }
 
     const fileReader = new FileReader();
     fileReader.onload = () => {
-      setItems((current) =>
-        current.map((item) =>
+      setItems((current) => {
+        const nextItems = current.map((item) =>
           item.id === id && item.kind === 'new'
             ? {
                 ...item,
@@ -93,8 +112,10 @@ export default function GalleryPicker({
                 error: null,
               }
             : item,
-        ),
-      );
+        );
+        onCountChange?.(nextItems.length);
+        return nextItems;
+      });
     };
     fileReader.readAsDataURL(file);
   };
@@ -180,12 +201,18 @@ export default function GalleryPicker({
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-light">Galerie je prázdná.</p>
+        <p className="admin-hint">Galerie je prázdná.</p>
       )}
 
-      <ButtonAdmin type="button" onClick={addItem} className="mt-3">
-        {items.length === 0 ? 'Přidat obrázek' : 'Přidat další obrázek'}
-      </ButtonAdmin>
+      <div className="mt-3 space-y-2">
+        <ButtonAdmin type="button" onClick={addItem} disabled={disabled}>
+          {items.length === 0 ? 'Přidat obrázek' : 'Přidat další obrázek'}
+        </ButtonAdmin>
+
+        {disabled && disabledReason ? (
+          <p className="admin-hint">{disabledReason}</p>
+        ) : null}
+      </div>
     </div>
   );
 }

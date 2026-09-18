@@ -136,6 +136,9 @@ model Project {
   descriptionEn String?        @map("description_en") @db.Text
   category    ProjectCategory?
   gallery     String[]
+  video       String           @default("")
+  videoWidth  Int?             @map("video_width")
+  videoHeight Int?             @map("video_height")
   sortOrder   Int              @default(0)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt

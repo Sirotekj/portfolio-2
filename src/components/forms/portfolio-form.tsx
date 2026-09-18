@@ -12,8 +12,8 @@ import {
   FormFeedback,
 } from '@/components/forms/admin-fields';
 import FormSubmit from './form-submit';
-import GalleryPicker from './gallery-picker';
 import ImagePicker from './image-picker';
+import ProjectMediaPicker from './project-media-picker';
 
 type PortfolioFormProps = {
   onClose: () => void;
@@ -135,7 +135,12 @@ export default function PortfolioForm({
           defaultImage={initialData?.image}
         />
 
-        <GalleryPicker defaultGallery={initialData?.gallery} />
+        <ProjectMediaPicker
+          defaultGallery={initialData?.gallery}
+          defaultVideo={initialData?.video}
+          defaultVideoWidth={initialData?.videoWidth}
+          defaultVideoHeight={initialData?.videoHeight}
+        />
 
         <FormFeedback errors={state.errors} messages={state.messages} />
 

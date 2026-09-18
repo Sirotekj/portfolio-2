@@ -208,6 +208,9 @@ export default function PortfolioEditor({
                     {project.gallery.length > 0
                       ? ` · galerie: ${project.gallery.length}`
                       : ''}
+                    {project.video.trim()
+                      ? ` · video${project.videoWidth && project.videoHeight ? `: ${project.videoWidth}×${project.videoHeight}` : ''}`
+                      : ''}
                   </p>
                 </div>
 

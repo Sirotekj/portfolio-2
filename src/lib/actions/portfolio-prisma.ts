@@ -5,6 +5,7 @@ import type { ProjectView } from '@/types/types';
 import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
 import { saveResponsiveImages } from '@/lib/images/save-upload';
 import { deleteStoredImage } from '@/lib/images/delete-upload';
+import { saveProjectVideo } from '@/lib/videos/save-video';
 import { prisma } from '@/lib/prisma';
 
 function mapProject(project: {
@@ -18,6 +19,9 @@ function mapProject(project: {
   descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
+  video: string;
+  videoWidth: number | null;
+  videoHeight: number | null;
   sortOrder: number;
 }): ProjectView {
   return {
@@ -31,6 +35,9 @@ function mapProject(project: {
     descriptionEn: project.descriptionEn,
     category: project.category,
     gallery: project.gallery.filter(Boolean),
+    video: project.video,
+    videoWidth: project.videoWidth,
+    videoHeight: project.videoHeight,
     sortOrder: project.sortOrder,
   };
 }
@@ -44,6 +51,8 @@ export async function saveProjectImage(
   });
 }
 
+export { saveProjectVideo };
+
 export type ProjectWriteData = {
   title: string;
   titleEn: string | null;
@@ -54,6 +63,9 @@ export type ProjectWriteData = {
   descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
+  video: string;
+  videoWidth: number | null;
+  videoHeight: number | null;
   sortOrder: number;
 };
 
@@ -69,6 +81,9 @@ export async function SaveProject(data: ProjectWriteData): Promise<void> {
       descriptionEn: data.descriptionEn,
       category: data.category,
       gallery: data.gallery,
+      video: data.video,
+      videoWidth: data.videoWidth,
+      videoHeight: data.videoHeight,
       sortOrder: data.sortOrder,
     },
   });
@@ -84,6 +99,12 @@ export async function UpdateProject(
   });
 }
 
+async function deleteProjectMediaPaths(paths: string[]): Promise<void> {
+  await Promise.all(
+    paths.filter(Boolean).map((mediaPath) => deleteStoredImage(mediaPath)),
+  );
+}
+
 export async function DeleteProject(id: string): Promise<void> {
   const project = await prisma.project.findUnique({
     where: { id: Number(id) },
@@ -93,23 +114,58 @@ export async function DeleteProject(id: string): Promise<void> {
     return;
   }
 
-  const imagePaths = new Set<string>();
+  const mediaPaths = new Set<string>();
 
   if (project.image.trim()) {
-    imagePaths.add(project.image.trim());
+    mediaPaths.add(project.image.trim());
   }
 
   for (const galleryImage of project.gallery) {
     if (galleryImage.trim()) {
-      imagePaths.add(galleryImage.trim());
+      mediaPaths.add(galleryImage.trim());
     }
   }
 
-  await Promise.all([...imagePaths].map((imagePath) => deleteStoredImage(imagePath)));
+  if (project.video.trim()) {
+    mediaPaths.add(project.video.trim());
+  }
+
+  await deleteProjectMediaPaths([...mediaPaths]);
 
   await prisma.project.delete({
     where: { id: Number(id) },
   });
+}
+
+export async function cleanupReplacedProjectMedia(
+  previous: Pick<ProjectView, 'gallery' | 'video'>,
+  next: Pick<ProjectView, 'gallery' | 'video'>,
+): Promise<void> {
+  const pathsToDelete = new Set<string>();
+
+  if (previous.video.trim() && previous.video !== next.video) {
+    pathsToDelete.add(previous.video.trim());
+  }
+
+  for (const galleryImage of previous.gallery) {
+    if (galleryImage.trim() && !next.gallery.includes(galleryImage.trim())) {
+      pathsToDelete.add(galleryImage.trim());
+    }
+  }
+
+  if (next.video.trim() && previous.gallery.length > 0) {
+    for (const galleryImage of previous.gallery) {
+      if (galleryImage.trim()) {
+        pathsToDelete.add(galleryImage.trim());
+      }
+    }
+  }
+
+  if (next.gallery.length > 0 && previous.video.trim()) {
+    pathsToDelete.add(previous.video.trim());
+  }
+
+  await deleteProjectMediaPaths([...pathsToDelete]);
 }
 
 export async function GetAllProjects(): Promise<ProjectView[]> {

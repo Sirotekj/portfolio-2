@@ -24,6 +24,9 @@ function mapProject(project: {
   descriptionEn: string | null;
   category: ProjectCategory | null;
   gallery: string[];
+  video: string;
+  videoWidth: number | null;
+  videoHeight: number | null;
   sortOrder: number;
 }): ProjectView {
   return {
@@ -37,6 +40,9 @@ function mapProject(project: {
     descriptionEn: project.descriptionEn,
     category: project.category,
     gallery: project.gallery.filter(Boolean),
+    video: project.video,
+    videoWidth: project.videoWidth,
+    videoHeight: project.videoHeight,
     sortOrder: project.sortOrder,
   };
 }

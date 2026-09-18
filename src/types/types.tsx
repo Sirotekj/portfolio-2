@@ -36,6 +36,9 @@ export type ProjectView = {
   descriptionEn: string | null;
   category: ProjectCategory | Categories | null;
   gallery: string[];
+  video: string;
+  videoWidth: number | null;
+  videoHeight: number | null;
   sortOrder: number;
 };
 

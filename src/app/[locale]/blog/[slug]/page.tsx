@@ -57,21 +57,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const localized = getBlogLocalizedFields(blog, locale);
 
   return (
-    <article className="small-container my-xlarge">
+    <article className="blog-post small-container">
       <Link
         href={localizedPath(locale, '/blog')}
-        className="mb-medium inline-block text-primary hover:underline"
+        className="blog-post__back"
       >
         {messages.blog.back}
       </Link>
 
-      <header className="mb-large">
-        <h1 className="text-center font-bold tracking-tight text-foreground">
-          {localized.title}
-        </h1>
-        <p className="text-center text-xl sm:text-2xl italic mt-small text-light">
-          {localized.intro}
-        </p>
+      <header className="blog-post__header">
+        <h1 className="blog-post__title">{localized.title}</h1>
+        <p className="blog-post__intro">{localized.intro}</p>
       </header>
 
       <BlogContent html={localized.content} />

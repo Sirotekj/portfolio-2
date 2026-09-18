@@ -39,7 +39,7 @@ function FieldPair({
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <div>
-        <label htmlFor={csId} className="mb-1 block text-sm font-medium">
+        <label htmlFor={csId} className="admin-label">
           {label} (CS)
         </label>
         {multiline ? (
@@ -61,7 +61,7 @@ function FieldPair({
         )}
       </div>
       <div>
-        <label htmlFor={enId} className="mb-1 block text-sm font-medium">
+        <label htmlFor={enId} className="admin-label">
           {label} (EN)
         </label>
         {multiline ? (
@@ -96,8 +96,8 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
 
   return (
     <form action={formAction} className="space-y-8">
-      <section className="space-y-4 rounded-xl border border-border p-4">
-        <h2 className="text-lg font-semibold text-foreground">SEO a metadata</h2>
+      <section className="admin-section">
+        <h2 className="admin-section__title">SEO a metadata</h2>
         <FieldPair
           csId="siteTitle"
           enId="siteTitleEn"
@@ -127,7 +127,7 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
           defaultEn={settings.keywordsEn}
         />
         <div>
-          <label htmlFor="author" className="mb-1 block text-sm font-medium">
+          <label htmlFor="author" className="admin-label">
             Autor
           </label>
           <input
@@ -140,8 +140,8 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-xl border border-border p-4">
-        <h2 className="text-lg font-semibold text-foreground">Branding</h2>
+      <section className="admin-section">
+        <h2 className="admin-section__title">Branding</h2>
         <ImagePicker
           label="Favicon"
           name="favicon"
@@ -162,8 +162,8 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
         />
       </section>
 
-      <section className="space-y-4 rounded-xl border border-border p-4">
-        <h2 className="text-lg font-semibold text-foreground">Kontakt v patičce</h2>
+      <section className="admin-section">
+        <h2 className="admin-section__title">Kontakt v patičce</h2>
         <FieldPair
           csId="contactHeader"
           enId="contactHeaderEn"
@@ -175,7 +175,7 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
         />
         <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <label htmlFor="contactEmail" className="mb-1 block text-sm font-medium">
+            <label htmlFor="contactEmail" className="admin-label">
               E-mail
             </label>
             <input
@@ -189,7 +189,7 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
           <div>
             <label
               htmlFor="contactLocation"
-              className="mb-1 block text-sm font-medium"
+              className="admin-label"
             >
               Místo
             </label>
@@ -202,7 +202,7 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="contactPhone" className="mb-1 block text-sm font-medium">
+            <label htmlFor="contactPhone" className="admin-label">
               Telefon
             </label>
             <input
@@ -216,8 +216,8 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-xl border border-border p-4">
-        <h2 className="text-lg font-semibold text-foreground">Kontaktní formulář</h2>
+      <section className="admin-section">
+        <h2 className="admin-section__title">Kontaktní formulář</h2>
         <FieldPair
           csId="formHeader"
           enId="formHeaderEn"

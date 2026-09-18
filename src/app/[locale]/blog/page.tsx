@@ -31,11 +31,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const blogs = await getPublishedBlogs();
 
   return (
-    <section className="container my-xlarge">
+    <section className="page-section container">
       {blogs.length === 0 ? (
-        <p className="text-center text-light">{messages.blog.empty}</p>
+        <p className="page-empty">{messages.blog.empty}</p>
       ) : (
-        <ul className="flex flex-col gap-large">
+        <ul className="blog-list">
           {blogs.map((blog) => {
             const localized = getBlogLocalizedFields(blog, locale);
 
@@ -43,10 +43,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
               <li key={blog.id}>
                 <Link
                   href={localizedPath(locale, `/blog/${localized.slug}`)}
-                  className="group grid min-h-48 grid-cols-1 overflow-hidden rounded-xl border border-border shadow-xl transition-colors hover:border-primary/50 md:grid-cols-[280px_1fr]"
+                  className="blog-card"
                 >
                   {blog.image ? (
-                    <div className="relative aspect-video w-full max-w-full overflow-hidden md:aspect-auto md:h-full md:min-h-0">
+                    <div className="blog-card__media">
                       <ResponsiveImage
                         basePath={blog.image}
                         alt={localized.title}
@@ -55,11 +55,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
                       />
                     </div>
                   ) : null}
-                  <div className="min-w-0 px-large py-medium">
-                    <h2 className="mt-0 mb-small text-foreground">
-                      {localized.title}
-                    </h2>
-                    <p className="text-light">{localized.intro}</p>
+                  <div className="blog-card__body">
+                    <h2 className="blog-card__title">{localized.title}</h2>
+                    <p className="page-muted">{localized.intro}</p>
                   </div>
                 </Link>
               </li>

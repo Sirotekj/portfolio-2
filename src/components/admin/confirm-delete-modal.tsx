@@ -30,22 +30,19 @@ export default function ConfirmDeleteModal({
   }
 
   return (
-    <div className="fixed inset-0 z-1300 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/40" onClick={onCancel} />
+    <div className="admin-modal admin-modal--center">
+      <div className="admin-modal__backdrop" onClick={onCancel} />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-delete-title"
-        className="relative w-full max-w-md rounded-xl border border-border bg-background p-6 shadow-xl"
+        className="admin-modal__panel admin-modal__panel--md"
       >
-        <h2
-          id="confirm-delete-title"
-          className="text-lg font-semibold text-foreground"
-        >
+        <h2 id="confirm-delete-title" className="admin-modal__title">
           {title}
         </h2>
-        <div className="mt-3 text-sm text-light">{children}</div>
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="admin-modal__body">{children}</div>
+        <div className="admin-modal__actions">
           <ButtonAdmin type="button" onClick={onCancel} color="light" disabled={isPending}>
             {cancelLabel}
           </ButtonAdmin>

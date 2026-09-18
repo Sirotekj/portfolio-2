@@ -1,0 +1,21 @@
+@layer components {
+  .container {
+    @apply mx-auto w-full sm:w-160 md:w-3xl lg:w-5xl xl:w-7xl 2xl:w-384;
+  }
+
+  .small-container {
+    @apply mx-auto w-full max-w-160 sm:w-8/10 lg:w-6/10;
+  }
+
+  .page-section {
+    @apply my-xlarge;
+  }
+
+  .page-empty {
+    @apply text-center text-light;
+  }
+
+  .page-muted {
+    @apply text-light;
+  }
+}

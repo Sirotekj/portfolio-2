@@ -2,8 +2,6 @@
 
 import { useMemo, useState, useTransition } from 'react';
 
-import ButtonAdmin from '@/components/admin/button-admin';
-
 type SortableListProps<T extends { id: number }> = {
   items: T[];
   onReorder: (orderedIds: number[]) => Promise<{ error?: string }>;
@@ -80,20 +78,18 @@ export default function SortableList<T extends { id: number }>({
   }
 
   if (items.length === 0) {
-    return <p className="text-sm text-light">{emptyLabel}</p>;
+    return <p className="admin-empty--sm">{emptyLabel}</p>;
   }
 
   return (
     <>
       {isReordering ? (
-        <p className="mb-2 text-sm text-light">Ukládám pořadí…</p>
+        <p className="admin-reorder-hint mb-2">Ukládám pořadí…</p>
       ) : null}
       {reorderError ? (
-        <p className="mb-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {reorderError}
-        </p>
+        <p className="admin-feedback admin-feedback--error mb-2">{reorderError}</p>
       ) : null}
-      <ul className="divide-y divide-border rounded-xl border border-border">
+      <ul className="admin-list">
         {items.map((item, index) => {
           const isDragging = draggedId === item.id;
           const isDropTarget =
@@ -116,20 +112,15 @@ export default function SortableList<T extends { id: number }>({
                 event.preventDefault();
                 handleDrop(item.id);
               }}
-              className={`flex items-center gap-3 px-4 py-3 transition-colors ${
-                isDragging ? 'opacity-50' : ''
-              } ${isDropTarget ? 'bg-primary/5' : ''}`}
+              className={`admin-list__row ${
+                isDragging ? 'admin-list__row--dragging' : ''
+              } ${isDropTarget ? 'admin-list__row--drop-target' : ''}`}
             >
-              <span
-                aria-hidden="true"
-                className="cursor-grab px-1 text-light active:cursor-grabbing"
-              >
+              <span aria-hidden="true" className="admin-drag-handle">
                 ⠿
               </span>
-              <span className="w-6 shrink-0 text-sm text-light">
-                {index + 1}.
-              </span>
-              <div className="min-w-0 flex-1">{renderItem(item, index)}</div>
+              <span className="admin-list__index">{index + 1}.</span>
+              <div className="admin-list__body">{renderItem(item, index)}</div>
             </li>
           );
         })}

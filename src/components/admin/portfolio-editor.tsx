@@ -132,13 +132,13 @@ export default function PortfolioEditor({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="admin-editor">
       <PortfolioPageForm portfolioPage={portfolioPage} />
 
-      <section className="space-y-6">
+      <section className="admin-block">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">Projekty</h2>
-          <p className="mt-1 text-sm text-light">
+          <h2 className="admin-section__title">Projekty</h2>
+          <p className="admin-section__desc">
             Správa projektů zobrazených na homepage.
           </p>
         </div>
@@ -148,22 +148,20 @@ export default function PortfolioEditor({
       </ButtonAdmin>
 
       {items.length > 0 ? (
-        <p className="text-sm text-light">
+        <p className="admin-reorder-hint">
           Pořadí na webu měníš přetažením projektů v seznamu.
           {isReordering ? ' Ukládám…' : ''}
         </p>
       ) : null}
 
       {reorderError ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {reorderError}
-        </p>
+        <p className="admin-feedback admin-feedback--error">{reorderError}</p>
       ) : null}
 
       {items.length === 0 ? (
-        <p className="text-light">Zatím žádné projekty v databázi.</p>
+        <p className="admin-empty">Zatím žádné projekty v databázi.</p>
       ) : (
-        <ul className="divide-y divide-border rounded-xl border border-border">
+        <ul className="admin-list">
           {items.map((project, index) => {
             const isDragging = draggedId === project.id;
             const isDropTarget =
@@ -186,27 +184,25 @@ export default function PortfolioEditor({
                   event.preventDefault();
                   handleDrop(project.id);
                 }}
-                className={`flex items-center gap-3 px-4 py-3 transition-colors ${
-                  isDragging ? 'opacity-50' : ''
-                } ${isDropTarget ? 'bg-primary/5' : ''}`}
+                className={`admin-list__row ${
+                  isDragging ? 'admin-list__row--dragging' : ''
+                } ${isDropTarget ? 'admin-list__row--drop-target' : ''}`}
               >
                 <button
                   type="button"
                   aria-label={`Přesunout projekt ${project.title}`}
-                  className="cursor-grab px-1 text-light active:cursor-grabbing"
+                  className="admin-drag-handle"
                 >
                   <span aria-hidden="true" className="text-lg leading-none">
                     ⠿
                   </span>
                 </button>
 
-                <span className="w-6 shrink-0 text-sm text-light">
-                  {index + 1}.
-                </span>
+                <span className="admin-list__index">{index + 1}.</span>
 
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-foreground">{project.title}</p>
-                  <p className="text-sm text-light">
+                <div className="admin-list__body">
+                  <p className="admin-list__title">{project.title}</p>
+                  <p className="admin-list__meta">
                     {project.category ?? 'bez kategorie'}
                     {project.titleEn ? ` · EN: ${project.titleEn}` : ''}
                     {project.gallery.length > 0
@@ -216,14 +212,14 @@ export default function PortfolioEditor({
                 </div>
 
                 <div
-                  className="flex shrink-0 flex-col items-end gap-1"
+                  className="admin-list__actions"
                   onMouseDown={(event) => event.stopPropagation()}
                 >
                   <ButtonAdmin
                     type="button"
                     onClick={() => openEditForm(project)}
                     color="light"
-                    className="px-3 py-1"
+                    className="admin-btn--compact"
                   >
                     Upravit
                   </ButtonAdmin>
@@ -231,7 +227,7 @@ export default function PortfolioEditor({
                     type="button"
                     onClick={() => openDeleteConfirm(project)}
                     color="danger"
-                    className="px-3 py-1"
+                    className="admin-btn--compact"
                   >
                     Smazat
                   </ButtonAdmin>
@@ -243,9 +239,9 @@ export default function PortfolioEditor({
       )}
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4">
-          <div className="fixed inset-0 bg-black/40" onClick={closeForm} />
-          <div className="relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
+        <div className="admin-modal">
+          <div className="admin-modal__backdrop" onClick={closeForm} />
+          <div className="admin-modal__panel">
             <PortfolioForm onClose={closeForm} initialData={selectedProject} />
           </div>
         </div>

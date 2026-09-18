@@ -30,24 +30,20 @@ export default function LanguageForm({
 
   return (
     <>
-      <header className="mb-4 flex justify-between text-xl font-semibold text-foreground">
+      <header className="admin-form__header">
         {initialData ? 'Upravit jazyk' : 'Přidat jazyk'}
-        <button
-          type="button"
-          className="flex h-6 w-6 cursor-pointer items-center justify-center text-4xl hover:text-primary"
-          onClick={onClose}
-        >
+        <button type="button" className="admin-form__close" onClick={onClose}>
           ×
         </button>
       </header>
 
-      <form action={formAction} className="flex flex-col gap-4">
+      <form action={formAction} className="admin-form">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
         ) : null}
 
         <div>
-          <label htmlFor="name" className="mb-1 block text-sm font-medium">
+          <label htmlFor="name" className="admin-label">
             Jazyk
           </label>
           <input
@@ -61,7 +57,7 @@ export default function LanguageForm({
         </div>
 
         <div>
-          <label htmlFor="nameEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="nameEn" className="admin-label">
             Jazyk (EN)
           </label>
           <input
@@ -75,7 +71,7 @@ export default function LanguageForm({
         </div>
 
         <div>
-          <label htmlFor="level" className="mb-1 block text-sm font-medium">
+          <label htmlFor="level" className="admin-label">
             Úroveň
           </label>
           <LevelSelect defaultValue={initialData?.level ?? 3} />

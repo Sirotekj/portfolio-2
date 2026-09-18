@@ -1,9 +1,15 @@
 @import 'tailwindcss';
 @import './styles/colors.css';
 @import './styles/spacing.css';
+@import './styles/components/page.css';
 @import './styles/components/header.css';
+@import './styles/components/navigation.css';
 @import './styles/components/footer.css';
 @import './styles/components/footer-form.css';
+@import './styles/components/portfolio.css';
+@import './styles/components/blog.css';
+@import './styles/components/about.css';
+@import './styles/components/admin.css';
 
 @theme inline {
   --color-background: var(--background);
@@ -47,142 +53,10 @@
     @apply text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mt-large mb-small;
   }
   h2 {
-    @apply text-2xl font-semibold text-foreground mt-large mb-small;
+    @apply text-xl sm:text-2xl font-semibold text-foreground mt-large mb-small;
   }
 
   h3 {
     @apply text-xl font-semibold text-foreground mt-large mb-small;
-  }
-}
-
-@layer components {
-  .container {
-    @apply mx-auto w-full sm:w-160 md:w-3xl lg:w-5xl xl:w-7xl 2xl:w-384;
-  }
-  .small-container {
-    @apply mx-auto w-full sm:w-8/10  lg:w-6/10 max-w-160;
-  }
-  .skill-circle {
-    @apply inline-block mr-1 h-4 w-4 rounded-full border text-light bg-none translate-y-0.5;
-  }
-  .skill-circle-full {
-    @apply border-0 bg-primary;
-  }
-  .category-button {
-    &.active {
-      &:after {
-        content: '';
-        position: absolute;
-        bottom: 0px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: var(--primary);
-      }
-    }
-    @apply relative uppercase cursor-pointer hover:text-primary;
-  }
-
-  .open-main-nav {
-    @apply relative pt-5 px-0 pb-0 ml-4 border-0 cursor-pointer z-1000;
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .burger {
-    transform: skew(5deg);
-    @apply relative block w-7 h-1 bg-primary my-0 mx-auto transition-all duration-400;
-  }
-
-  .burger::before,
-  .burger::after {
-    @apply content-[""] block w-full h-full bg-primary transition-all duration-400;
-  }
-
-  .burger::before {
-    /*@apply -translate-y-4 -skew-x-10;*/
-    transform: translateY(-16px) skew(-10deg);
-  }
-
-  .burger::after {
-    transform: translateY(-12px) translateX(-2px) skew(-20deg);
-    /*@apply -translate-y-3 -translate-x-0.5 -skew-x-20;*/
-  }
-
-  .is-open .burger {
-    transform: skew(5deg) translateY(-8px) rotate(-45deg);
-    /* @apply -translate-y-2 skew-x-5 -rotate-45;*/
-    &:before {
-      /*@apply translate-y-0 -skew-x-10 rotate-75;*/
-    }
-    &:after {
-      /*@apply -translate-y-3 translate-x-2.5 -skew-x-20;*/
-    }
-  }
-
-  .is-open .burger::before {
-    transform: translateY(0) skew(-10deg) rotate(75deg);
-  }
-
-  .is-open .burger::after {
-    transform: translateY(-12px) translateX(10px) skew(-20deg);
-    opacity: 0;
-  }
-
-  .mobile-menu {
-    visibility: hidden;
-    transition: all 0.375s;
-
-    @apply fixed h-screen inset-0 text-center bg-primary opacity-0 -z-1;
-    &:before {
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: -15px;
-      transform-origin: 0 0;
-      transition: all 0.4s 0.1s;
-      @apply content-[""] absolute bg-dark -skew-x-14 -translate-x-6/5;
-    }
-
-    &.is-open {
-      visibility: visible;
-      @apply opacity-100 z-900;
-      &:before {
-        @apply translate-x-0;
-      }
-    }
-  }
-
-  .blog-content {
-    @apply leading-relaxed;
-
-    :where(p, ul, ol, blockquote) {
-      @apply mb-medium;
-    }
-
-    :where(h2, h3) {
-      @apply mt-large mb-small font-semibold text-foreground;
-    }
-
-    :where(ul, ol) {
-      @apply ml-large list-outside;
-    }
-
-    :where(ul) {
-      @apply list-disc;
-    }
-
-    :where(ol) {
-      @apply list-decimal;
-    }
-
-    :where(a) {
-      @apply text-primary underline;
-    }
-
-    :where(img) {
-      @apply my-medium h-auto max-w-full rounded-lg;
-    }
   }
 }

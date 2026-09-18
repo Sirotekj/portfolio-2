@@ -32,17 +32,14 @@ export default function NavigationMobile({ navItems }: NavigationMobileProps) {
       <div
         className={`mobile-menu md:hidden ${mobileMenuOpened ? 'is-open' : ''}`}
       >
-        <ul className="relative h-[93%] flex flex-col justify-center items-center -skew-x-14">
+        <ul className="mobile-menu__list">
           {navItems.map(({ href, label, isActive }) => (
             <Link
               key={href}
               href={href}
               onClick={() => setMobileMenuOpened(false)}
-              className={`block py-3 text-xl font-medium transition-colors skew-x-14 ${
-                isActive
-                  ? 'text-background'
-                  : 'text-background/80 hover:text-background'
-              }`}
+              className="mobile-menu__link"
+              data-active={isActive ? 'true' : 'false'}
             >
               {label}
             </Link>

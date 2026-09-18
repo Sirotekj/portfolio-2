@@ -43,11 +43,13 @@ export default async function PortfolioPage({ params }: PortfolioPageProps) {
 
   return (
     <section>
-      <div className="mx-auto container">
+      <div className="portfolio-intro container">
         {intro ? (
-          <p className="mt-4">{intro}</p>
+          <p className="portfolio-intro__text">{intro}</p>
         ) : (
-          <p className="mt-4 text-light">{messages.portfolio.empty.intro}</p>
+          <p className="portfolio-intro__text page-muted">
+            {messages.portfolio.empty.intro}
+          </p>
         )}
       </div>
 

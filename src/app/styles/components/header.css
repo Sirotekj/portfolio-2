@@ -1,6 +1,6 @@
 @layer components {
   .site-header {
-    @apply fixed top-0 right-0 left-0 z-50 border-b border-border bg-background/75 backdrop-blur-sm;
+    @apply fixed top-0 right-0 left-0 px-4 sm:px-6 z-50 border-b border-border bg-background/75 backdrop-blur-sm;
   }
 
   .site-header__inner {

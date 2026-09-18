@@ -1,0 +1,79 @@
+@layer components {
+  .open-main-nav {
+    @apply relative z-1000 ml-4 cursor-pointer border-0 px-0 pt-5 pb-0;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .burger {
+    transform: skew(5deg);
+    @apply relative mx-auto my-0 block h-1 w-7 bg-primary transition-all duration-400;
+  }
+
+  .burger::before,
+  .burger::after {
+    @apply block h-full w-full bg-primary transition-all duration-400 content-[""];
+  }
+
+  .burger::before {
+    transform: translateY(-16px) skew(-10deg);
+  }
+
+  .burger::after {
+    transform: translateY(-12px) translateX(-2px) skew(-20deg);
+  }
+
+  .is-open .burger {
+    transform: skew(5deg) translateY(-8px) rotate(-45deg);
+  }
+
+  .is-open .burger::before {
+    transform: translateY(0) skew(-10deg) rotate(75deg);
+  }
+
+  .is-open .burger::after {
+    transform: translateY(-12px) translateX(10px) skew(-20deg);
+    opacity: 0;
+  }
+
+  .mobile-menu {
+    visibility: hidden;
+    transition: all 0.375s;
+
+    @apply fixed inset-0 -z-1 h-screen bg-primary text-center opacity-0;
+    &:before {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: -15px;
+      transform-origin: 0 0;
+      transition: all 0.4s 0.1s;
+      @apply absolute bg-dark -translate-x-6/5 -skew-x-14 content-[""];
+    }
+
+    &.is-open {
+      visibility: visible;
+      @apply z-900 opacity-100;
+      &:before {
+        @apply translate-x-0;
+      }
+    }
+  }
+
+  .mobile-menu__list {
+    @apply relative flex h-[93%] -skew-x-14 flex-col items-center justify-center;
+  }
+
+  .mobile-menu__link {
+    @apply block skew-x-14 py-3 text-xl font-medium transition-colors;
+  }
+
+  .mobile-menu__link[data-active='true'] {
+    @apply text-background;
+  }
+
+  .mobile-menu__link[data-active='false'] {
+    @apply text-background/80 hover:text-background;
+  }
+}

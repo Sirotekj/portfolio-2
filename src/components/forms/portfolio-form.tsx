@@ -7,6 +7,10 @@ import type { ProjectView } from '@/types/types';
 import { createProjectAction } from '@/lib/actions/portfolio-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
+import {
+  fieldClass,
+  FormFeedback,
+} from '@/components/forms/admin-fields';
 import FormSubmit from './form-submit';
 import GalleryPicker from './gallery-picker';
 import ImagePicker from './image-picker';
@@ -15,9 +19,6 @@ type PortfolioFormProps = {
   onClose: () => void;
   initialData?: ProjectView;
 };
-
-const fieldClass =
-  'w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary';
 
 const CATEGORY_OPTIONS = [
   { value: '', label: '— bez kategorie —' },
@@ -40,24 +41,20 @@ export default function PortfolioForm({
 
   return (
     <>
-      <header className="mb-4 flex justify-between text-xl font-semibold text-foreground">
+      <header className="admin-form__header">
         {isEditing ? 'Upravit projekt' : 'Přidat projekt'}
-        <button
-          type="button"
-          className="flex h-6 w-6 cursor-pointer items-center justify-center text-4xl hover:text-primary"
-          onClick={onClose}
-        >
+        <button type="button" className="admin-form__close" onClick={onClose}>
           ×
         </button>
       </header>
 
-      <form action={formAction} className="flex flex-col gap-4">
+      <form action={formAction} className="admin-form">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
         ) : null}
 
         <div>
-          <label htmlFor="title" className="mb-1 block text-sm font-medium">
+          <label htmlFor="title" className="admin-label">
             Název (CS)
           </label>
           <input
@@ -71,7 +68,7 @@ export default function PortfolioForm({
         </div>
 
         <div>
-          <label htmlFor="titleEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="titleEn" className="admin-label">
             Název (EN)
           </label>
           <input
@@ -85,7 +82,7 @@ export default function PortfolioForm({
         </div>
 
         <div>
-          <label htmlFor="category" className="mb-1 block text-sm font-medium">
+          <label htmlFor="category" className="admin-label">
             Kategorie
           </label>
           <select
@@ -103,7 +100,7 @@ export default function PortfolioForm({
         </div>
 
         <div>
-          <label htmlFor="description" className="mb-1 block text-sm font-medium">
+          <label htmlFor="description" className="admin-label">
             Popis (CS)
           </label>
           <textarea
@@ -118,7 +115,7 @@ export default function PortfolioForm({
         <div>
           <label
             htmlFor="descriptionEn"
-            className="mb-1 block text-sm font-medium"
+            className="admin-label"
           >
             Popis (EN)
           </label>
@@ -140,23 +137,9 @@ export default function PortfolioForm({
 
         <GalleryPicker defaultGallery={initialData?.gallery} />
 
-        {state.errors.length > 0 ? (
-          <ul className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {state.errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        ) : null}
+        <FormFeedback errors={state.errors} messages={state.messages} />
 
-        {state.messages.length > 0 ? (
-          <ul className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
-            {state.messages.map((message) => (
-              <li key={message}>{message}</li>
-            ))}
-          </ul>
-        ) : null}
-
-        <div className="mt-2 flex justify-between gap-4">
+        <div className="admin-form__actions">
           <FormSubmit />
           <ButtonAdmin type="button" onClick={onClose} color="light">
             Zrušit

@@ -19,7 +19,7 @@ export default function EditDashboardPage() {
           <li key={section.href}>
             <Link
               href={section.href}
-              className="block h-full rounded-xl border border-border p-5 shadow-sm transition-colors hover:border-primary"
+              className="block h-full rounded-xl border border-border p-3 sm:p-5 shadow-sm transition-colors hover:border-primary"
             >
               <h2 className="text-lg mt-0 font-semibold text-foreground">
                 {section.title}

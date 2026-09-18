@@ -58,33 +58,33 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="admin-block">
       <ButtonAdmin type="button" onClick={openCreateForm} color="dark">
         Přidat článek
       </ButtonAdmin>
 
       {blogs.length === 0 ? (
-        <p className="text-light">Zatím žádné články v databázi.</p>
+        <p className="admin-empty">Zatím žádné články v databázi.</p>
       ) : (
-        <ul className="divide-y divide-border rounded-xl border border-border">
+        <ul className="admin-list">
           {blogs.map((blog) => (
             <li
               key={blog.id}
-              className="flex items-center justify-between gap-4 px-4 py-3"
+              className="admin-list__row admin-list__row--spread"
             >
-              <div className="min-w-0">
-                <p className="font-medium text-foreground">{blog.title}</p>
-                <p className="text-sm text-light">
+              <div className="admin-list__body">
+                <p className="admin-list__title">{blog.title}</p>
+                <p className="admin-list__meta">
                   /{blog.slug}
                   {blog.slugEn ? ` · EN: /${blog.slugEn}` : ''}
                 </p>
               </div>
-              <div className="flex shrink-0 flex-col items-end gap-1">
+              <div className="admin-list__actions">
                 <ButtonAdmin
                   type="button"
                   onClick={() => openEditForm(blog)}
                   color="light"
-                  className="px-3 py-1"
+                  className="admin-btn--compact"
                 >
                   Upravit
                 </ButtonAdmin>
@@ -92,7 +92,7 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
                   type="button"
                   onClick={() => openDeleteConfirm(blog)}
                   color="danger"
-                  className="px-3 py-1"
+                  className="admin-btn--compact"
                 >
                   Smazat
                 </ButtonAdmin>
@@ -103,9 +103,9 @@ export default function BlogEditor({ blogs }: BlogEditorProps) {
       )}
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4">
-          <div className="fixed inset-0 bg-black/40" onClick={closeForm} />
-          <div className="relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl">
+        <div className="admin-modal">
+          <div className="admin-modal__backdrop" onClick={closeForm} />
+          <div className="admin-modal__panel">
             <BlogForm onClose={closeForm} initialData={selectedBlog} />
           </div>
         </div>

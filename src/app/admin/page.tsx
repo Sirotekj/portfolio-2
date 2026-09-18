@@ -18,17 +18,15 @@ export default async function AdminPage() {
   const isConfigured = await isAdminLoginReady();
 
   return (
-    <section className="mx-auto flex min-h-[70vh] w-full max-w-lg flex-col justify-center px-6 py-12">
-      <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-        Přihlášení
-      </h1>
-      <p className="mt-2 text-light">
+    <section className="admin-login-page">
+      <h1 className="admin-login-page__title">Přihlášení</h1>
+      <p className="admin-login-page__lead">
         Administrace obsahu portfolia. Přihlas se emailem a heslem uloženým v
         databázi.
       </p>
 
       {!isConfigured ? (
-        <div className="mt-8 rounded-md border border-border bg-background p-4 text-sm text-light">
+        <div className="admin-login-page__setup">
           <p className="font-medium text-foreground">Chybí konfigurace</p>
           {setupError ? <p className="mt-2 text-red-600">{setupError}</p> : null}
           <p className="mt-2">

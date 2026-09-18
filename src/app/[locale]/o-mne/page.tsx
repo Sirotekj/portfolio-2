@@ -29,7 +29,7 @@ export async function generateMetadata({
 
 function LevelDots({ level }: { level: number }) {
   return (
-    <span className="ml-2 truncate">
+    <span className="about-level-dots">
       {Array.from({ length: 5 }, (_, index) => (
         <span
           key={index}
@@ -51,32 +51,32 @@ export default async function AboutPage({ params }: AboutPageProps) {
 
   return (
     <section>
-      <div className="container my-xlarge">
-        <div className="after:clear-both after:content-[''] after:block">
-          <div className="mb-medium mr-large w-full overflow-hidden rounded-xl shadow-xl sm:w-2/5 sm:float-left md:w-1/3">
+      <div className="page-section container">
+        <div className="about-intro__clearfix">
+          <div className="about-intro__photo">
             <picture>
               <img
                 src={photoSrc}
                 alt={messages.about.photoAlt}
-                className="h-auto w-full"
+                className="about-intro__photo-img"
               />
             </picture>
           </div>
           {introParagraphs.length > 0 ? (
-            <div className="space-y-4">
+            <div className="about-intro__text">
               {introParagraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
           ) : (
-            <p className="text-light">{messages.about.empty.intro}</p>
+            <p className="page-muted">{messages.about.empty.intro}</p>
           )}
         </div>
       </div>
 
-      <div className="container my-xlarge">
-        <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border px-large pb-large shadow-xl lg:grid-cols-2">
-          <div className="col-span-1">
+      <div className="page-section container">
+        <div className="about-panel">
+          <div className="about-panel__column">
             <h2>{messages.about.sections.skills}</h2>
             {localized.skills.length > 0 ? (
               <ul>
@@ -88,7 +88,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="text-light">{messages.about.empty.skills}</p>
+              <p className="page-muted">{messages.about.empty.skills}</p>
             )}
 
             <h2>{messages.about.sections.education}</h2>
@@ -101,7 +101,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="text-light">{messages.about.empty.education}</p>
+              <p className="page-muted">{messages.about.empty.education}</p>
             )}
 
             <h2>{messages.about.sections.languages}</h2>
@@ -115,7 +115,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="text-light">{messages.about.empty.languages}</p>
+              <p className="page-muted">{messages.about.empty.languages}</p>
             )}
 
             <h2>{messages.about.sections.hobbies}</h2>
@@ -126,22 +126,22 @@ export default async function AboutPage({ params }: AboutPageProps) {
                   .join(', ')}
               </p>
             ) : (
-              <p className="text-light">{messages.about.empty.hobbies}</p>
+              <p className="page-muted">{messages.about.empty.hobbies}</p>
             )}
           </div>
 
-          <div className="col-span-1">
+          <div className="about-panel__column">
             <h2>{messages.about.sections.jobs}</h2>
             {localized.jobs.length > 0 ? (
               <ul>
                 {[...localized.jobs].reverse().map((job) => (
-                  <li key={job.id} className="whitespace-pre-line">
+                  <li key={job.id} className="about-panel__job">
                     <b>{job.years}</b> - {job.displayDescription}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-light">{messages.about.empty.jobs}</p>
+              <p className="page-muted">{messages.about.empty.jobs}</p>
             )}
           </div>
         </div>

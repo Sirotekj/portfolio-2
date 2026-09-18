@@ -25,15 +25,15 @@ export default function AboutPageForm({ aboutPage }: AboutPageFormProps) {
   });
 
   return (
-    <section className="space-y-4 rounded-xl border border-border p-4">
+    <section className="admin-section">
       <div>
-        <h2 className="text-lg font-semibold text-foreground">Úvodní část</h2>
-        <p className="mt-1 text-sm text-light">
+        <h2 className="admin-section__title">Úvodní část</h2>
+        <p className="admin-section__desc">
           Foto a hlavní text z horní části stránky O mně.
         </p>
       </div>
 
-      <form action={formAction} className="flex flex-col gap-4">
+      <form action={formAction} className="admin-form">
         <ImagePicker
           label="Foto"
           name="photo"
@@ -41,7 +41,7 @@ export default function AboutPageForm({ aboutPage }: AboutPageFormProps) {
         />
 
         <div>
-          <label htmlFor="intro" className="mb-1 block text-sm font-medium">
+          <label htmlFor="intro" className="admin-label">
             Úvodní text (CS)
           </label>
           <textarea
@@ -56,7 +56,7 @@ export default function AboutPageForm({ aboutPage }: AboutPageFormProps) {
         </div>
 
         <div>
-          <label htmlFor="introEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="introEn" className="admin-label">
             Úvodní text (EN)
           </label>
           <textarea

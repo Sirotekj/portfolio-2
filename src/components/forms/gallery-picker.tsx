@@ -101,7 +101,7 @@ export default function GalleryPicker({
 
   return (
     <div>
-      <span className="mb-1 block text-sm font-medium">Galerie</span>
+      <span className="admin-label">Galerie</span>
 
       {items.length > 0 ? (
         <ul className="space-y-4">

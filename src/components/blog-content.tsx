@@ -5,7 +5,7 @@ type BlogContentProps = {
 export default function BlogContent({ html }: BlogContentProps) {
   return (
     <div
-      className="blog-content flex flex-col gap-medium text-foreground"
+      className="blog-content"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

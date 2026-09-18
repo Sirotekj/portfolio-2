@@ -66,7 +66,7 @@ export default function ImagePicker({
 
   return (
     <div>
-      <label htmlFor={name} className="text-sm">
+      <label htmlFor={name} className="admin-label">
         {label}
       </label>
       <div className="controls">

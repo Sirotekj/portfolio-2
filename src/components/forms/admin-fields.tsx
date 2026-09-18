@@ -1,5 +1,4 @@
-export const fieldClass =
-  'w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary';
+export const fieldClass = 'admin-field';
 
 export function LevelSelect({ defaultValue = 3 }: { defaultValue?: number }) {
   return (
@@ -28,14 +27,14 @@ export function FormFeedback({
   return (
     <>
       {errors.length > 0 ? (
-        <ul className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <ul className="admin-feedback admin-feedback--error">
           {errors.map((error) => (
             <li key={error}>{error}</li>
           ))}
         </ul>
       ) : null}
       {messages.length > 0 ? (
-        <ul className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
+        <ul className="admin-feedback admin-feedback--success">
           {messages.map((message) => (
             <li key={message}>{message}</li>
           ))}

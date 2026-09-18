@@ -13,9 +13,9 @@ export default function LoginForm() {
   );
 
   return (
-    <form action={formAction} className="mx-auto w-full max-w-md space-y-4">
+    <form action={formAction} className="admin-login-form">
       <div>
-        <label htmlFor="email" className="mb-1 block text-sm font-medium">
+        <label htmlFor="email" className="admin-label">
           Email
         </label>
         <input
@@ -24,12 +24,12 @@ export default function LoginForm() {
           type="email"
           autoComplete="username"
           required
-          className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary"
+          className="admin-field"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium">
+        <label htmlFor="password" className="admin-label">
           Heslo
         </label>
         <input
@@ -38,21 +38,17 @@ export default function LoginForm() {
           type="password"
           autoComplete="current-password"
           required
-          className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary"
+          className="admin-field"
         />
       </div>
 
       {state.error ? (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="admin-login-form__error" role="alert">
           {state.error}
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full rounded-md bg-primary px-4 py-2 font-medium text-background transition-opacity cursor-pointer hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-      >
+      <button type="submit" disabled={isPending} className="admin-submit">
         {isPending ? 'Přihlašuji…' : 'Přihlásit se'}
       </button>
     </form>

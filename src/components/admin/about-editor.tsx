@@ -29,7 +29,7 @@ type AboutEditorProps = {
 
 function LevelDots({ level }: { level: number }) {
   return (
-    <span className="ml-2 truncate">
+    <span className="about-level-dots">
       {Array.from({ length: 5 }, (_, index) => (
         <span
           key={index}
@@ -42,7 +42,7 @@ function LevelDots({ level }: { level: number }) {
 
 export default function AboutEditor({ data }: AboutEditorProps) {
   return (
-    <div className="space-y-8">
+    <div className="admin-editor">
       <AboutPageForm aboutPage={data.aboutPage} />
 
       <AboutListEditor
@@ -58,7 +58,7 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         Form={SkillForm}
         renderItem={(skill) => (
           <>
-            <p className="font-medium text-foreground">{skill.name}</p>
+            <p className="admin-item-title">{skill.name}</p>
             <LevelDots level={skill.level} />
           </>
         )}
@@ -78,8 +78,8 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         Form={EducationForm}
         renderItem={(education) => (
           <>
-            <p className="font-medium text-foreground">{education.years}</p>
-            <p className="text-sm text-light">{education.school}</p>
+            <p className="admin-item-title">{education.years}</p>
+            <p className="admin-item-meta">{education.school}</p>
           </>
         )}
       />
@@ -96,7 +96,7 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         Form={LanguageForm}
         renderItem={(language) => (
           <>
-            <p className="font-medium text-foreground">{language.name}</p>
+            <p className="admin-item-title">{language.name}</p>
             <LevelDots level={language.level} />
           </>
         )}
@@ -113,7 +113,7 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         getItemDeleteLabel={(hobby) => hobby.name}
         Form={HobbyForm}
         renderItem={(hobby) => (
-          <p className="font-medium text-foreground">{hobby.name}</p>
+          <p className="admin-item-title">{hobby.name}</p>
         )}
       />
 
@@ -131,8 +131,8 @@ export default function AboutEditor({ data }: AboutEditorProps) {
         Form={JobForm}
         renderItem={(job) => (
           <>
-            <p className="font-medium text-foreground">{job.years}</p>
-            <p className="whitespace-pre-line text-sm text-light">
+            <p className="admin-item-title">{job.years}</p>
+            <p className="admin-item-meta--pre">
               {job.description}
             </p>
           </>

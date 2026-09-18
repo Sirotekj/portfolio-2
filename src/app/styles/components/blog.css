@@ -1,0 +1,73 @@
+@layer components {
+  .blog-list {
+    @apply flex flex-col gap-large;
+  }
+
+  .blog-card {
+    @apply grid min-h-48 grid-cols-1 overflow-hidden rounded-xl border border-border shadow-xl transition-colors hover:border-primary/50 md:grid-cols-[280px_1fr];
+  }
+
+  .blog-card__media {
+    @apply relative aspect-video w-full max-w-full overflow-hidden md:aspect-auto md:h-full md:min-h-0;
+  }
+
+  .blog-card__body {
+    @apply min-w-0 px-medium sm:px-large py-medium;
+  }
+
+  .blog-card__title {
+    @apply mt-0 mb-small text-foreground;
+  }
+
+  .blog-post {
+    @apply my-xlarge;
+  }
+
+  .blog-post__back {
+    @apply mb-medium inline-block text-primary hover:underline;
+  }
+
+  .blog-post__header {
+    @apply mb-large;
+  }
+
+  .blog-post__title {
+    @apply text-center font-bold tracking-tight text-foreground;
+  }
+
+  .blog-post__intro {
+    @apply mt-small text-center text-lg sm:text-xl italic text-light md:text-2xl;
+  }
+
+  .blog-content {
+    @apply flex flex-col gap-medium leading-relaxed text-foreground;
+
+    :where(p, ul, ol, blockquote) {
+      @apply mb-medium;
+    }
+
+    :where(h2, h3) {
+      @apply mt-large mb-small font-semibold text-foreground;
+    }
+
+    :where(ul, ol) {
+      @apply ml-large list-outside;
+    }
+
+    :where(ul) {
+      @apply list-disc;
+    }
+
+    :where(ol) {
+      @apply list-decimal;
+    }
+
+    :where(a) {
+      @apply text-primary underline;
+    }
+
+    :where(img) {
+      @apply my-medium h-auto max-w-full rounded-lg;
+    }
+  }
+}

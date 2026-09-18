@@ -8,6 +8,10 @@ import type { BlogView } from '@/types/types';
 import { createAction } from '@/lib/actions/blog-actions';
 
 import ButtonAdmin from '@/components/admin/button-admin';
+import {
+  fieldClass,
+  FormFeedback,
+} from '@/components/forms/admin-fields';
 import FormSubmit from './form-submit';
 import ImagePicker from './image-picker';
 import RichTextEditor from './rich-text-editor';
@@ -16,9 +20,6 @@ type Props = {
   onClose: () => void;
   initialData?: BlogView;
 };
-
-const fieldClass =
-  'w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary';
 
 export default function BlogForm({ onClose, initialData }: Props) {
   const [content, setContent] = useState(initialData?.content ?? '');
@@ -32,23 +33,20 @@ export default function BlogForm({ onClose, initialData }: Props) {
 
   return (
     <>
-      <header className="flex justify-between mb-4 text-xl font-semibold text-foreground">
+      <header className="admin-form__header">
         {isEditing ? 'Upravit článek' : 'Přidat článek'}
-        <button
-          className="text-4xl h-6 w-6 flex justify-center items-center cursor-pointer hover:text-primary"
-          onClick={onClose}
-        >
+        <button type="button" className="admin-form__close" onClick={onClose}>
           ×
         </button>
       </header>
 
-      <form action={formAction} className="flex flex-col gap-4">
+      <form action={formAction} className="admin-form">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
         ) : null}
 
         <div>
-          <label htmlFor="title" className="mb-1 block text-sm font-medium">
+          <label htmlFor="title" className="admin-label">
             Název (CS)
           </label>
           <input
@@ -62,7 +60,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <label htmlFor="titleEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="titleEn" className="admin-label">
             Název (EN)
           </label>
           <input
@@ -76,7 +74,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <label htmlFor="slug" className="mb-1 block text-sm font-medium">
+          <label htmlFor="slug" className="admin-label">
             Slug (CS)
           </label>
           <input
@@ -87,13 +85,13 @@ export default function BlogForm({ onClose, initialData }: Props) {
             placeholder="např. grafik-na-taliri"
             className={fieldClass}
           />
-          <p className="mt-1 text-sm text-light">
+          <p className="admin-hint">
             Pokud necháš prázdné, vygeneruje se automaticky z názvu.
           </p>
         </div>
 
         <div>
-          <label htmlFor="slugEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="slugEn" className="admin-label">
             Slug (EN)
           </label>
           <input
@@ -104,7 +102,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
             placeholder="např. graphic-on-a-plate"
             className={fieldClass}
           />
-          <p className="mt-1 text-sm text-light">
+          <p className="admin-hint">
             Volitelné — prázdné použije český slug v anglické verzi webu.
           </p>
         </div>
@@ -116,7 +114,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
             defaultImage={initialData?.image}
           />
           {initialData?.image ? (
-            <p className="my-2 text-sm text-light">
+            <p className="admin-hint my-2">
               Aktuální: {initialData.image}
             </p>
           ) : null}
@@ -130,7 +128,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <label htmlFor="intro" className="mb-1 block text-sm font-medium">
+          <label htmlFor="intro" className="admin-label">
             Úvod (CS)
           </label>
           <textarea
@@ -144,7 +142,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <label htmlFor="introEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="introEn" className="admin-label">
             Úvod (EN)
           </label>
           <textarea
@@ -158,7 +156,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <span className="mb-1 block text-sm font-medium">
+          <span className="admin-label">
             Hlavní text (CS)
           </span>
           <RichTextEditor
@@ -170,7 +168,7 @@ export default function BlogForm({ onClose, initialData }: Props) {
         </div>
 
         <div>
-          <span className="mb-1 block text-sm font-medium">
+          <span className="admin-label">
             Hlavní text (EN)
           </span>
           <RichTextEditor
@@ -181,23 +179,9 @@ export default function BlogForm({ onClose, initialData }: Props) {
           />
         </div>
 
-        {state.errors.length > 0 ? (
-          <ul className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {state.errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        ) : null}
+        <FormFeedback errors={state.errors} messages={state.messages} />
 
-        {state.messages.length > 0 ? (
-          <ul className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
-            {state.messages.map((message) => (
-              <li key={message}>{message}</li>
-            ))}
-          </ul>
-        ) : null}
-
-        <div className="mt-2 flex justify-between gap-4">
+        <div className="admin-form__actions">
           <FormSubmit />
           <ButtonAdmin type="button" onClick={onClose} color="light">
             Zrušit

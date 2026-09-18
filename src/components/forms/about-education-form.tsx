@@ -26,24 +26,20 @@ export default function EducationForm({
 
   return (
     <>
-      <header className="mb-4 flex justify-between text-xl font-semibold text-foreground">
+      <header className="admin-form__header">
         {initialData ? 'Upravit vzdělání' : 'Přidat vzdělání'}
-        <button
-          type="button"
-          className="flex h-6 w-6 cursor-pointer items-center justify-center text-4xl hover:text-primary"
-          onClick={onClose}
-        >
+        <button type="button" className="admin-form__close" onClick={onClose}>
           ×
         </button>
       </header>
 
-      <form action={formAction} className="flex flex-col gap-4">
+      <form action={formAction} className="admin-form">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
         ) : null}
 
         <div>
-          <label htmlFor="years" className="mb-1 block text-sm font-medium">
+          <label htmlFor="years" className="admin-label">
             Roky
           </label>
           <input
@@ -58,7 +54,7 @@ export default function EducationForm({
         </div>
 
         <div>
-          <label htmlFor="school" className="mb-1 block text-sm font-medium">
+          <label htmlFor="school" className="admin-label">
             Škola / kurz
           </label>
           <textarea
@@ -72,7 +68,7 @@ export default function EducationForm({
         </div>
 
         <div>
-          <label htmlFor="schoolEn" className="mb-1 block text-sm font-medium">
+          <label htmlFor="schoolEn" className="admin-label">
             Škola / kurz (EN)
           </label>
           <textarea

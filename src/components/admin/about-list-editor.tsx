@@ -81,10 +81,12 @@ export default function AboutListEditor<T extends { id: number }>({
   }
 
   return (
-    <section className="space-y-4 rounded-xl border border-border p-4">
+    <section className="admin-section">
       <div>
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-light">{description}</p> : null}
+        <h2 className="admin-section__title">{title}</h2>
+        {description ? (
+          <p className="admin-section__desc">{description}</p>
+        ) : null}
       </div>
 
       <SortableList
@@ -95,14 +97,14 @@ export default function AboutListEditor<T extends { id: number }>({
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">{renderItem(item)}</div>
             <div
-              className="flex shrink-0 flex-col items-end gap-1"
+              className="admin-list__actions"
               onMouseDown={(event) => event.stopPropagation()}
             >
               <ButtonAdmin
                 type="button"
                 onClick={() => openEditForm(item)}
                 color="light"
-                className="px-3 py-1"
+                className="admin-btn--compact"
               >
                 Upravit
               </ButtonAdmin>
@@ -110,7 +112,7 @@ export default function AboutListEditor<T extends { id: number }>({
                 type="button"
                 onClick={() => openDeleteConfirm(item)}
                 color="danger"
-                className="px-3 py-1"
+                className="admin-btn--compact"
               >
                 Smazat
               </ButtonAdmin>
@@ -124,9 +126,9 @@ export default function AboutListEditor<T extends { id: number }>({
       </ButtonAdmin>
 
       {isFormOpen ? (
-        <div className="fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4">
-          <div className="fixed inset-0 bg-black/40" onClick={closeForm} />
-          <div className="relative my-8 w-full max-w-2xl rounded-xl border border-border bg-background p-6 shadow-xl">
+        <div className="admin-modal">
+          <div className="admin-modal__backdrop" onClick={closeForm} />
+          <div className="admin-modal__panel admin-modal__panel--sm">
             <Form onClose={closeForm} initialData={selectedItem} />
           </div>
         </div>

@@ -15,29 +15,23 @@ export default function EditShell({
   description,
 }: EditShellProps) {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-background/95">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+    <div className="admin-shell">
+      <header className="admin-shell__header">
+        <div className="admin-shell__header-inner">
           <div>
-            <p className="text-sm text-light">Administrace</p>
-            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+            <p className="admin-shell__eyebrow">Administrace</p>
+            <h1 className="admin-shell__title">{title}</h1>
             {description ? (
-              <p className="mt-1 text-sm text-light">{description}</p>
+              <p className="admin-shell__desc">{description}</p>
             ) : null}
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/edit"
-              className="text-sm font-medium text-primary hover:underline"
-            >
+          <div className="admin-shell__toolbar">
+            <Link href="/edit" className="admin-shell__link">
               Přehled
             </Link>
             <form action={logoutAction}>
-              <button
-                type="submit"
-                className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors cursor-pointer truncate hover:border-primary hover:text-primary"
-              >
+              <button type="submit" className="admin-logout-btn">
                 Odhlásit se
               </button>
             </form>
@@ -45,14 +39,14 @@ export default function EditShell({
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-5xl gap-8 px-6 py-8 lg:grid-cols-[220px_1fr]">
+      <div className="admin-shell__layout">
         <aside>
-          <nav className="flex flex-col gap-1">
+          <nav className="admin-nav">
             {editSections.map((section) => (
               <Link
                 key={section.href}
                 href={section.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                className="admin-nav__link"
               >
                 {section.title}
               </Link>

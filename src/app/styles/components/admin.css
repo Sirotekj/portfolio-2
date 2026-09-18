@@ -1,0 +1,265 @@
+@layer components {
+  .admin-field {
+    @apply w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary;
+  }
+
+  .admin-label {
+    @apply mb-1 block text-sm font-medium;
+  }
+
+  .admin-hint {
+    @apply mt-1 text-sm text-light;
+  }
+
+  .admin-form {
+    @apply flex flex-col gap-4;
+  }
+
+  .admin-form__header {
+    @apply mb-4 flex justify-between text-xl font-semibold text-foreground;
+  }
+
+  .admin-form__close {
+    @apply flex h-6 w-6 cursor-pointer items-center justify-center text-4xl hover:text-primary;
+  }
+
+  .admin-form__actions {
+    @apply mt-2 flex justify-between gap-4;
+  }
+
+  .admin-feedback {
+    @apply rounded-md px-3 py-2 text-sm;
+  }
+
+  .admin-feedback--error {
+    @apply border border-red-200 bg-red-50 text-red-700;
+  }
+
+  .admin-feedback--success {
+    @apply border border-primary/30 bg-primary/10 text-primary;
+  }
+
+  .admin-section {
+    @apply space-y-4 rounded-xl border border-border p-4;
+  }
+
+  .admin-section__title {
+    @apply text-lg font-semibold text-foreground;
+  }
+
+  .admin-section__desc {
+    @apply mt-1 text-sm text-light;
+  }
+
+  .admin-block {
+    @apply space-y-6;
+  }
+
+  .admin-editor {
+    @apply space-y-8;
+  }
+
+  .admin-list {
+    @apply divide-y divide-border rounded-xl border border-border;
+  }
+
+  .admin-list__row {
+    @apply flex items-center gap-3 px-4 py-3 transition-colors;
+  }
+
+  .admin-list__row--dragging {
+    @apply opacity-50;
+  }
+
+  .admin-list__row--drop-target {
+    @apply bg-primary/5;
+  }
+
+  .admin-list__row--spread {
+    @apply justify-between gap-4;
+  }
+
+  .admin-list__index {
+    @apply w-6 shrink-0 text-sm text-light;
+  }
+
+  .admin-list__body {
+    @apply min-w-0 flex-1;
+  }
+
+  .admin-list__title {
+    @apply font-medium text-foreground;
+  }
+
+  .admin-list__meta {
+    @apply text-sm text-light;
+  }
+
+  .admin-list__actions {
+    @apply flex shrink-0 flex-col items-end gap-1;
+  }
+
+  .admin-drag-handle {
+    @apply cursor-grab px-1 text-light active:cursor-grabbing;
+  }
+
+  .admin-modal {
+    @apply fixed inset-0 z-1200 flex items-start justify-center overflow-y-auto p-4;
+  }
+
+  .admin-modal--center {
+    @apply z-1300 items-center;
+  }
+
+  .admin-modal__backdrop {
+    @apply fixed inset-0 bg-black/40;
+  }
+
+  .admin-modal__panel {
+    @apply relative my-8 w-full max-w-3xl rounded-xl border border-border bg-background p-6 shadow-xl;
+  }
+
+  .admin-modal__panel--sm {
+    @apply max-w-2xl;
+  }
+
+  .admin-modal__panel--md {
+    @apply max-w-md;
+  }
+
+  .admin-modal__title {
+    @apply text-lg font-semibold text-foreground;
+  }
+
+  .admin-modal__body {
+    @apply mt-3 text-sm text-light;
+  }
+
+  .admin-modal__actions {
+    @apply mt-6 flex justify-end gap-3;
+  }
+
+  .admin-shell {
+    @apply min-h-screen bg-background;
+  }
+
+  .admin-shell__header {
+    @apply border-b border-border bg-background/95;
+  }
+
+  .admin-shell__header-inner {
+    @apply mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4;
+  }
+
+  .admin-shell__eyebrow {
+    @apply text-sm text-light;
+  }
+
+  .admin-shell__title {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  .admin-shell__desc {
+    @apply mt-1 text-sm text-light;
+  }
+
+  .admin-shell__toolbar {
+    @apply flex items-center gap-3;
+  }
+
+  .admin-shell__link {
+    @apply text-sm font-medium text-primary hover:underline;
+  }
+
+  .admin-shell__layout {
+    @apply mx-auto grid max-w-5xl gap-8 px-4 sm:px-6 py-8 lg:grid-cols-[220px_1fr];
+  }
+
+  .admin-nav {
+    @apply flex flex-col gap-1;
+  }
+
+  .admin-nav__link {
+    @apply rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary;
+  }
+
+  .admin-logout-btn {
+    @apply cursor-pointer truncate rounded-md border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:text-primary;
+  }
+
+  .admin-login-page {
+    @apply mx-auto flex min-h-[70vh] w-full max-w-lg flex-col justify-center px-6 py-12;
+  }
+
+  .admin-login-page__title {
+    @apply text-3xl font-semibold tracking-tight text-foreground;
+  }
+
+  .admin-login-page__lead {
+    @apply mt-2 text-light;
+  }
+
+  .admin-login-page__setup {
+    @apply mt-8 rounded-md border border-border bg-background p-4 text-sm text-light;
+  }
+
+  .admin-login-form {
+    @apply mx-auto w-full max-w-md space-y-4;
+  }
+
+  .admin-login-form__error {
+    @apply text-sm text-red-600;
+  }
+
+  .admin-submit {
+    @apply w-full cursor-pointer rounded-md bg-primary px-4 py-2 font-medium text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .admin-btn {
+    @apply flex cursor-pointer items-center rounded-md border px-4 py-2 text-sm font-medium text-nowrap transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60;
+
+    & > svg {
+      @apply h-10 w-10 p-2;
+    }
+  }
+
+  .admin-btn--compact {
+    @apply px-3 py-1;
+  }
+
+  .admin-btn--dark {
+    @apply border-primary bg-primary text-background;
+  }
+
+  .admin-btn--light {
+    @apply border-border hover:border-primary hover:text-primary;
+  }
+
+  .admin-btn--danger {
+    @apply border-danger text-danger hover:border-danger-hover hover:bg-danger/5 hover:text-danger-hover;
+  }
+
+  .admin-empty {
+    @apply text-light;
+  }
+
+  .admin-empty--sm {
+    @apply text-sm text-light;
+  }
+
+  .admin-reorder-hint {
+    @apply text-sm text-light;
+  }
+
+  .admin-item-title {
+    @apply font-medium text-foreground;
+  }
+
+  .admin-item-meta {
+    @apply text-sm text-light;
+  }
+
+  .admin-item-meta--pre {
+    @apply whitespace-pre-line text-sm text-light;
+  }
+}

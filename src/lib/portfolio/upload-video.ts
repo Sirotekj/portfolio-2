@@ -2,7 +2,7 @@ import path from 'path';
 
 import {
   putBlob,
-  isBlobStorageEnabled,
+  shouldUseBlobStorage,
   withBlobStorePrefix,
 } from '@/lib/storage/blob';
 import { slugify } from '@/lib/utils/slug';
@@ -30,13 +30,13 @@ async function savePortfolioVideoToBlob(file: File): Promise<VideoUpload> {
   const contentType =
     originalExtension === '.webm' ? 'video/webm' : 'video/mp4';
 
-  await putBlob(storedPath, buffer, contentType);
+  const result = await putBlob(storedPath, buffer, contentType);
 
-  return { path: withBlobStorePrefix(storedPath) };
+  return { path: result.pathname };
 }
 
 export async function savePortfolioVideo(file: File): Promise<VideoUpload> {
-  if (isBlobStorageEnabled()) {
+  if (shouldUseBlobStorage()) {
     return savePortfolioVideoToBlob(file);
   }
 

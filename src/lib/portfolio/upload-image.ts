@@ -5,8 +5,9 @@ import { saveResponsiveImages } from '@/lib/images/save-upload';
 import { IMAGE_WIDTHS } from '@/lib/images/responsive';
 import { loadSharp } from '@/lib/images/load-sharp';
 import {
-  putBlob,
   isBlobStorageEnabled,
+  putBlob,
+  shouldUseBlobStorage,
   withBlobStorePrefix,
 } from '@/lib/storage/blob';
 import { slugify } from '@/lib/utils/slug';
@@ -39,7 +40,7 @@ async function savePortfolioImageToBlob(
     .rotate()
     .metadata();
 
-  await Promise.all(
+  const uploads = await Promise.all(
     IMAGE_WIDTHS.map(async (width) => {
       const output = await sharp(buffer)
         .rotate()
@@ -50,12 +51,22 @@ async function savePortfolioImageToBlob(
         .webp({ quality: 82 })
         .toBuffer();
 
-      await putBlob(`${relativeBase}-${width}.webp`, output, 'image/webp');
+      const result = await putBlob(
+        `${relativeBase}-${width}.webp`,
+        output,
+        'image/webp',
+      );
+
+      return { width, result };
     }),
   );
 
+  const defaultUpload = uploads.find((entry) => entry.width === 960);
+  const storedBasePath =
+    defaultUpload?.result.pathname.replace(/-960\.webp$/i, '') ?? basePath;
+
   return {
-    basePath,
+    basePath: storedBasePath,
     width: imageWidth,
     height: imageHeight,
   };
@@ -64,7 +75,7 @@ async function savePortfolioImageToBlob(
 export async function savePortfolioImage(
   file: File,
 ): Promise<ResponsiveImageUpload> {
-  if (isBlobStorageEnabled()) {
+  if (shouldUseBlobStorage()) {
     return savePortfolioImageToBlob(file);
   }
 

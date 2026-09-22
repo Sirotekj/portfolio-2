@@ -4,6 +4,25 @@ export function isBlobStorageEnabled(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
 }
 
+export function isRunningOnVercel(): boolean {
+  return Boolean(process.env.VERCEL);
+}
+
+/** Na Vercelu vždy Blob; bez tokenu raději chyba než zápis do public/. */
+export function shouldUseBlobStorage(): boolean {
+  if (isBlobStorageEnabled()) {
+    return true;
+  }
+
+  if (isRunningOnVercel()) {
+    throw new Error(
+      'Chybí BLOB_READ_WRITE_TOKEN. V Vercelu propoj Blob store s projektem (Storage → Blob → Connections), nebo token doplň do env pro Preview/Production.',
+    );
+  }
+
+  return false;
+}
+
 /** development/ nebo production/ — podle Vercel prostředí, nebo BLOB_STORE_PREFIX. */
 export function getBlobStorePrefix(): string {
   const explicit = process.env.BLOB_STORE_PREFIX?.trim();
@@ -17,6 +36,24 @@ export function getBlobStorePrefix(): string {
   }
 
   return 'development/';
+}
+
+export function resolveBlobPublicBaseUrl(): string | null {
+  const explicit =
+    process.env.NEXT_PUBLIC_BLOB_PUBLIC_BASE_URL?.trim() ||
+    process.env.BLOB_PUBLIC_BASE_URL?.trim();
+
+  if (explicit) {
+    return explicit.replace(/\/$/, '');
+  }
+
+  const storeId = process.env.BLOB_STORE_ID?.trim();
+
+  if (storeId) {
+    return `https://${storeId}.public.blob.vercel-storage.com`;
+  }
+
+  return null;
 }
 
 export function withBlobStorePrefix(pathname: string): string {
@@ -49,21 +86,19 @@ export function isPortfolioBlobPath(storedPath: string): boolean {
     return false;
   }
 
-  return isBlobStorageEnabled();
+  return isBlobStorageEnabled() || Boolean(resolveBlobPublicBaseUrl());
 }
 
 export function getBlobPublicBaseUrl(): string {
-  const base =
-    process.env.NEXT_PUBLIC_BLOB_PUBLIC_BASE_URL?.trim() ||
-    process.env.BLOB_PUBLIC_BASE_URL?.trim();
+  const base = resolveBlobPublicBaseUrl();
 
   if (!base) {
     throw new Error(
-      'Chybí NEXT_PUBLIC_BLOB_PUBLIC_BASE_URL (nebo BLOB_PUBLIC_BASE_URL). Zkopíruj veřejnou URL Blob store z Vercelu.',
+      'Chybí veřejná URL Blob store. Nastav NEXT_PUBLIC_BLOB_PUBLIC_BASE_URL, nebo propoj Blob store s projektem (Vercel doplní BLOB_STORE_ID).',
     );
   }
 
-  return base.replace(/\/$/, '');
+  return base;
 }
 
 export function blobPublicUrl(pathname: string): string {
@@ -79,6 +114,10 @@ export async function putBlob(
   body: Buffer,
   contentType: string,
 ): Promise<{ url: string; pathname: string }> {
+  if (!isBlobStorageEnabled()) {
+    throw new Error('BLOB_READ_WRITE_TOKEN není nastavený.');
+  }
+
   const { put } = await import('@vercel/blob');
   const blobPath = withBlobStorePrefix(pathname);
 

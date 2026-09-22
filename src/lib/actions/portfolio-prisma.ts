@@ -3,9 +3,9 @@ import type { ProjectCategory } from '@/generated/prisma/client';
 import type { ProjectView } from '@/types/types';
 
 import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
-import { saveResponsiveImages } from '@/lib/images/save-upload';
-import { deleteStoredImage } from '@/lib/images/delete-upload';
-import { saveProjectVideo } from '@/lib/videos/save-video';
+import { deletePortfolioMedia } from '@/lib/portfolio/delete-media';
+import { savePortfolioImage } from '@/lib/portfolio/upload-image';
+import { savePortfolioVideo } from '@/lib/portfolio/upload-video';
 import { prisma } from '@/lib/prisma';
 
 function mapProject(project: {
@@ -45,13 +45,10 @@ function mapProject(project: {
 export async function saveProjectImage(
   file: File,
 ): Promise<ResponsiveImageUpload> {
-  return saveResponsiveImages({
-    file,
-    folder: 'uploads/portfolio',
-  });
+  return savePortfolioImage(file);
 }
 
-export { saveProjectVideo };
+export { savePortfolioVideo as saveProjectVideo };
 
 export type ProjectWriteData = {
   title: string;
@@ -101,7 +98,7 @@ export async function UpdateProject(
 
 async function deleteProjectMediaPaths(paths: string[]): Promise<void> {
   await Promise.all(
-    paths.filter(Boolean).map((mediaPath) => deleteStoredImage(mediaPath)),
+    paths.filter(Boolean).map((mediaPath) => deletePortfolioMedia(mediaPath)),
   );
 }
 

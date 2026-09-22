@@ -47,7 +47,42 @@ export default function PortfolioStorageDiagnostics({
           <dt>Prefix ve store</dt>
           <dd>{diagnostics.blobStorePrefix}</dd>
         </div>
+        <div>
+          <dt>Souborů v Blob (portfolio)</dt>
+          <dd>
+            {diagnostics.blobFileCount === null
+              ? '—'
+              : String(diagnostics.blobFileCount)}
+          </dd>
+        </div>
       </dl>
+
+      {diagnostics.testImageUrl ? (
+        <p className="admin-diagnostics__test-url">
+          Test URL:{' '}
+          <a
+            href={diagnostics.testImageUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="admin-diagnostics__link"
+          >
+            {diagnostics.testImageUrl}
+          </a>
+        </p>
+      ) : null}
+
+      {diagnostics.blobListSample.length > 0 ? (
+        <div className="admin-diagnostics__paths">
+          <p className="admin-diagnostics__label">Ukázka z Blob list():</p>
+          <ul>
+            {diagnostics.blobListSample.map((storedPath) => (
+              <li key={storedPath}>
+                <code>{storedPath}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {recentProjectPaths.length > 0 ? (
         <div className="admin-diagnostics__paths">

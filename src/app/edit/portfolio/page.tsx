@@ -32,7 +32,6 @@ export default async function EditPortfolioPage() {
     portfolioPage = emptyPortfolioPage;
   }
 
-  const diagnostics = getPortfolioStorageDiagnostics();
   const recentProjectPaths = projects.slice(0, 5).flatMap((project) => {
     const paths = [project.image, ...project.gallery, project.video].filter(
       Boolean,
@@ -40,6 +39,9 @@ export default async function EditPortfolioPage() {
 
     return paths;
   });
+  const diagnostics = await getPortfolioStorageDiagnostics(
+    recentProjectPaths[0],
+  );
 
   return (
     <EditShell

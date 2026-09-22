@@ -38,19 +38,42 @@ export function getBlobStorePrefix(): string {
   return 'development/';
 }
 
+/** Vercel env pull dává store_ prefix; CDN host používá id bez něj. */
+export function normalizeBlobStoreIdForHost(storeId: string): string {
+  const trimmed = storeId.trim();
+  return trimmed.replace(/^store_/i, '');
+}
+
+function normalizeBlobPublicHostname(hostname: string): string {
+  const [subdomain, ...rest] = hostname.split('.');
+
+  if (!subdomain || rest.length === 0) {
+    return hostname;
+  }
+
+  return `${normalizeBlobStoreIdForHost(subdomain)}.${rest.join('.')}`;
+}
+
 export function resolveBlobPublicBaseUrl(): string | null {
   const explicit =
     process.env.NEXT_PUBLIC_BLOB_PUBLIC_BASE_URL?.trim() ||
     process.env.BLOB_PUBLIC_BASE_URL?.trim();
 
   if (explicit) {
-    return explicit.replace(/\/$/, '');
+    try {
+      const parsed = new URL(explicit.replace(/\/$/, ''));
+      parsed.hostname = normalizeBlobPublicHostname(parsed.hostname);
+      return parsed.origin;
+    } catch {
+      return explicit.replace(/\/$/, '');
+    }
   }
 
   const storeId = process.env.BLOB_STORE_ID?.trim();
 
   if (storeId) {
-    return `https://${storeId}.public.blob.vercel-storage.com`;
+    const hostId = normalizeBlobStoreIdForHost(storeId);
+    return `https://${hostId}.public.blob.vercel-storage.com`;
   }
 
   return null;

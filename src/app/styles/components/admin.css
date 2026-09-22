@@ -91,6 +91,14 @@
     @apply mt-4 list-disc space-y-1 pl-5 text-light;
   }
 
+  .admin-diagnostics__test-url {
+    @apply mt-4 break-all text-xs;
+  }
+
+  .admin-diagnostics__link {
+    @apply text-primary underline;
+  }
+
   .admin-editor {
     @apply space-y-8;
   }

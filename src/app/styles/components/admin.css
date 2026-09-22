@@ -55,6 +55,42 @@
     @apply space-y-6;
   }
 
+  .admin-diagnostics {
+    @apply rounded-xl border border-border bg-background/60 p-4 text-sm;
+  }
+
+  .admin-diagnostics__summary {
+    @apply cursor-pointer font-medium text-foreground;
+  }
+
+  .admin-diagnostics__list {
+    @apply mt-4 grid gap-2 sm:grid-cols-2;
+  }
+
+  .admin-diagnostics__list dt {
+    @apply text-light;
+  }
+
+  .admin-diagnostics__list dd {
+    @apply font-mono text-xs text-foreground;
+  }
+
+  .admin-diagnostics__paths {
+    @apply mt-4;
+  }
+
+  .admin-diagnostics__label {
+    @apply mb-1 text-light;
+  }
+
+  .admin-diagnostics__paths ul {
+    @apply space-y-1 font-mono text-xs break-all;
+  }
+
+  .admin-diagnostics__notes {
+    @apply mt-4 list-disc space-y-1 pl-5 text-light;
+  }
+
   .admin-editor {
     @apply space-y-8;
   }

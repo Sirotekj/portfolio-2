@@ -53,6 +53,7 @@ export default function PortfolioEditor({
     null,
   );
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const items = useMemo(() => {
     const order = optimisticIds ?? projects.map((project) => project.id);
@@ -79,6 +80,7 @@ export default function PortfolioEditor({
   }
 
   function openDeleteConfirm(project: ProjectView) {
+    setDeleteError(null);
     setProjectToDelete(project);
   }
 
@@ -97,9 +99,16 @@ export default function PortfolioEditor({
     formData.set('id', String(projectToDelete.id));
 
     startDeleteTransition(async () => {
-      await deleteProjectAction(formData);
+      const result = await deleteProjectAction(formData);
+
+      if (result.error) {
+        setDeleteError(result.error);
+        return;
+      }
+
       setProjectToDelete(null);
       setOptimisticIds(null);
+      setDeleteError(null);
     });
   }
 
@@ -156,6 +165,10 @@ export default function PortfolioEditor({
 
       {reorderError ? (
         <p className="admin-feedback admin-feedback--error">{reorderError}</p>
+      ) : null}
+
+      {deleteError ? (
+        <p className="admin-feedback admin-feedback--error">{deleteError}</p>
       ) : null}
 
       {items.length === 0 ? (

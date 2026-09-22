@@ -27,6 +27,10 @@ const messages = {
       categories: {
         all: 'vše',
       },
+      gallery: {
+        title: 'Galerie projektů',
+        close: 'Zavřít galerii',
+      },
       empty: {
         intro: 'Není zde žádný úvodní text.',
         projects: 'Nejsou zde žádné projekty.',
@@ -97,6 +101,10 @@ const messages = {
     portfolio: {
       categories: {
         all: 'all',
+      },
+      gallery: {
+        title: 'Project gallery',
+        close: 'Close gallery',
       },
       empty: {
         intro: 'There is no introduction here.',

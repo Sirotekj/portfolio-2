@@ -5,6 +5,8 @@ import {
   deleteBlobUrls,
   isBlobStorageEnabled,
   isPortfolioBlobPath,
+  isRunningOnVercel,
+  resolveBlobPublicBaseUrl,
 } from '@/lib/storage/blob';
 
 function portfolioBlobDeleteUrls(storedPath: string): string[] {
@@ -35,11 +37,14 @@ export async function deletePortfolioMedia(storedPath: string): Promise<void> {
   }
 
   if (isPortfolioBlobPath(normalized)) {
-    await deleteBlobUrls(portfolioBlobDeleteUrls(normalized));
+    if (resolveBlobPublicBaseUrl()) {
+      await deleteBlobUrls(portfolioBlobDeleteUrls(normalized));
+    }
+
     return;
   }
 
-  if (isBlobStorageEnabled()) {
+  if (isBlobStorageEnabled() && isRunningOnVercel()) {
     return;
   }
 

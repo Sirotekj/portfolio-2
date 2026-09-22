@@ -297,15 +297,25 @@ export async function createProjectAction(
   }
 }
 
-export async function deleteProjectAction(formData: FormData): Promise<void> {
+export async function deleteProjectAction(
+  formData: FormData,
+): Promise<{ error?: string }> {
   const id = formData.get('id');
 
   if (typeof id !== 'string' || !id.trim()) {
-    return;
+    return { error: 'Chybí ID projektu.' };
   }
 
-  await DeleteProject(id);
-  revalidatePortfolioPaths();
+  try {
+    await DeleteProject(id);
+    revalidatePortfolioPaths();
+    return {};
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Smazání projektu se nezdařilo.';
+
+    return { error: message };
+  }
 }
 
 export async function reorderProjectsAction(

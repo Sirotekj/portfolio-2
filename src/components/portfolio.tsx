@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import PortfolioGalleryModal from '@/components/portfolio-gallery-modal';
 import type { Locale } from '@/i18n/config';
 import { getMessages } from '@/i18n/messages';
 import {
@@ -109,6 +110,7 @@ function ProjectImage({
 
 export default function Portfolio({ projects, locale }: PortfolioProps) {
   const [category, setCategory] = useState<Categories | 'vse'>('vse');
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const messages = getMessages(locale);
 
   const filteredProjects = useMemo(() => {
@@ -120,6 +122,10 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
 
     return withImage.filter((project) => project.category === category);
   }, [category, projects]);
+
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [category]);
 
   return (
     <>
@@ -143,9 +149,16 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
       <div className="portfolio-grid container">
         {filteredProjects.length > 0 ? (
           <ul className="portfolio-grid__columns">
-            {filteredProjects.map((project) => (
+            {filteredProjects.map((project, index) => (
               <li key={project.id} className="portfolio-grid__item">
-                <ProjectImage project={project} locale={locale} />
+                <button
+                  type="button"
+                  className="portfolio-grid__button"
+                  onClick={() => setSelectedIndex(index)}
+                  aria-label={getProjectLocalizedTitle(project, locale)}
+                >
+                  <ProjectImage project={project} locale={locale} />
+                </button>
               </li>
             ))}
           </ul>
@@ -153,6 +166,15 @@ export default function Portfolio({ projects, locale }: PortfolioProps) {
           <p className="page-empty">{messages.portfolio.empty.projects}</p>
         )}
       </div>
+
+      {selectedIndex !== null ? (
+        <PortfolioGalleryModal
+          projects={filteredProjects}
+          initialIndex={selectedIndex}
+          locale={locale}
+          onClose={() => setSelectedIndex(null)}
+        />
+      ) : null}
     </>
   );
 }

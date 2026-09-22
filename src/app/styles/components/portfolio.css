@@ -39,6 +39,123 @@
     @apply mb-medium w-full break-inside-avoid overflow-hidden rounded-xl shadow-xl;
   }
 
+  .portfolio-grid__button {
+    @apply block w-full cursor-pointer border-0 bg-transparent p-0 text-left;
+  }
+
+  .portfolio-modal {
+    @apply fixed inset-0 z-[1200] flex flex-col bg-background/95 backdrop-blur-sm;
+  }
+
+  .portfolio-modal__close {
+    @apply absolute top-4 right-4 z-20 flex h-10 w-10 cursor-pointer items-center justify-center border-0 bg-transparent text-4xl leading-none text-foreground transition-colors hover:text-primary;
+  }
+
+  .portfolio-modal__pagination {
+    @apply absolute top-5 left-6 z-20 text-sm font-medium tracking-wide text-light;
+  }
+
+  .portfolio-modal__main {
+    @apply relative mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col justify-center px-14 pt-16 pb-4;
+  }
+
+  .portfolio-modal__swiper--main {
+    @apply h-full w-full;
+  }
+
+  .portfolio-modal__slide {
+    @apply flex h-full flex-col items-center justify-center gap-medium;
+  }
+
+  .portfolio-modal__media {
+    @apply flex w-full max-w-5xl items-center justify-center;
+  }
+
+  .portfolio-modal__media--image,
+  .portfolio-modal__media--video {
+    @apply max-h-[58vh];
+  }
+
+  .portfolio-modal__image-frame {
+    @apply relative h-full max-h-[58vh] w-full max-w-full;
+  }
+
+  .portfolio-modal__image {
+    @apply h-full max-h-[58vh] w-full object-contain;
+  }
+
+  .portfolio-modal__image--fluid {
+    @apply h-auto w-auto max-h-[58vh] max-w-full;
+  }
+
+  .portfolio-modal__video {
+    @apply h-auto max-h-[58vh] w-full max-w-full bg-black object-contain;
+  }
+
+  .portfolio-modal__gallery {
+    @apply flex max-h-[58vh] w-full max-w-5xl flex-wrap items-center justify-center gap-medium overflow-y-auto px-small;
+  }
+
+  .portfolio-modal__gallery-item {
+    @apply flex max-h-[52vh] max-w-full flex-[1_1_14rem] items-center justify-center;
+  }
+
+  .portfolio-modal__gallery-image {
+    @apply h-auto max-h-[52vh] w-auto max-w-full object-contain;
+  }
+
+  .portfolio-modal__title {
+    @apply mt-0 mb-0 text-center text-2xl font-semibold text-foreground;
+  }
+
+  .portfolio-modal__thumbs-wrap {
+    @apply w-full border-t border-border p-1;
+  }
+
+  .portfolio-modal__swiper--thumbs {
+    @apply w-full;
+  }
+
+  .portfolio-modal__swiper--thumbs .swiper-slide {
+    width: 100px;
+    flex-shrink: 0;
+  }
+
+  .portfolio-modal__thumb-slide {
+    @apply h-20 shrink-0;
+  }
+
+  .portfolio-modal__thumb {
+    @apply block h-20 w-[100px] cursor-pointer overflow-hidden rounded-md border-2 border-transparent bg-transparent p-0 transition-colors;
+  }
+
+  .portfolio-modal__thumb-image {
+    @apply h-20 w-[100px] object-cover;
+  }
+
+  .portfolio-modal__swiper--thumbs
+    .swiper-slide-thumb-active
+    .portfolio-modal__thumb {
+    @apply border-primary;
+  }
+
+  .portfolio-modal__swiper--main .swiper-button-prev,
+  .portfolio-modal__swiper--main .swiper-button-next {
+    @apply text-foreground transition-colors hover:text-primary;
+  }
+
+  .portfolio-modal__swiper--main .swiper-button-prev {
+    @apply left-2;
+  }
+
+  .portfolio-modal__swiper--main .swiper-button-next {
+    @apply right-2;
+  }
+
+  .portfolio-modal__swiper--main .swiper-button-disabled {
+    @apply opacity-30;
+  }
+
   .portfolio-image {
     @apply relative w-full overflow-hidden;
   }

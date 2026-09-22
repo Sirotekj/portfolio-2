@@ -67,6 +67,20 @@ export function withBlobStorePrefix(pathname: string): string {
   return `${prefix}${normalized}`;
 }
 
+function hasBlobStorePrefix(pathname: string): boolean {
+  const explicit = process.env.BLOB_STORE_PREFIX?.trim();
+
+  if (explicit) {
+    const normalizedPrefix = explicit.endsWith('/') ? explicit : `${explicit}/`;
+    return pathname.startsWith(normalizedPrefix);
+  }
+
+  return (
+    pathname.startsWith('development/') || pathname.startsWith('production/')
+  );
+}
+
+/** Pouze cesty nahrané do Blob (prefix development/ nebo production/). Staré uploads/portfolio/… jsou lokální. */
 export function isPortfolioBlobPath(storedPath: string): boolean {
   const normalized = storedPath.trim();
 
@@ -86,7 +100,7 @@ export function isPortfolioBlobPath(storedPath: string): boolean {
     return false;
   }
 
-  return isBlobStorageEnabled() || Boolean(resolveBlobPublicBaseUrl());
+  return hasBlobStorePrefix(pathname);
 }
 
 export function getBlobPublicBaseUrl(): string {
@@ -130,11 +144,18 @@ export async function putBlob(
 }
 
 export async function deleteBlobUrls(urls: string[]): Promise<void> {
-  if (urls.length === 0) {
+  if (urls.length === 0 || !isBlobStorageEnabled()) {
     return;
   }
 
   const { del } = await import('@vercel/blob');
 
-  await del(urls, { token: process.env.BLOB_READ_WRITE_TOKEN });
+  try {
+    await del(urls, { token: process.env.BLOB_READ_WRITE_TOKEN });
+  } catch (error) {
+    console.warn(
+      '[blob] Smazání souborů se nezdařilo (pokračuji):',
+      error instanceof Error ? error.message : error,
+    );
+  }
 }

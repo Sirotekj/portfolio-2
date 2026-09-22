@@ -6,6 +6,8 @@ import type { BlogFormData, FormState } from '@/types/types';
 
 import { isHtmlEmpty, slugify } from '@/lib/utils/slug';
 
+import { deleteStoredMedia } from '@/lib/images/delete-media';
+
 import { DeleteBlog, GetBlogById, SaveBlog, UpdateBlog, saveBlogImage } from './blog-prisma';
 
 function optionalText(value: FormDataEntryValue | null): string | null {
@@ -117,6 +119,17 @@ export async function createAction(
     }
 
     if (id) {
+      if (imageUrl) {
+        const previous = await GetBlogById(Number(id));
+
+        if (
+          previous?.image.trim() &&
+          previous.image.trim() !== imageUrl
+        ) {
+          await deleteStoredMedia(previous.image.trim());
+        }
+      }
+
       await UpdateBlog(blog, imageUrl, id);
     } else {
       await SaveBlog(blog, imageUrl);

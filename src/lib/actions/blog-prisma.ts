@@ -1,10 +1,8 @@
 import type { BlogFormData, BlogView } from '@/types/types';
 
-import { saveResponsiveImages } from '@/lib/images/save-upload';
-import {
-  deleteStoredImage,
-  extractUploadPathsFromHtml,
-} from '@/lib/images/delete-upload';
+import { deleteStoredMedia } from '@/lib/images/delete-media';
+import { extractUploadPathsFromHtml } from '@/lib/images/delete-upload';
+import { saveResponsiveImage } from '@/lib/images/upload-responsive';
 import { prisma } from '@/lib/prisma';
 
 function mapBlog(blog: {
@@ -36,11 +34,7 @@ function mapBlog(blog: {
 }
 
 export async function saveBlogImage(file: File): Promise<string> {
-  const upload = await saveResponsiveImages({
-    file,
-    folder: 'uploads/blog',
-  });
-
+  const upload = await saveResponsiveImage(file, 'uploads/blog');
   return upload.basePath;
 }
 
@@ -116,7 +110,7 @@ export async function DeleteBlog(id: string): Promise<void> {
     }
   }
 
-  await Promise.all([...imagePaths].map((imagePath) => deleteStoredImage(imagePath)));
+  await Promise.all([...imagePaths].map((imagePath) => deleteStoredMedia(imagePath)));
 
   await prisma.blogPost.delete({
     where: { id: Number(id) },

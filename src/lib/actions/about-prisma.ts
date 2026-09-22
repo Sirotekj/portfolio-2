@@ -4,8 +4,8 @@ import {
   buildAboutEditorData,
   fetchAboutEditorLists,
 } from '@/lib/about/db';
-import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
-import { saveResponsiveImages } from '@/lib/images/save-upload';
+import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
+import { saveResponsiveImage } from '@/lib/images/upload-responsive';
 import { prisma } from '@/lib/prisma';
 
 const aboutPageDefaults = {
@@ -19,10 +19,7 @@ function mapAboutPage(aboutPage: AboutPageView): AboutPageView {
 }
 
 export async function saveAboutPhoto(file: File): Promise<ResponsiveImageUpload> {
-  return saveResponsiveImages({
-    file,
-    folder: 'uploads/about',
-  });
+  return saveResponsiveImage(file, 'uploads/about');
 }
 
 export async function getOrCreateAboutPage(): Promise<AboutPageView> {

@@ -10,6 +10,7 @@ import {
   deleteJobExperience,
   deleteLanguage,
   deleteSkill,
+  getOrCreateAboutPage,
   reorderEducation,
   reorderHobbies,
   reorderJobs,
@@ -23,6 +24,7 @@ import {
   saveSkill,
   updateAboutPage,
 } from '@/lib/actions/about-prisma';
+import { deleteStoredMedia } from '@/lib/images/delete-media';
 
 function revalidateAboutPaths(): void {
   revalidatePath('/edit/about');
@@ -78,11 +80,16 @@ export async function saveAboutPageAction(
   }
 
   try {
+    const current = await getOrCreateAboutPage();
     let photo: string | undefined;
 
     if (photoFile instanceof File && photoFile.size > 0) {
       const upload = await saveAboutPhoto(photoFile);
       photo = upload.basePath;
+
+      if (current.photo.trim() && current.photo.trim() !== photo) {
+        await deleteStoredMedia(current.photo.trim());
+      }
     } else if (typeof existingPhoto === 'string' && existingPhoto.trim()) {
       photo = existingPhoto.trim();
     }

@@ -1,6 +1,6 @@
 import {
   blobPublicUrl,
-  isPortfolioBlobPath,
+  isBlobStoredPath,
 } from '@/lib/storage/blob';
 
 export const IMAGE_WIDTHS = [1720, 960, 372] as const;
@@ -25,7 +25,7 @@ export function getResponsiveImagePath(
   const normalized = basePath.replace(/^\/+/, '');
 
   if (!isResponsiveImageBase(normalized)) {
-    if (isPortfolioBlobPath(normalized)) {
+    if (isBlobStoredPath(normalized)) {
       return blobPublicUrl(normalized);
     }
 
@@ -34,7 +34,7 @@ export function getResponsiveImagePath(
 
   const pathname = `${normalized}-${width}.webp`;
 
-  if (isPortfolioBlobPath(normalized)) {
+  if (isBlobStoredPath(normalized)) {
     return blobPublicUrl(pathname);
   }
 

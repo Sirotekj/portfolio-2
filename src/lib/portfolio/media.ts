@@ -2,7 +2,7 @@ import {
   DEFAULT_IMAGE_WIDTH,
   getResponsiveImagePath,
 } from '@/lib/images/responsive';
-import { blobPublicUrl, isPortfolioBlobPath } from '@/lib/storage/blob';
+import { blobPublicUrl, isBlobStoredPath } from '@/lib/storage/blob';
 import type { ProjectView } from '@/types/types';
 
 export type ProjectMediaKind = 'image' | 'gallery' | 'video';
@@ -34,7 +34,7 @@ export function getStoredMediaPath(path: string): string {
     return '';
   }
 
-  if (isPortfolioBlobPath(normalized)) {
+  if (isBlobStoredPath(normalized)) {
     return blobPublicUrl(normalized);
   }
 

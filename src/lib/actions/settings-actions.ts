@@ -9,6 +9,7 @@ import {
   saveSettingsImage,
   updateSiteSettings,
 } from '@/lib/actions/settings-prisma';
+import { deleteStoredMedia } from '@/lib/images/delete-media';
 
 function optionalText(value: FormDataEntryValue | null): string | null {
   if (typeof value !== 'string') {
@@ -56,6 +57,11 @@ async function resolveImageField(
 
   if (file instanceof File && file.size > 0) {
     const upload = await saveSettingsImage(file);
+
+    if (currentValue.trim() && currentValue.trim() !== upload.basePath) {
+      await deleteStoredMedia(currentValue.trim());
+    }
+
     return upload.basePath;
   }
 

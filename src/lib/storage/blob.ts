@@ -1,4 +1,4 @@
-const PORTFOLIO_PATH_SEGMENT = 'uploads/portfolio';
+const UPLOADS_PATH_SEGMENT = 'uploads/';
 
 export function isBlobStorageEnabled(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
@@ -103,8 +103,8 @@ function hasBlobStorePrefix(pathname: string): boolean {
   );
 }
 
-/** Pouze cesty nahrané do Blob (prefix development/ nebo production/). Staré uploads/portfolio/… jsou lokální. */
-export function isPortfolioBlobPath(storedPath: string): boolean {
+/** Cesty nahrané do Blob (prefix development/ nebo production/). Staré uploads/… bez prefixu jsou lokální. */
+export function isBlobStoredPath(storedPath: string): boolean {
   const normalized = storedPath.trim();
 
   if (
@@ -113,17 +113,22 @@ export function isPortfolioBlobPath(storedPath: string): boolean {
   ) {
     return (
       normalized.includes('blob.vercel-storage.com') &&
-      normalized.includes(PORTFOLIO_PATH_SEGMENT)
+      normalized.includes(UPLOADS_PATH_SEGMENT)
     );
   }
 
   const pathname = normalized.replace(/^\/+/, '');
 
-  if (!pathname.includes(PORTFOLIO_PATH_SEGMENT)) {
+  if (!pathname.includes(UPLOADS_PATH_SEGMENT)) {
     return false;
   }
 
   return hasBlobStorePrefix(pathname);
+}
+
+/** @deprecated Použij isBlobStoredPath — zachováno pro zpětnou kompatibilitu. */
+export function isPortfolioBlobPath(storedPath: string): boolean {
+  return isBlobStoredPath(storedPath);
 }
 
 export function getBlobPublicBaseUrl(): string {

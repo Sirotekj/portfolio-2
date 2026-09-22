@@ -3,21 +3,37 @@ import path from 'path';
 import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
 import { saveResponsiveImages } from '@/lib/images/save-upload';
 import { IMAGE_WIDTHS } from '@/lib/images/responsive';
-import { putBlob, isBlobStorageEnabled } from '@/lib/storage/blob';
+import { loadSharp } from '@/lib/images/load-sharp';
+import {
+  putBlob,
+  isBlobStorageEnabled,
+  withBlobStorePrefix,
+} from '@/lib/storage/blob';
 import { slugify } from '@/lib/utils/slug';
 
 const PORTFOLIO_FOLDER = 'uploads/portfolio';
 
+function getStoredBasePath(imageId: string): string {
+  const relativePath = `${PORTFOLIO_FOLDER}/${imageId}`.replace(/\\/g, '/');
+
+  if (isBlobStorageEnabled()) {
+    return withBlobStorePrefix(relativePath);
+  }
+
+  return relativePath;
+}
+
 async function savePortfolioImageToBlob(
   file: File,
 ): Promise<ResponsiveImageUpload> {
-  const sharp = (await import('sharp')).default;
+  const sharp = await loadSharp();
   const buffer = Buffer.from(await file.arrayBuffer());
   const originalExtension = path.extname(file.name);
   const baseName =
     slugify(path.basename(file.name, originalExtension)) || 'image';
   const imageId = `${Date.now()}-${baseName}`;
-  const basePath = `${PORTFOLIO_FOLDER}/${imageId}`.replace(/\\/g, '/');
+  const relativeBase = `${PORTFOLIO_FOLDER}/${imageId}`.replace(/\\/g, '/');
+  const basePath = getStoredBasePath(imageId);
 
   const { width: imageWidth = 0, height: imageHeight = 0 } = await sharp(buffer)
     .rotate()
@@ -34,7 +50,7 @@ async function savePortfolioImageToBlob(
         .webp({ quality: 82 })
         .toBuffer();
 
-      await putBlob(`${basePath}-${width}.webp`, output, 'image/webp');
+      await putBlob(`${relativeBase}-${width}.webp`, output, 'image/webp');
     }),
   );
 

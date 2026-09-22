@@ -1,7 +1,33 @@
-const PORTFOLIO_PREFIX = 'uploads/portfolio';
+const PORTFOLIO_PATH_SEGMENT = 'uploads/portfolio';
 
 export function isBlobStorageEnabled(): boolean {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
+}
+
+/** development/ nebo production/ — podle Vercel prostředí, nebo BLOB_STORE_PREFIX. */
+export function getBlobStorePrefix(): string {
+  const explicit = process.env.BLOB_STORE_PREFIX?.trim();
+
+  if (explicit) {
+    return explicit.endsWith('/') ? explicit : `${explicit}/`;
+  }
+
+  if (process.env.VERCEL_ENV === 'production') {
+    return 'production/';
+  }
+
+  return 'development/';
+}
+
+export function withBlobStorePrefix(pathname: string): string {
+  const normalized = pathname.replace(/^\/+/, '');
+  const prefix = getBlobStorePrefix();
+
+  if (normalized.startsWith(prefix)) {
+    return normalized;
+  }
+
+  return `${prefix}${normalized}`;
 }
 
 export function isPortfolioBlobPath(storedPath: string): boolean {
@@ -13,13 +39,13 @@ export function isPortfolioBlobPath(storedPath: string): boolean {
   ) {
     return (
       normalized.includes('blob.vercel-storage.com') &&
-      normalized.includes(PORTFOLIO_PREFIX)
+      normalized.includes(PORTFOLIO_PATH_SEGMENT)
     );
   }
 
   const pathname = normalized.replace(/^\/+/, '');
 
-  if (!pathname.startsWith(PORTFOLIO_PREFIX)) {
+  if (!pathname.includes(PORTFOLIO_PATH_SEGMENT)) {
     return false;
   }
 
@@ -54,8 +80,9 @@ export async function putBlob(
   contentType: string,
 ): Promise<{ url: string; pathname: string }> {
   const { put } = await import('@vercel/blob');
+  const blobPath = withBlobStorePrefix(pathname);
 
-  return put(pathname, body, {
+  return put(blobPath, body, {
     access: 'public',
     token: process.env.BLOB_READ_WRITE_TOKEN,
     addRandomSuffix: false,

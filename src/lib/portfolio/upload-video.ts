@@ -1,6 +1,10 @@
 import path from 'path';
 
-import { putBlob, isBlobStorageEnabled } from '@/lib/storage/blob';
+import {
+  putBlob,
+  isBlobStorageEnabled,
+  withBlobStorePrefix,
+} from '@/lib/storage/blob';
 import { slugify } from '@/lib/utils/slug';
 import type { VideoUpload } from '@/lib/videos/save-video';
 import { saveProjectVideo as saveProjectVideoLocal } from '@/lib/videos/save-video';
@@ -28,7 +32,7 @@ async function savePortfolioVideoToBlob(file: File): Promise<VideoUpload> {
 
   await putBlob(storedPath, buffer, contentType);
 
-  return { path: storedPath };
+  return { path: withBlobStorePrefix(storedPath) };
 }
 
 export async function savePortfolioVideo(file: File): Promise<VideoUpload> {

@@ -1,7 +1,7 @@
 import { mkdir } from 'fs/promises';
 import path from 'path';
 
-import sharp from 'sharp';
+import { loadSharp } from '@/lib/images/load-sharp';
 
 import { IMAGE_WIDTHS } from '@/lib/images/responsive';
 import { slugify } from '@/lib/utils/slug';
@@ -22,6 +22,7 @@ export async function saveResponsiveImages({
   file,
   folder,
 }: SaveResponsiveImagesOptions): Promise<ResponsiveImageUpload> {
+  const sharp = await loadSharp();
   const buffer = Buffer.from(await file.arrayBuffer());
   const originalExtension = path.extname(file.name);
   const baseName =

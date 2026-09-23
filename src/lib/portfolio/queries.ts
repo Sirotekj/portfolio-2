@@ -51,7 +51,7 @@ export async function getPortfolioProjects(): Promise<ProjectView[]> {
   try {
     const projects = await prisma.project.findMany({
       where: { image: { not: '' } },
-      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+      orderBy: [{ sortOrder: 'desc' }, { createdAt: 'desc' }],
     });
 
     return projects.map(mapProject);

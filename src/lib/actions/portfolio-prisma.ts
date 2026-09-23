@@ -167,7 +167,7 @@ export async function cleanupReplacedProjectMedia(
 
 export async function GetAllProjects(): Promise<ProjectView[]> {
   const projects = await prisma.project.findMany({
-    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+    orderBy: [{ sortOrder: 'desc' }, { createdAt: 'desc' }],
   });
 
   return projects.map(mapProject);
@@ -188,11 +188,13 @@ export async function getNextProjectSortOrder(): Promise<number> {
 }
 
 export async function ReorderProjects(orderedIds: number[]): Promise<void> {
+  const lastIndex = orderedIds.length - 1;
+
   await prisma.$transaction(
     orderedIds.map((id, index) =>
       prisma.project.update({
         where: { id },
-        data: { sortOrder: index },
+        data: { sortOrder: lastIndex - index },
       }),
     ),
   );

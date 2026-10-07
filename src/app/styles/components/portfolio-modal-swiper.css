@@ -13,11 +13,28 @@
   gap: var(--space-medium);
 }
 
+.portfolio-modal .portfolio-modal__thumbs-wrap {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  overflow: hidden;
+}
+
+.portfolio-modal .portfolio-modal__swiper--thumbs.swiper {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+}
+
 .portfolio-modal
   .portfolio-modal__swiper--thumbs.swiper
   .swiper-slide.portfolio-modal__thumb-slide {
+  box-sizing: border-box;
   flex-shrink: 0;
-  width: 100px;
+  width: 100px !important;
+  max-width: 100px !important;
+  min-width: 100px !important;
   height: 5rem;
 }
 
@@ -25,6 +42,9 @@
 .portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-next {
   color: var(--background);
   transition: color 150ms ease;
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 1px var(--color-foreground));
 }
 
 .portfolio-modal

@@ -24,7 +24,7 @@ export function getProjectGalleryImages(project: ProjectView): string[] {
     return [];
   }
 
-  return [project.image, ...project.gallery].filter(Boolean);
+  return [...project.gallery].filter(Boolean);
 }
 
 export function getStoredMediaPath(path: string): string {

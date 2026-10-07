@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Swiper as SwiperInstance } from 'swiper';
 import { Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -24,6 +24,21 @@ type PortfolioGalleryModalProps = {
   locale: Locale;
   onClose: () => void;
 };
+
+const THUMB_SLIDE_WIDTH_PX = 100;
+
+function syncThumbsSwiperLayout(
+  swiper: SwiperInstance,
+  activeSlideIndex: number,
+  animate = false,
+): void {
+  if (swiper.destroyed || swiper.el.clientWidth <= 0) {
+    return;
+  }
+
+  swiper.update();
+  swiper.slideTo(activeSlideIndex, animate ? 280 : 0);
+}
 
 function ProjectSlideMedia({
   project,
@@ -61,7 +76,10 @@ function ProjectSlideMedia({
     const images = getProjectGalleryImages(project);
 
     return (
-      <div className="portfolio-modal__gallery">
+      <div
+        className="portfolio-modal__gallery"
+        data-count={images.length}
+      >
         {images.map((imagePath) => (
           <div key={imagePath} className="portfolio-modal__gallery-item">
             <Image
@@ -120,8 +138,14 @@ export default function PortfolioGalleryModal({
   onClose,
 }: PortfolioGalleryModalProps) {
   const messages = getMessages(locale);
+  const thumbsWrapRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef(initialIndex);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperInstance | null>(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -140,6 +164,34 @@ export default function PortfolioGalleryModal({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onClose]);
+
+  useEffect(() => {
+    if (!thumbsSwiper || thumbsSwiper.destroyed) {
+      return;
+    }
+
+    syncThumbsSwiperLayout(thumbsSwiper, activeIndex, true);
+  }, [activeIndex, thumbsSwiper]);
+
+  useEffect(() => {
+    const wrap = thumbsWrapRef.current;
+
+    if (!thumbsSwiper || !wrap) {
+      return;
+    }
+
+    const sync = () => {
+      syncThumbsSwiperLayout(thumbsSwiper, activeIndexRef.current, false);
+    };
+
+    sync();
+    const resizeObserver = new ResizeObserver(sync);
+    resizeObserver.observe(wrap);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [thumbsSwiper]);
 
   if (projects.length === 0) {
     return null;
@@ -199,17 +251,27 @@ export default function PortfolioGalleryModal({
         </Swiper>
       </div>
 
-      <div className="portfolio-modal__thumbs-wrap">
+      <div ref={thumbsWrapRef} className="portfolio-modal__thumbs-wrap">
         <Swiper
           key={`portfolio-thumbs-${projects.map((project) => project.id).join('-')}`}
           className="portfolio-modal__swiper portfolio-modal__swiper--thumbs"
-          modules={[Thumbs]}
-          onSwiper={setThumbsSwiper}
+          onSwiper={(swiper) => {
+            setThumbsSwiper(swiper);
+            requestAnimationFrame(() => {
+              syncThumbsSwiperLayout(swiper, safeIndex, false);
+            });
+          }}
           initialSlide={safeIndex}
           spaceBetween={8}
           slidesPerView="auto"
+          centeredSlides
+          centeredSlidesBounds={false}
           watchSlidesProgress
           slideToClickedSlide
+          roundLengths
+          observer
+          observeParents
+          resizeObserver
         >
           {projects.map((project) => {
             const title = getProjectLocalizedTitle(project, locale);
@@ -219,7 +281,7 @@ export default function PortfolioGalleryModal({
               <SwiperSlide
                 key={project.id}
                 className="portfolio-modal__thumb-slide"
-                style={{ width: 100 }}
+                style={{ width: `${THUMB_SLIDE_WIDTH_PX}px`, flexShrink: 0 }}
                 aria-label={title}
               >
                 <div className="portfolio-modal__thumb">

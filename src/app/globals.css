@@ -1,4 +1,11 @@
 @import 'tailwindcss';
+
+@layer vendor, components;
+
+@import 'swiper/css' layer(vendor);
+@import 'swiper/css/navigation' layer(vendor);
+@import 'swiper/css/thumbs' layer(vendor);
+
 @import './styles/colors.css';
 @import './styles/spacing.css';
 @import './styles/components/page.css';
@@ -10,6 +17,7 @@
 @import './styles/components/blog.css';
 @import './styles/components/about.css';
 @import './styles/components/admin.css';
+@import './styles/components/portfolio-modal-swiper.css';
 
 @theme inline {
   --color-background: var(--background);

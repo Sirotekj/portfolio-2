@@ -1,0 +1,56 @@
+/**
+ * Swiper přepisuje styly modalu — nelayerované pravidla načtená po vendor/components,
+ * aby měla přednost před swiper/css (který Tailwind často nechá mimo @layer vendor).
+ */
+.portfolio-modal
+  .portfolio-modal__swiper--main.swiper
+  .swiper-slide.portfolio-modal__slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: var(--space-medium);
+}
+
+.portfolio-modal
+  .portfolio-modal__swiper--thumbs.swiper
+  .swiper-slide.portfolio-modal__thumb-slide {
+  flex-shrink: 0;
+  width: 100px;
+  height: 5rem;
+}
+
+.portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-prev,
+.portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-next {
+  color: var(--background);
+  transition: color 150ms ease;
+}
+
+.portfolio-modal
+  .portfolio-modal__swiper--main.swiper
+  .swiper-button-prev:hover,
+.portfolio-modal
+  .portfolio-modal__swiper--main.swiper
+  .swiper-button-next:hover {
+  color: var(--primary);
+}
+
+.portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-prev {
+  left: 0.5rem;
+}
+
+.portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-next {
+  right: 0.5rem;
+}
+
+.portfolio-modal .portfolio-modal__swiper--main.swiper .swiper-button-disabled {
+  opacity: 0.3;
+}
+
+.portfolio-modal
+  .portfolio-modal__swiper--thumbs.swiper
+  .swiper-slide-thumb-active
+  .portfolio-modal__thumb {
+  border-color: var(--primary);
+}

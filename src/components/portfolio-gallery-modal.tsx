@@ -18,10 +18,6 @@ import { getProjectImageSrc } from '@/lib/portfolio/images';
 import { getProjectLocalizedTitle } from '@/lib/portfolio/localize';
 import type { ProjectView } from '@/types/types';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
-
 type PortfolioGalleryModalProps = {
   projects: ProjectView[];
   initialIndex: number;
@@ -45,8 +41,9 @@ function ProjectSlideMedia({
       <div className="portfolio-modal__media portfolio-modal__media--video">
         <video
           src={videoSrc}
-          controls
+          autoPlay
           playsInline
+          loop
           className="portfolio-modal__video"
           style={
             project.videoWidth && project.videoHeight
@@ -195,7 +192,7 @@ export default function PortfolioGalleryModal({
             return (
               <SwiperSlide key={project.id} className="portfolio-modal__slide">
                 <ProjectSlideMedia project={project} title={title} />
-                <h2 className="portfolio-modal__title">{title}</h2>
+                <p className="portfolio-modal__title">{title}</p>
               </SwiperSlide>
             );
           })}
@@ -211,8 +208,6 @@ export default function PortfolioGalleryModal({
           initialSlide={safeIndex}
           spaceBetween={8}
           slidesPerView="auto"
-          centeredSlides
-          centerInsufficientSlides
           watchSlidesProgress
           slideToClickedSlide
         >
@@ -242,7 +237,6 @@ export default function PortfolioGalleryModal({
           })}
         </Swiper>
       </div>
-
     </div>
   );
 }

@@ -44,7 +44,7 @@
   }
 
   .portfolio-modal {
-    @apply fixed inset-0 z-[1200] flex flex-col bg-background/95 backdrop-blur-sm;
+    @apply fixed inset-0 z-1200 flex flex-col bg-foreground/95 backdrop-blur-sm;
   }
 
   .portfolio-modal__close {
@@ -61,10 +61,6 @@
 
   .portfolio-modal__swiper--main {
     @apply h-full w-full;
-  }
-
-  .portfolio-modal__slide {
-    @apply flex h-full flex-col items-center justify-center gap-medium;
   }
 
   .portfolio-modal__media {
@@ -105,7 +101,7 @@
   }
 
   .portfolio-modal__title {
-    @apply mt-0 mb-0 text-center text-2xl font-semibold text-foreground;
+    @apply mt-2 mb-0 text-center text-background text-lg;
   }
 
   .portfolio-modal__thumbs-wrap {
@@ -116,44 +112,12 @@
     @apply w-full;
   }
 
-  .portfolio-modal__swiper--thumbs .swiper-slide {
-    width: 100px;
-    flex-shrink: 0;
-  }
-
-  .portfolio-modal__thumb-slide {
-    @apply h-20 shrink-0;
-  }
-
   .portfolio-modal__thumb {
-    @apply block h-20 w-[100px] cursor-pointer overflow-hidden rounded-md border-2 border-transparent bg-transparent p-0 transition-colors;
+    @apply block h-20 w-25 cursor-pointer overflow-hidden rounded-md border-2 border-transparent bg-transparent p-0 transition-colors;
   }
 
   .portfolio-modal__thumb-image {
-    @apply h-20 w-[100px] object-cover;
-  }
-
-  .portfolio-modal__swiper--thumbs
-    .swiper-slide-thumb-active
-    .portfolio-modal__thumb {
-    @apply border-primary;
-  }
-
-  .portfolio-modal__swiper--main .swiper-button-prev,
-  .portfolio-modal__swiper--main .swiper-button-next {
-    @apply text-foreground transition-colors hover:text-primary;
-  }
-
-  .portfolio-modal__swiper--main .swiper-button-prev {
-    @apply left-2;
-  }
-
-  .portfolio-modal__swiper--main .swiper-button-next {
-    @apply right-2;
-  }
-
-  .portfolio-modal__swiper--main .swiper-button-disabled {
-    @apply opacity-30;
+    @apply h-20 w-25 object-cover;
   }
 
   .portfolio-image {

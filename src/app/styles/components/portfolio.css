@@ -36,7 +36,7 @@
   }
 
   .portfolio-grid__item {
-    @apply mb-medium w-full break-inside-avoid overflow-hidden rounded-xl shadow-xl;
+    @apply mb-medium w-full break-inside-avoid overflow-hidden rounded-xl shadow-lg transition-shadow hover:shadow-xl;
   }
 
   .portfolio-grid__button {

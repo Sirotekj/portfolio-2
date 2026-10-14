@@ -6,6 +6,7 @@ import {
 } from '@/lib/about/db';
 import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
 import { saveResponsiveImage } from '@/lib/images/upload-responsive';
+import { withRetry } from '@/lib/actions/with-retry';
 import { prisma } from '@/lib/prisma';
 
 const aboutPageDefaults = {
@@ -23,13 +24,15 @@ export async function saveAboutPhoto(file: File): Promise<ResponsiveImageUpload>
 }
 
 export async function getOrCreateAboutPage(): Promise<AboutPageView> {
-  const aboutPage = await prisma.aboutPage.upsert({
-    where: { id: 1 },
-    create: { id: 1, ...aboutPageDefaults },
-    update: {},
-  });
+  return withRetry(async () => {
+    const aboutPage = await prisma.aboutPage.upsert({
+      where: { id: 1 },
+      create: { id: 1, ...aboutPageDefaults },
+      update: {},
+    });
 
-  return mapAboutPage(aboutPage);
+    return mapAboutPage(aboutPage);
+  });
 }
 
 export async function updateAboutPage(data: {
@@ -47,7 +50,7 @@ export async function updateAboutPage(data: {
 export async function getAboutEditorData(): Promise<AboutEditorData> {
   const [aboutPage, lists] = await Promise.all([
     getOrCreateAboutPage(),
-    fetchAboutEditorLists(),
+    withRetry(() => fetchAboutEditorLists()),
   ]);
 
   return buildAboutEditorData(

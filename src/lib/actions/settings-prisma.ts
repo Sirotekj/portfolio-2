@@ -2,6 +2,7 @@ import type { SiteSettingsView } from '@/types/types';
 
 import type { ResponsiveImageUpload } from '@/lib/images/process-upload';
 import { saveResponsiveImage } from '@/lib/images/upload-responsive';
+import { withRetry } from '@/lib/actions/with-retry';
 import { prisma } from '@/lib/prisma';
 import { defaultSiteSettings } from '@/lib/site-settings/defaults';
 
@@ -12,13 +13,15 @@ export async function saveSettingsImage(
 }
 
 export async function getOrCreateSiteSettings(): Promise<SiteSettingsView> {
-  const settings = await prisma.siteSettings.upsert({
-    where: { id: 1 },
-    create: defaultSiteSettings,
-    update: {},
-  });
+  return withRetry(async () => {
+    const settings = await prisma.siteSettings.upsert({
+      where: { id: 1 },
+      create: defaultSiteSettings,
+      update: {},
+    });
 
-  return settings;
+    return settings;
+  });
 }
 
 export async function updateSiteSettings(

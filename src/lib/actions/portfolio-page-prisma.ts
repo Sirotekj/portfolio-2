@@ -1,5 +1,6 @@
 import type { PortfolioPageView } from '@/types/types';
 
+import { withRetry } from '@/lib/actions/with-retry';
 import { prisma } from '@/lib/prisma';
 
 const portfolioPageDefaults = {
@@ -8,11 +9,13 @@ const portfolioPageDefaults = {
 };
 
 export async function getOrCreatePortfolioPage(): Promise<PortfolioPageView> {
-  return prisma.portfolioPage.upsert({
-    where: { id: 1 },
-    create: { id: 1, ...portfolioPageDefaults },
-    update: {},
-  });
+  return withRetry(() =>
+    prisma.portfolioPage.upsert({
+      where: { id: 1 },
+      create: { id: 1, ...portfolioPageDefaults },
+      update: {},
+    }),
+  );
 }
 
 export async function updatePortfolioPage(data: {

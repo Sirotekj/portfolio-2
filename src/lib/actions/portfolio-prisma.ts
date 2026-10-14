@@ -6,6 +6,7 @@ import type { ResponsiveImageUpload } from '@/lib/images/save-upload';
 import { deletePortfolioMedia } from '@/lib/portfolio/delete-media';
 import { savePortfolioImage } from '@/lib/portfolio/upload-image';
 import { savePortfolioVideo } from '@/lib/portfolio/upload-video';
+import { withRetry } from '@/lib/actions/with-retry';
 import { prisma } from '@/lib/prisma';
 
 function mapProject(project: {
@@ -166,25 +167,31 @@ export async function cleanupReplacedProjectMedia(
 }
 
 export async function GetAllProjects(): Promise<ProjectView[]> {
-  const projects = await prisma.project.findMany({
-    orderBy: [{ sortOrder: 'desc' }, { createdAt: 'desc' }],
-  });
+  return withRetry(async () => {
+    const projects = await prisma.project.findMany({
+      orderBy: [{ sortOrder: 'desc' }, { createdAt: 'desc' }],
+    });
 
-  return projects.map(mapProject);
+    return projects.map(mapProject);
+  });
 }
 
 export async function GetProjectById(id: number): Promise<ProjectView | null> {
-  const project = await prisma.project.findUnique({ where: { id } });
+  return withRetry(async () => {
+    const project = await prisma.project.findUnique({ where: { id } });
 
-  return project ? mapProject(project) : null;
+    return project ? mapProject(project) : null;
+  });
 }
 
 export async function getNextProjectSortOrder(): Promise<number> {
-  const result = await prisma.project.aggregate({
-    _max: { sortOrder: true },
-  });
+  return withRetry(async () => {
+    const result = await prisma.project.aggregate({
+      _max: { sortOrder: true },
+    });
 
-  return (result._max.sortOrder ?? -1) + 1;
+    return (result._max.sortOrder ?? -1) + 1;
+  });
 }
 
 export async function ReorderProjects(orderedIds: number[]): Promise<void> {

@@ -3,6 +3,7 @@ import type { BlogFormData, BlogView } from '@/types/types';
 import { deleteStoredMedia } from '@/lib/images/delete-media';
 import { extractUploadPathsFromHtml } from '@/lib/images/delete-upload';
 import { saveResponsiveImage } from '@/lib/images/upload-responsive';
+import { withRetry } from '@/lib/actions/with-retry';
 import { prisma } from '@/lib/prisma';
 
 function mapBlog(blog: {
@@ -118,19 +119,23 @@ export async function DeleteBlog(id: string): Promise<void> {
 }
 
 export async function GetBlogById(id: number): Promise<BlogView | null> {
-  const blog = await prisma.blogPost.findUnique({ where: { id } });
+  return withRetry(async () => {
+    const blog = await prisma.blogPost.findUnique({ where: { id } });
 
-  if (!blog) {
-    return null;
-  }
+    if (!blog) {
+      return null;
+    }
 
-  return mapBlog(blog);
+    return mapBlog(blog);
+  });
 }
 
 export async function GetAllBlogs(): Promise<BlogView[]> {
-  const blogs = await prisma.blogPost.findMany({
-    orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
-  });
+  return withRetry(async () => {
+    const blogs = await prisma.blogPost.findMany({
+      orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
+    });
 
-  return blogs.map(mapBlog);
+    return blogs.map(mapBlog);
+  });
 }

@@ -27,7 +27,8 @@ export default async function EditPortfolioPage() {
       GetAllProjects(),
       getOrCreatePortfolioPage(),
     ]);
-  } catch {
+  } catch (error) {
+    console.error('[edit/portfolio] Načtení dat selhalo:', error);
     projects = [];
     portfolioPage = emptyPortfolioPage;
   }

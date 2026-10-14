@@ -121,5 +121,6 @@ export function getLocalizedFooterSettings(
       settings.formSubmitLabelEn,
       footerDefaults.formSubmitLabel,
     ),
+    author: settings.author.trim(),
   };
 }

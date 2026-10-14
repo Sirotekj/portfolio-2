@@ -15,7 +15,8 @@ export default async function EditSettingsPage() {
 
   try {
     settings = await getOrCreateSiteSettings();
-  } catch {
+  } catch (error) {
+    console.error('[edit/settings] Načtení dat selhalo:', error);
     settings = defaultSiteSettings;
   }
 

@@ -72,7 +72,7 @@ export default async function Footer({ locale }: FooterProps) {
       <div className="site-footer__bar">
         <ul className="site-footer__bar-list">
           <li>Copyright {new Date().getFullYear()} ©</li>
-          <li>Sára Šebelíková.</li>
+          {texts.author ? <li>{texts.author}.</li> : null}
         </ul>
       </div>
     </footer>

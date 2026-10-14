@@ -28,7 +28,8 @@ export default async function EditAboutPage() {
 
   try {
     data = await getAboutEditorData();
-  } catch {
+  } catch (error) {
+    console.error('[edit/about] Načtení dat selhalo:', error);
     data = emptyAboutData;
   }
 

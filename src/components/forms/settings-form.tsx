@@ -6,10 +6,7 @@ import type { SiteSettingsView } from '@/types/types';
 
 import { saveSiteSettingsAction } from '@/lib/actions/settings-actions';
 
-import {
-  fieldClass,
-  FormFeedback,
-} from '@/components/forms/admin-fields';
+import { fieldClass, FormFeedback } from '@/components/forms/admin-fields';
 import FormSubmit from '@/components/forms/form-submit';
 import ImagePicker from '@/components/forms/image-picker';
 
@@ -126,18 +123,6 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
           defaultCs={settings.keywords}
           defaultEn={settings.keywordsEn}
         />
-        <div>
-          <label htmlFor="author" className="admin-label">
-            Autor
-          </label>
-          <input
-            type="text"
-            id="author"
-            name="author"
-            defaultValue={settings.author}
-            className={fieldClass}
-          />
-        </div>
       </section>
 
       <section className="admin-section">
@@ -187,10 +172,7 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
             />
           </div>
           <div>
-            <label
-              htmlFor="contactLocation"
-              className="admin-label"
-            >
+            <label htmlFor="contactLocation" className="admin-label">
               Místo
             </label>
             <input
@@ -213,6 +195,23 @@ export default function SettingsForm({ settings }: SettingsFormProps) {
               className={fieldClass}
             />
           </div>
+        </div>
+        <div>
+          <label htmlFor="author" className="admin-label">
+            Jméno v copyright liště
+          </label>
+          <input
+            type="text"
+            id="author"
+            name="author"
+            defaultValue={settings.author}
+            placeholder="Jméno"
+            className={fieldClass}
+          />
+          <p className="admin-hint">
+            Zobrazí se v dolní liště patičky vedle copyright. Používá se i v SEO
+            metadata jako autor webu.
+          </p>
         </div>
       </section>
 

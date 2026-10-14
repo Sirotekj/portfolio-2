@@ -1,29 +1,13 @@
 import { isPrismaSchemaMismatchError } from '@/lib/prisma/errors';
 
-const RETRYABLE_PRISMA_CODES = new Set([
-  'P1001',
-  'P1002',
-  'P1008',
-  'P1017',
-  'P2024',
-]);
-
 function shouldRetry(error: unknown, retriesLeft: number): boolean {
   if (retriesLeft <= 0) {
     return false;
   }
 
+  // Chybějící tabulka/sloupec — retry jen zpomalí a stejně selže
   if (isPrismaSchemaMismatchError(error)) {
     return false;
-  }
-
-  if (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    typeof (error as { code: unknown }).code === 'string'
-  ) {
-    return RETRYABLE_PRISMA_CODES.has((error as { code: string }).code);
   }
 
   return true;

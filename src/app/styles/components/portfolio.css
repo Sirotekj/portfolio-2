@@ -44,7 +44,12 @@
   }
 
   .portfolio-modal {
-    @apply fixed inset-0 z-1200 flex flex-col bg-foreground/95 backdrop-blur-sm;
+    @apply fixed inset-0 z-1200 flex select-none flex-col bg-foreground/95 backdrop-blur-sm;
+  }
+
+  .portfolio-modal img,
+  .portfolio-modal video {
+    -webkit-user-drag: none;
   }
 
   .portfolio-modal__close {

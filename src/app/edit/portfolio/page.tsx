@@ -49,10 +49,10 @@ export default async function EditPortfolioPage() {
       title="Portfolio"
       description="Úvodní text homepage a správa projektů."
     >
-      <PortfolioStorageDiagnostics
+      {/*<PortfolioStorageDiagnostics
         diagnostics={diagnostics}
         recentProjectPaths={[...new Set(recentProjectPaths)]}
-      />
+      />*/}
       <PortfolioEditor portfolioPage={portfolioPage} projects={projects} />
     </EditShell>
   );

@@ -53,8 +53,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      // Výchozí 1 MB nestačí pro upload hlavního obrázku + galerie (originály před sharp).
-      bodySizeLimit: "15mb",
+      // Vercel má ~4,5 MB na jeden HTTP request — portfolio nahrává obrázky po jednom (viz uploadPortfolioImageAction).
+      bodySizeLimit: "5mb",
     },
   },
   redirects: async () => [

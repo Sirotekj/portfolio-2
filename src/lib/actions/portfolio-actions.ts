@@ -16,6 +16,11 @@ import {
   saveProjectVideo,
 } from '@/lib/actions/portfolio-prisma';
 import type { ProjectCategory } from '@/generated/prisma/client';
+import { validateImageFile } from '@/lib/images/validate-image-file';
+
+export type PortfolioImageUploadResult =
+  | { basePath: string; width: number; height: number }
+  | { error: string };
 
 function optionalText(value: FormDataEntryValue | null): string | null {
   if (typeof value !== 'string') {
@@ -70,6 +75,110 @@ function parseProjectForm(formData: FormData): {
   };
 }
 
+function parsePreUploadedMainImage(formData: FormData): {
+  basePath: string;
+  width: number;
+  height: number;
+} | null {
+  const basePath = String(formData.get('preUploadedImage') ?? '').trim();
+
+  if (!basePath) {
+    return null;
+  }
+
+  const width = parseOptionalInt(formData.get('preUploadedImageWidth'));
+  const height = parseOptionalInt(formData.get('preUploadedImageHeight'));
+
+  return {
+    basePath,
+    width: width ?? 0,
+    height: height ?? 0,
+  };
+}
+
+async function resolveMainImage(formData: FormData): Promise<{
+  basePath?: string;
+  width?: number;
+  height?: number;
+  error?: string;
+}> {
+  const preUploaded = parsePreUploadedMainImage(formData);
+
+  if (preUploaded) {
+    return preUploaded;
+  }
+
+  const imageFile = formData.get('image');
+
+  if (!(imageFile instanceof File) || imageFile.size === 0) {
+    return {};
+  }
+
+  const upload = await saveProjectImage(imageFile);
+
+  return {
+    basePath: upload.basePath,
+    width: upload.width,
+    height: upload.height,
+  };
+}
+
+export type PortfolioVideoUploadResult =
+  | { path: string }
+  | { error: string };
+
+export async function uploadPortfolioVideoAction(
+  formData: FormData,
+): Promise<PortfolioVideoUploadResult> {
+  const file = formData.get('file');
+
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: 'Video chybí nebo je prázdné.' };
+  }
+
+  try {
+    const upload = await saveProjectVideo(file);
+
+    return { path: upload.path };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Nahrání videa se nezdařilo.';
+
+    return { error: message };
+  }
+}
+
+export async function uploadPortfolioImageAction(
+  formData: FormData,
+): Promise<PortfolioImageUploadResult> {
+  const file = formData.get('file');
+
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: 'Soubor chybí nebo je prázdný.' };
+  }
+
+  const validationError = validateImageFile(file);
+
+  if (validationError) {
+    return { error: validationError };
+  }
+
+  try {
+    const upload = await saveProjectImage(file);
+
+    return {
+      basePath: upload.basePath,
+      width: upload.width,
+      height: upload.height,
+    };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Nahrání obrázku se nezdařilo.';
+
+    return { error: message };
+  }
+}
+
 async function parseGallery(formData: FormData): Promise<string[]> {
   const existing = formData
     .getAll('existingGallery')
@@ -98,6 +207,20 @@ async function parseVideo(formData: FormData): Promise<{
   videoWidth: number | null;
   videoHeight: number | null;
 }> {
+  const preUploadedVideo = String(formData.get('preUploadedVideo') ?? '').trim();
+
+  if (preUploadedVideo) {
+    return {
+      video: preUploadedVideo,
+      videoWidth:
+        parseOptionalInt(formData.get('preUploadedVideoWidth')) ??
+        parseOptionalInt(formData.get('videoWidth')),
+      videoHeight:
+        parseOptionalInt(formData.get('preUploadedVideoHeight')) ??
+        parseOptionalInt(formData.get('videoHeight')),
+    };
+  }
+
   const existing = String(formData.get('existingVideo') ?? '').trim();
   const file = formData.get('video');
 
@@ -206,7 +329,6 @@ export async function createProjectAction(
     return { messages: [], errors };
   }
 
-  const imageFile = formData.get('image');
   const existingImage = formData.get('existingImage');
 
   try {
@@ -234,11 +356,16 @@ export async function createProjectAction(
       let imageWidth: number | null | undefined;
       let imageHeight: number | null | undefined;
 
-      if (imageFile instanceof File && imageFile.size > 0) {
-        const upload = await saveProjectImage(imageFile);
-        image = upload.basePath;
-        imageWidth = upload.width;
-        imageHeight = upload.height;
+      const mainImage = await resolveMainImage(formData);
+
+      if (mainImage.error) {
+        return { messages: [], errors: [mainImage.error] };
+      }
+
+      if (mainImage.basePath) {
+        image = mainImage.basePath;
+        imageWidth = mainImage.width ?? null;
+        imageHeight = mainImage.height ?? null;
       }
 
       await cleanupReplacedProjectMedia(previous, {
@@ -257,21 +384,26 @@ export async function createProjectAction(
         videoHeight: media.videoHeight,
       });
     } else {
-      if (!(imageFile instanceof File) || imageFile.size === 0) {
+      const mainImage = await resolveMainImage(formData);
+
+      if (mainImage.error) {
+        return { messages: [], errors: [mainImage.error] };
+      }
+
+      if (!mainImage.basePath) {
         return {
           messages: [],
           errors: ['Vyber hlavní obrázek projektu.'],
         };
       }
 
-      const upload = await saveProjectImage(imageFile);
       const sortOrder = await getNextProjectSortOrder();
 
       await SaveProject({
         ...project,
-        image: upload.basePath,
-        imageWidth: upload.width,
-        imageHeight: upload.height,
+        image: mainImage.basePath,
+        imageWidth: mainImage.width ?? null,
+        imageHeight: mainImage.height ?? null,
         gallery: media.gallery,
         video: media.video,
         videoWidth: media.videoWidth,

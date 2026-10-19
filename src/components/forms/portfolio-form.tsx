@@ -1,18 +1,19 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState, useTransition } from 'react';
 
 import type { ProjectView } from '@/types/types';
 
 import { createProjectAction } from '@/lib/actions/portfolio-actions';
+import { buildPortfolioSubmitFormData } from '@/lib/portfolio/submit-portfolio-form';
 
 import ButtonAdmin from '@/components/admin/button-admin';
 import {
   fieldClass,
   FormFeedback,
 } from '@/components/forms/admin-fields';
-import FormSubmit from './form-submit';
 import ImagePicker from './image-picker';
+import PortfolioFormSubmit from './portfolio-form-submit';
 import ProjectMediaPicker from './project-media-picker';
 
 type PortfolioFormProps = {
@@ -36,8 +37,45 @@ export default function PortfolioForm({
     messages: [],
     errors: [],
   });
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const isEditing = Boolean(initialData?.id);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setUploadError(null);
+
+    const form = event.currentTarget;
+    const source = new FormData(form);
+
+    setIsUploading(true);
+
+    let payload: FormData;
+
+    try {
+      const built = await buildPortfolioSubmitFormData(source);
+
+      if (built.error) {
+        setUploadError(built.error);
+        return;
+      }
+
+      if (!built.formData) {
+        setUploadError('Odeslání formuláře se nezdařilo.');
+        return;
+      }
+
+      payload = built.formData;
+    } finally {
+      setIsUploading(false);
+    }
+
+    startTransition(() => {
+      formAction(payload);
+    });
+  }
 
   return (
     <>
@@ -48,7 +86,7 @@ export default function PortfolioForm({
         </button>
       </header>
 
-      <form action={formAction} className="admin-form">
+      <form onSubmit={handleSubmit} className="admin-form">
         {initialData?.id ? (
           <input type="hidden" name="id" value={initialData.id} />
         ) : null}
@@ -142,10 +180,18 @@ export default function PortfolioForm({
           defaultVideoHeight={initialData?.videoHeight}
         />
 
-        <FormFeedback errors={state.errors} messages={state.messages} />
+        <FormFeedback
+          errors={[...(uploadError ? [uploadError] : []), ...state.errors]}
+          messages={state.messages}
+        />
+
+        <p className="admin-hint">
+          Obrázky se nahrávají po jednom (limit Vercelu ~4,5 MB na požadavek).
+          Každý soubor max. 2 MB.
+        </p>
 
         <div className="admin-form__actions">
-          <FormSubmit />
+          <PortfolioFormSubmit uploading={isUploading} pending={isPending} />
           <ButtonAdmin type="button" onClick={onClose} color="light">
             Zrušit
           </ButtonAdmin>

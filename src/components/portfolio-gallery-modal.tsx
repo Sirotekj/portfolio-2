@@ -15,7 +15,10 @@ import {
   getProjectVideoSrc,
 } from '@/lib/portfolio/media';
 import { getProjectImageSrc } from '@/lib/portfolio/images';
-import { getProjectLocalizedTitle } from '@/lib/portfolio/localize';
+import {
+  getProjectLocalizedTitle,
+  getProjectLocalizedDescription,
+} from '@/lib/portfolio/localize';
 import type { ProjectView } from '@/types/types';
 
 type PortfolioGalleryModalProps = {
@@ -40,12 +43,39 @@ function syncThumbsSwiperLayout(
   swiper.slideTo(activeSlideIndex, animate ? 280 : 0);
 }
 
+function syncSlideVideos(swiper: SwiperInstance): void {
+  if (swiper.destroyed) {
+    return;
+  }
+
+  const activeSlide = swiper.slides[swiper.activeIndex];
+
+  swiper.slides.forEach((slide) => {
+    slide.querySelectorAll('video').forEach((video) => {
+      if (slide !== activeSlide) {
+        video.pause();
+        return;
+      }
+
+      video.play().catch((error: unknown) => {
+        // Browsers may block autoplay with sound — retry muted.
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
+          video.muted = true;
+          video.play().catch(() => {});
+        }
+      });
+    });
+  });
+}
+
 function ProjectSlideMedia({
   project,
   title,
+  autoPlay,
 }: {
   project: ProjectView;
   title: string;
+  autoPlay: boolean;
 }) {
   const mediaKind = getProjectMediaKind(project);
 
@@ -56,7 +86,8 @@ function ProjectSlideMedia({
       <div className="portfolio-modal__media portfolio-modal__media--video">
         <video
           src={videoSrc}
-          autoPlay
+          autoPlay={autoPlay}
+          preload={autoPlay ? 'auto' : 'metadata'}
           playsInline
           loop
           className="portfolio-modal__video"
@@ -76,10 +107,7 @@ function ProjectSlideMedia({
     const images = getProjectGalleryImages(project);
 
     return (
-      <div
-        className="portfolio-modal__gallery"
-        data-count={images.length}
-      >
+      <div className="portfolio-modal__gallery" data-count={images.length}>
         {images.map((imagePath) => (
           <div key={imagePath} className="portfolio-modal__gallery-item">
             <Image
@@ -232,19 +260,23 @@ export default function PortfolioGalleryModal({
           }}
           onSlideChange={(swiper) => {
             setActiveIndex(swiper.activeIndex);
-            swiper.el
-              .querySelectorAll('video')
-              .forEach((video) => video.pause());
+            syncSlideVideos(swiper);
           }}
           spaceBetween={24}
         >
-          {projects.map((project) => {
+          {projects.map((project, index) => {
             const title = getProjectLocalizedTitle(project, locale);
+            const description = getProjectLocalizedDescription(project, locale);
 
             return (
               <SwiperSlide key={project.id} className="portfolio-modal__slide">
-                <ProjectSlideMedia project={project} title={title} />
+                <ProjectSlideMedia
+                  project={project}
+                  title={title}
+                  autoPlay={index === safeIndex}
+                />
                 <p className="portfolio-modal__title">{title}</p>
+                <p className="portfolio-modal__description">{description}</p>
               </SwiperSlide>
             );
           })}

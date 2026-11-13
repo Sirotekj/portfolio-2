@@ -11,6 +11,16 @@ export function getProjectLocalizedTitle(
 
   return project.title;
 }
+export function getProjectLocalizedDescription(
+  project: ProjectView,
+  locale: Locale,
+): string {
+  if (locale === 'en' && project.descriptionEn?.trim()) {
+    return project.descriptionEn.trim();
+  }
+
+  return project.description;
+}
 
 export function getLocalizedPortfolioIntro(
   page: PortfolioPageView,
